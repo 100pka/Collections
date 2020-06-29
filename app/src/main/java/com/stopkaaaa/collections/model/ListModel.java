@@ -2,7 +2,6 @@ package com.stopkaaaa.collections.model;
 
 import com.google.common.util.concurrent.ListenableFutureTask;
 
-import java.util.concurrent.FutureTask;
 
 public class ListModel {
     private static boolean startButtonClicked = false;
