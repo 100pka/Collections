@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="utf-8"?>
+<merge
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <TextView
+        android:id="@+id/elementsLabel"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:paddingVertical="10dp"
+        android:text="Elements"
+        android:textSize="20dp"
+        app:layout_constraintEnd_toStartOf="@+id/elementsAmount"
+        app:layout_constraintHorizontal_chainStyle="packed"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/threadsLabel"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:paddingVertical="10dp"
+        android:text="Threads"
+        android:textSize="20dp"
+        app:layout_constraintEnd_toStartOf="@+id/threadsAmount"
+        app:layout_constraintHorizontal_chainStyle="packed"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/elementsLabel" />
+
+    <EditText
+        android:id="@+id/elementsAmount"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:hint="Enter elements amount"
+        app:layout_constraintBottom_toBottomOf="@+id/elementsLabel"
+        app:layout_constraintEnd_toStartOf="@+id/startButton"
+        app:layout_constraintHorizontal_chainStyle="packed"
+        app:layout_constraintStart_toEndOf="@+id/elementsLabel"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <EditText
+        android:id="@+id/threadsAmount"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:hint="Enter threads amount"
+        app:layout_constraintBottom_toBottomOf="@+id/threadsLabel"
+        app:layout_constraintEnd_toStartOf="@+id/startButton"
+        app:layout_constraintHorizontal_chainStyle="packed"
+        app:layout_constraintStart_toEndOf="@+id/elementsLabel"
+        app:layout_constraintTop_toTopOf="@+id/threadsLabel" />
+
+    <androidx.appcompat.widget.AppCompatToggleButton
+        android:id="@+id/startButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textOn = "STOP"
+        android:textOff = "@string/start"
+        app:layout_constraintBottom_toBottomOf="@+id/threadsLabel"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_chainStyle="packed"
+        app:layout_constraintStart_toEndOf="@+id/elementsAmount"
+        app:layout_constraintTop_toTopOf="parent" />
+
+</merge>
