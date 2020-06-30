@@ -1,6 +1,7 @@
 package com.stopkaaaa.collections.ui;
 
 import android.content.Context;
+import android.text.TextUtils;
 import android.util.AttributeSet;
 import android.view.LayoutInflater;
 import android.widget.EditText;
@@ -9,9 +10,7 @@ import android.widget.ToggleButton;
 import androidx.constraintlayout.widget.ConstraintLayout;
 
 import com.stopkaaaa.collections.R;
-
-import java.util.LinkedList;
-import java.util.List;
+import com.stopkaaaa.collections.model.CalculationParameters;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -25,12 +24,12 @@ public class StartAmountView extends ConstraintLayout {
     EditText threadsAmountEditText;
 
     public StartAmountView(Context context) {
-        super(context);
+        super(context, null);
         initializeViews(context);
     }
 
     public StartAmountView(Context context, AttributeSet attributeSet) {
-        super(context, attributeSet);
+        super(context, attributeSet, 0);
         initializeViews(context);
     }
 
@@ -41,17 +40,21 @@ public class StartAmountView extends ConstraintLayout {
         ButterKnife.bind(this);
     }
 
+    public CalculationParameters getCalculationData() {
+        return new CalculationParameters(this.getElementsAmount(),
+                this.getThreadsAmount(),
+                this.startButtonIsChecked());
+    }
+
     public String getElementsAmount() {
-        if (elementsAmountEditText.getText().toString() == null ||
-                elementsAmountEditText.getText().length() == 0){
+        if (TextUtils.isEmpty(elementsAmountEditText.getText().toString())){
             return "";
         }
         return elementsAmountEditText.getText().toString();
     }
 
     public String getThreadsAmount() {
-        if (threadsAmountEditText.getText().toString() == null ||
-                threadsAmountEditText.getText().length() == 0){
+        if (TextUtils.isEmpty(elementsAmountEditText.getText().toString())){
             return "";
         }
         return threadsAmountEditText.getText().toString();

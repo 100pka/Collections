@@ -1,6 +1,7 @@
 package com.stopkaaaa.collections.model;
 
 import com.google.common.util.concurrent.ListenableFutureTask;
+import com.stopkaaaa.collections.R;
 
 
 public class ListModel {

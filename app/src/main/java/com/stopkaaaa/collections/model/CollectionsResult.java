@@ -7,7 +7,6 @@ import java.util.ArrayList;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
-import java.util.concurrent.FutureTask;
 
 public class CollectionsResult implements ModelContract.Model{
 
@@ -15,12 +14,12 @@ public class CollectionsResult implements ModelContract.Model{
 
     private ArrayList<ListModel> listArrayList;
 
-    private CalculationData calculationData;
+    private CalculationParameters calculationParameters;
 
     private ModelContract.ModelPresenter modelPresenter;
 
     private CollectionsResult(ModelContract.ModelPresenter modelPresenter) {
-        this.calculationData = new CalculationData("", "", false);
+        this.calculationParameters = new CalculationParameters("", "", false);
         this.modelPresenter = modelPresenter;
         init();
     }
@@ -57,12 +56,12 @@ public class CollectionsResult implements ModelContract.Model{
     @Override
     public void calculation() {
         ExecutorService executor = Executors
-                .newFixedThreadPool(Integer.parseInt(calculationData.getThreads()));
-        if (calculationData == null) return;
+                .newFixedThreadPool(Integer.parseInt(calculationParameters.getThreads()));
+        if (calculationParameters == null) return;
         for (final ListModel listModel: listArrayList
              ) {
             ListenableFutureTask<String> task = ListenableFutureTask.create(new CollectionsCalc(
-                    Integer.parseInt(calculationData.getAmount()),
+                    Integer.parseInt(calculationParameters.getAmount()),
                     listModel.getListType(), listModel.getOperation()));
             listModel.setTask(task);
             listModel.getTask().addListener(new Runnable() {
@@ -97,11 +96,11 @@ public class CollectionsResult implements ModelContract.Model{
         this.listArrayList = listArrayList;
     }
 
-    public CalculationData getCalculationData() {
-        return calculationData;
+    public CalculationParameters getCalculationParameters() {
+        return calculationParameters;
     }
 
-    public void setCalculationData(CalculationData calculationData) {
-        this.calculationData = calculationData;
+    public void setCalculationParameters(CalculationParameters calculationParameters) {
+        this.calculationParameters = calculationParameters;
     }
 }

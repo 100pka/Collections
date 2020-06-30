@@ -17,6 +17,9 @@ import butterknife.ButterKnife;
 
 public class MainActivity extends AppCompatActivity {
 
+    public final String[] listTypes = getResources().getStringArray(R.array.listTypes);
+    public final String[] operations = getResources().getStringArray(R.array.operations);
+
     @BindView(R.id.tabLayout)
     TabLayout tableLayout;
 

@@ -1,11 +1,11 @@
 package com.stopkaaaa.collections.model;
 
-public class CalculationData {
+public class CalculationParameters {
     private final String amount;
     private final String threads;
     private final boolean checked;
 
-    public CalculationData(String amount, String threads, boolean checked) {
+    public CalculationParameters(String amount, String threads, boolean checked) {
         this.amount = amount;
         this.threads = threads;
         this.checked = checked;

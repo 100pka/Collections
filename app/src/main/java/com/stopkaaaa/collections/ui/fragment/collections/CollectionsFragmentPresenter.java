@@ -1,6 +1,6 @@
 package com.stopkaaaa.collections.ui.fragment.collections;
 
-import com.stopkaaaa.collections.model.CalculationData;
+import com.stopkaaaa.collections.model.CalculationParameters;
 
 import com.stopkaaaa.collections.model.CollectionsResult;
 import com.stopkaaaa.collections.model.ListModel;
@@ -27,10 +27,10 @@ public class CollectionsFragmentPresenter implements CollectionsFragmentContract
     }
 
     @Override
-    public void onStartButtonClicked(CalculationData calculationData) {
+    public void onStartButtonClicked(CalculationParameters calculationParameters) {
         ListModel.setStartButtonClicked(true);
         notifyRecyclerAdapter();
-        startCalculation(calculationData);
+        startCalculation(calculationParameters);
 
 
     }
@@ -40,8 +40,8 @@ public class CollectionsFragmentPresenter implements CollectionsFragmentContract
         mCollectionsFragmentContractView.notifyRecyclerAdapter();
     }
 
-    private void startCalculation(CalculationData calculationData) {
-        collectionsResult.setCalculationData(calculationData);
+    private void startCalculation(CalculationParameters calculationParameters) {
+        collectionsResult.setCalculationParameters(calculationParameters);
         collectionsResult.calculation();
     }
 }

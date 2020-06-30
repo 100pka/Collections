@@ -11,7 +11,7 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.stopkaaaa.collections.model.CalculationData;
+import com.stopkaaaa.collections.model.CalculationParameters;
 import com.stopkaaaa.collections.ui.StartAmountView;
 import com.stopkaaaa.collections.ui.recycler.RecyclerAdapter;
 
@@ -70,11 +70,8 @@ public class CollectionsFragment extends Fragment implements CollectionsFragment
         startAmountView.setOnStartButtonClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                final CalculationData calculationData =
-                        new CalculationData(startAmountView.getElementsAmount(),
-                                startAmountView.getThreadsAmount(),
-                                startAmountView.startButtonIsChecked());
-                mPresenter.onStartButtonClicked(calculationData);
+                final CalculationParameters calculationParameters = startAmountView.getCalculationData();
+                mPresenter.onStartButtonClicked(calculationParameters);
             }
         });
 

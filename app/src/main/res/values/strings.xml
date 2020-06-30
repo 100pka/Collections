@@ -6,4 +6,20 @@
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="start">START</string>
+
+    <string-array name="listTypes">
+        <item>ArrayList</item>
+        <item>LinkedList</item>
+        <item>CopyOnWriteArrayList</item>
+    </string-array>
+
+    <string-array name="operations">
+        <item>Adding to start in </item>
+        <item>Adding to middle in </item>
+        <item>Adding to end in </item>
+        <item>Search in </item>
+        <item>Remove from start in </item>
+        <item>Remove from middle in </item>
+        <item>Remove from end in </item>
+    </string-array>
 </resources>
