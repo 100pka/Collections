@@ -82,6 +82,12 @@ public class CollectionsFragment extends Fragment implements CollectionsFragment
 
     }
 
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+
+    }
+
     public static List<String> getList() {
         List<String> nameList = new ArrayList<String>();
         nameList.add("Adding to start in ArrayList");

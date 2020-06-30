@@ -34,7 +34,7 @@ public class ResultViewHolder extends RecyclerView.ViewHolder implements Recycle
     @Override
     public void setItemTime(String time) {
         itemTimeTextView.setText(time);
-        progressBar.setVisibility(View.GONE);
+        progressBar.setVisibility(View.INVISIBLE);
         itemTimeTextView.setVisibility(View.VISIBLE);
     }
 

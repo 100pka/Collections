@@ -15,51 +15,36 @@ import java.util.ArrayList;
 
 public class PageAdapter extends FragmentPagerAdapter {
 
-    private static final int PAGE_NUMBER = 2;
-    private CollectionsFragmentPresenter collectionsFragmentPresenter;
-    private MapsFragmentPresenter mapsFragmentPresenter;
+    ArrayList<Fragment> mFragmentList;
+    ArrayList<String> mFragmentTitleList;
 
-    public PageAdapter(FragmentManager fmng)
+    PageAdapter (FragmentManager fmng)
     {
         super(fmng);
-
+        mFragmentList = new ArrayList<>();
+        mFragmentTitleList = new ArrayList<>();
     }
 
     @NonNull
     @Override
     public Fragment getItem(int position) {
-        switch (position) {
-            case 0:{
-                CollectionsFragment collectionsFragment = CollectionsFragment.newInstance();
-                collectionsFragmentPresenter = new CollectionsFragmentPresenter(collectionsFragment);
-                return collectionsFragment;
-            }
-            case 1:{
-                MapsFragment mapsFragment = MapsFragment.newInstance();
-                mapsFragmentPresenter = new MapsFragmentPresenter(mapsFragment);
-                return mapsFragment;
-            }
-            default:
-                return null;
-        }
+        return mFragmentList.get(position);
     }
 
     @Override
     public int getCount() {
-        return PAGE_NUMBER;
+        return mFragmentList.size();
     }
 
+    public void addFragment (Fragment fragment, String title) {
+        mFragmentList.add(fragment);
+        mFragmentTitleList.add(title);
+    }
 
     @Nullable
     @Override
     public CharSequence getPageTitle(int position) {
-        switch (position){
-            case 0:
-                return "Collections";
-            case 1:
-                return "Maps";
-            default:
-                return "";
-        }
+        return mFragmentTitleList.get(position);
     }
 }
+
