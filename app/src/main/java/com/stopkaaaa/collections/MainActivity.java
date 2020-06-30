@@ -25,9 +25,6 @@ public class MainActivity extends AppCompatActivity {
 
     PageAdapter pageAdapter;
 
-    private CollectionsFragmentPresenter collectionsFragmentPresenter;
-    private MapsFragmentPresenter mapsFragmentPresenter;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -36,11 +33,13 @@ public class MainActivity extends AppCompatActivity {
         ButterKnife.bind(this);
 
         CollectionsFragment collectionsFragment = CollectionsFragment.newInstance();
-        collectionsFragmentPresenter = new CollectionsFragmentPresenter(collectionsFragment);
+        CollectionsFragmentPresenter collectionsFragmentPresenter =
+                new CollectionsFragmentPresenter(collectionsFragment);
         collectionsFragment.setPresenter(collectionsFragmentPresenter);
 
         MapsFragment mapsFragment = MapsFragment.newInstance();
-        mapsFragmentPresenter = new MapsFragmentPresenter(mapsFragment);
+        MapsFragmentPresenter mapsFragmentPresenter =
+                new MapsFragmentPresenter(mapsFragment);
         mapsFragment.setPresenter(mapsFragmentPresenter);
 
         pageAdapter = new PageAdapter(getSupportFragmentManager());
