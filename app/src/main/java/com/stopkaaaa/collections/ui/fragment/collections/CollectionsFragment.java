@@ -1,7 +1,6 @@
 package com.stopkaaaa.collections.ui.fragment.collections;
 
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -17,7 +16,6 @@ import com.stopkaaaa.collections.ui.StartAmountView;
 import com.stopkaaaa.collections.ui.recycler.RecyclerAdapter;
 
 import com.stopkaaaa.collections.R;
-import com.stopkaaaa.collections.ui.recycler.ResultsListPresenter;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -66,7 +64,7 @@ public class CollectionsFragment extends Fragment implements CollectionsFragment
 //        amountFragment = (StartAmountFragment) getChildFragmentManager().findFragmentById(R.id.startAmountCollections);
 //        amountFragment.addOnNewCalculationDateListener(this);
         collectionsRecycler.setLayoutManager(new GridLayoutManager(getContext(), 3));
-        recyclerAdapter = new RecyclerAdapter(new ResultsListPresenter(mPresenter.getRecyclerData()));
+        recyclerAdapter = new RecyclerAdapter(mPresenter.getRecyclerData());
         collectionsRecycler.setAdapter(recyclerAdapter);
 
         startAmountView.setOnStartButtonClickListener(new View.OnClickListener() {
@@ -140,7 +138,7 @@ public class CollectionsFragment extends Fragment implements CollectionsFragment
 
     @Override
     public void notifyRecyclerAdapter() {
-        recyclerAdapter.getPresenter().setCalculationResults(mPresenter.getRecyclerData());
+        recyclerAdapter.setCalculationResults(mPresenter.getRecyclerData());
         recyclerAdapter.notifyDataSetChanged();
     }
 }

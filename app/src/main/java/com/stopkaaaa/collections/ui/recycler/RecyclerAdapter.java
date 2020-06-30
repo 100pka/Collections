@@ -21,10 +21,10 @@ import butterknife.ButterKnife;
 
 public class RecyclerAdapter extends RecyclerView.Adapter<ResultViewHolder> {
 
-    private final ResultsListPresenter presenter;
+    private List<ListModel> calculationResults;
 
-    public RecyclerAdapter(ResultsListPresenter presenter) {
-        this.presenter = presenter;
+    public RecyclerAdapter(List<ListModel> calculationResults) {
+        this.calculationResults = calculationResults;
     }
 
     @NonNull
@@ -36,16 +36,21 @@ public class RecyclerAdapter extends RecyclerView.Adapter<ResultViewHolder> {
 
     @Override
     public void onBindViewHolder(@NonNull ResultViewHolder holder, int position) {
-        presenter.onBindResultAtPosition(position, holder);
+        holder.setItemName(calculationResults.get(position).getTitle());
+        if (ListModel.isStartButtonClicked()) {
+            holder.setStartButtonClicked();
+        }
+        if (!calculationResults.get(position).getTime().equals("0 ms")) {
+            holder.setItemTime(calculationResults.get(position).getTime());
+        }
     }
 
     @Override
     public int getItemCount() {
-
-        return presenter.getCalculationResultCount();
+        return calculationResults.size();
     }
 
-    public ResultsListPresenter getPresenter() {
-        return presenter;
+    public void setCalculationResults(List<ListModel> calculationResults){
+        this.calculationResults = calculationResults;
     }
 }
