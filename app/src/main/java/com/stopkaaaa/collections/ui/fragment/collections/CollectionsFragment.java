@@ -45,9 +45,7 @@ public class CollectionsFragment extends Fragment implements CollectionsFragment
         // Required empty public constructor
     }
 
-    public static CollectionsFragment newInstance() {
-        return new CollectionsFragment();
-    }
+    public static CollectionsFragment newInstance() { return new CollectionsFragment(); }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -80,41 +78,40 @@ public class CollectionsFragment extends Fragment implements CollectionsFragment
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
     }
 
-    public static List<String> getList() {
-        List<String> nameList = new ArrayList<String>();
-        nameList.add("Adding to start in ArrayList");
-        nameList.add("Adding to start in LinkedList");
-        nameList.add("Adding to start in CopyOnWriteList");
-
-        nameList.add("Adding to middle in ArrayList");
-        nameList.add("Adding to middle in LinkedList");
-        nameList.add("Adding to middle in CopyOnWriteList");
-
-        nameList.add("Adding to end in ArrayList");
-        nameList.add("Adding to end in LinkedList");
-        nameList.add("Adding to end in CopyOnWriteList");
-
-        nameList.add("Search in ArrayList");
-        nameList.add("Search in LinkedList");
-        nameList.add("Search in CopyOnWriteList");
-
-        nameList.add("Remove from start in ArrayList");
-        nameList.add("Remove from start in LinkedList");
-        nameList.add("Remove from start in CopyOnWriteList");
-
-        nameList.add("Remove from middle in ArrayList");
-        nameList.add("Remove from middle in LinkedList");
-        nameList.add("Remove from middle in CopyOnWriteList");
-
-        nameList.add("Remove from end in ArrayList");
-        nameList.add("Remove from end in LinkedList");
-        nameList.add("Remove from end in CopyOnWriteList");
-
-        return nameList;
-    }
+//    public static List<String> getList() {
+//        List<String> nameList = new ArrayList<String>();
+//        nameList.add("Adding to start in ArrayList");
+//        nameList.add("Adding to start in LinkedList");
+//        nameList.add("Adding to start in CopyOnWriteList");
+//
+//        nameList.add("Adding to middle in ArrayList");
+//        nameList.add("Adding to middle in LinkedList");
+//        nameList.add("Adding to middle in CopyOnWriteList");
+//
+//        nameList.add("Adding to end in ArrayList");
+//        nameList.add("Adding to end in LinkedList");
+//        nameList.add("Adding to end in CopyOnWriteList");
+//
+//        nameList.add("Search in ArrayList");
+//        nameList.add("Search in LinkedList");
+//        nameList.add("Search in CopyOnWriteList");
+//
+//        nameList.add("Remove from start in ArrayList");
+//        nameList.add("Remove from start in LinkedList");
+//        nameList.add("Remove from start in CopyOnWriteList");
+//
+//        nameList.add("Remove from middle in ArrayList");
+//        nameList.add("Remove from middle in LinkedList");
+//        nameList.add("Remove from middle in CopyOnWriteList");
+//
+//        nameList.add("Remove from end in ArrayList");
+//        nameList.add("Remove from end in LinkedList");
+//        nameList.add("Remove from end in CopyOnWriteList");
+//
+//        return nameList;
+//    }
 
 //    @Override
 //    public void onNewCalculationData(CalculationData calculationData) {
@@ -127,15 +124,8 @@ public class CollectionsFragment extends Fragment implements CollectionsFragment
 //        super.onDestroyView();
 //    }
 
-
-    @Override
-    public void setPresenter(CollectionsFragmentContract.Presenter presenter) {
-        this.mPresenter = presenter;
-    }
-
     @Override
     public void notifyRecyclerAdapter() {
         recyclerAdapter.setCalculationResults(mPresenter.getRecyclerData());
-        recyclerAdapter.notifyDataSetChanged();
     }
 }

@@ -25,15 +25,14 @@ public class StartAmountView extends ConstraintLayout {
 
     public StartAmountView(Context context) {
         super(context, null);
-        initializeViews(context);
+        LayoutInflater inflater = (LayoutInflater) context
+                .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+        inflater.inflate(R.layout.custom_view_start_amount, this);
+        ButterKnife.bind(this);
     }
 
     public StartAmountView(Context context, AttributeSet attributeSet) {
         super(context, attributeSet, 0);
-        initializeViews(context);
-    }
-
-    private void initializeViews(Context context) {
         LayoutInflater inflater = (LayoutInflater) context
                 .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         inflater.inflate(R.layout.custom_view_start_amount, this);

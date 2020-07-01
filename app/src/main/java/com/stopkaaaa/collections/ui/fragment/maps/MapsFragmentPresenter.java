@@ -6,7 +6,6 @@ public class MapsFragmentPresenter implements MapsFragmentContract.Presenter {
 
     public MapsFragmentPresenter(MapsFragmentContract.View mMapsFragmentContractView) {
         this.mMapsFragmentContractView = mMapsFragmentContractView;
-        mMapsFragmentContractView.setPresenter(this);
     }
 
 }

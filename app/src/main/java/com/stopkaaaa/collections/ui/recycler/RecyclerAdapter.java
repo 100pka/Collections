@@ -52,5 +52,6 @@ public class RecyclerAdapter extends RecyclerView.Adapter<ResultViewHolder> {
 
     public void setCalculationResults(List<ListModel> calculationResults){
         this.calculationResults = calculationResults;
+        this.notifyDataSetChanged();
     }
 }

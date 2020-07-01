@@ -58,9 +58,4 @@ public class MapsFragment extends Fragment implements MapsFragmentContract.View{
 
         return nameList;
     }
-
-    @Override
-    public void setPresenter(MapsFragmentContract.Presenter presenter) {
-        this.mPresenter = presenter;
-    }
 }

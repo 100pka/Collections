@@ -38,12 +38,12 @@ public class MainActivity extends AppCompatActivity {
         CollectionsFragment collectionsFragment = CollectionsFragment.newInstance();
         CollectionsFragmentPresenter collectionsFragmentPresenter =
                 new CollectionsFragmentPresenter(collectionsFragment);
-        collectionsFragment.setPresenter(collectionsFragmentPresenter);
+//        collectionsFragment.setPresenter(collectionsFragmentPresenter);
 
         MapsFragment mapsFragment = MapsFragment.newInstance();
         MapsFragmentPresenter mapsFragmentPresenter =
                 new MapsFragmentPresenter(mapsFragment);
-        mapsFragment.setPresenter(mapsFragmentPresenter);
+//        mapsFragment.setPresenter(mapsFragmentPresenter);
 
         pageAdapter = new PageAdapter(getSupportFragmentManager());
         pageAdapter.addFragment(collectionsFragment, getString(R.string.collections));
