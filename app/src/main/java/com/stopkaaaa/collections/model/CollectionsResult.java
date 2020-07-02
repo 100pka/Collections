@@ -15,7 +15,7 @@ public class CollectionsResult implements ModelContract.Model{
 
     private static CollectionsResult instance;
 
-    private ArrayList<ListModel> listArrayList;
+    private ArrayList<CalculationResult> listArrayList;
 
     private CalculationParameters calculationParameters;
 
@@ -52,9 +52,9 @@ public class CollectionsResult implements ModelContract.Model{
             if (i > 14 && i < 18) operation.append(context.getString(R.string.removeFromMiddle));
             if (i > 17) operation.append(context.getString(R.string.removeFromEnd));
 
-            ListModel listModel = new ListModel(listType.toString(), operation.toString());
+            CalculationResult calculationResult = new CalculationResult(listType.toString(), operation.toString());
 
-            listArrayList.add(listModel);
+            listArrayList.add(calculationResult);
 
         }
     }
@@ -64,17 +64,17 @@ public class CollectionsResult implements ModelContract.Model{
         ExecutorService executor = Executors
                 .newFixedThreadPool(Integer.parseInt(calculationParameters.getThreads()));
         if (calculationParameters == null) return;
-        for (final ListModel listModel: listArrayList
+        for (final CalculationResult calculationResult : listArrayList
              ) {
             ListenableFutureTask<String> task = ListenableFutureTask.create(new CollectionsCalc(
                     Integer.parseInt(calculationParameters.getAmount()),
-                    listModel.getListType(), listModel.getOperation()));
-            listModel.setTask(task);
-            listModel.getTask().addListener(new Runnable() {
+                    calculationResult.getListType(), calculationResult.getOperation()));
+            calculationResult.setTask(task);
+            calculationResult.getTask().addListener(new Runnable() {
                 @Override
                 public void run() {
                     try {
-                        listModel.setTime(listModel.getTask().get());
+                        calculationResult.setTime(calculationResult.getTask().get());
                         modelPresenter.notifyRecyclerAdapter();
                     }
                     catch (ExecutionException | InterruptedException e) {
@@ -82,7 +82,7 @@ public class CollectionsResult implements ModelContract.Model{
                     }
                 }
             }, executor);
-            executor.execute(listModel.getTask());
+            executor.execute(calculationResult.getTask());
         }
     }
 
@@ -94,11 +94,11 @@ public class CollectionsResult implements ModelContract.Model{
         return instance;
     }
 
-    public ArrayList<ListModel> getListArrayList() {
+    public ArrayList<CalculationResult> getListArrayList() {
         return listArrayList;
     }
 
-    public void setListArrayList(ArrayList<ListModel> listArrayList) {
+    public void setListArrayList(ArrayList<CalculationResult> listArrayList) {
         this.listArrayList = listArrayList;
     }
 

@@ -5,7 +5,7 @@ import android.content.Context;
 import com.stopkaaaa.collections.BasePresenter;
 import com.stopkaaaa.collections.BaseView;
 import com.stopkaaaa.collections.model.CalculationParameters;
-import com.stopkaaaa.collections.model.ListModel;
+import com.stopkaaaa.collections.model.CalculationResult;
 
 import java.util.ArrayList;
 
@@ -16,6 +16,6 @@ public interface CollectionsFragmentContract {
     }
     interface Presenter extends BasePresenter{
         void onStartButtonClicked (CalculationParameters calculationParameters);
-        ArrayList<ListModel> getRecyclerData();
+        ArrayList<CalculationResult> getRecyclerData();
     }
 }

@@ -3,7 +3,7 @@ package com.stopkaaaa.collections.ui.fragment.collections;
 import com.stopkaaaa.collections.model.CalculationParameters;
 
 import com.stopkaaaa.collections.model.CollectionsResult;
-import com.stopkaaaa.collections.model.ListModel;
+import com.stopkaaaa.collections.model.CalculationResult;
 import com.stopkaaaa.collections.model.ModelContract;
 import java.util.ArrayList;
 
@@ -21,13 +21,13 @@ public class CollectionsFragmentPresenter implements CollectionsFragmentContract
     }
 
     @Override
-    public ArrayList<ListModel> getRecyclerData() {
+    public ArrayList<CalculationResult> getRecyclerData() {
         return collectionsResult.getListArrayList();
     }
 
     @Override
     public void onStartButtonClicked(CalculationParameters calculationParameters) {
-        ListModel.setStartButtonClicked(true);
+        CalculationResult.setStartButtonClicked(true);
         notifyRecyclerAdapter();
         startCalculation(calculationParameters);
 

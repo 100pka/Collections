@@ -3,27 +3,21 @@ package com.stopkaaaa.collections.ui.recycler;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.RelativeLayout;
-import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.stopkaaaa.collections.R;
-import com.stopkaaaa.collections.model.ListModel;
+import com.stopkaaaa.collections.model.CalculationResult;
 
 
-import java.util.ArrayList;
 import java.util.List;
-
-import butterknife.BindView;
-import butterknife.ButterKnife;
 
 public class RecyclerAdapter extends RecyclerView.Adapter<ResultViewHolder> {
 
-    private List<ListModel> calculationResults;
+    private List<CalculationResult> calculationResults;
 
-    public RecyclerAdapter(List<ListModel> calculationResults) {
+    public RecyclerAdapter(List<CalculationResult> calculationResults) {
         this.calculationResults = calculationResults;
     }
 
@@ -37,7 +31,7 @@ public class RecyclerAdapter extends RecyclerView.Adapter<ResultViewHolder> {
     @Override
     public void onBindViewHolder(@NonNull ResultViewHolder holder, int position) {
         holder.setItemName(calculationResults.get(position).getTitle());
-        if (ListModel.isStartButtonClicked()) {
+        if (CalculationResult.isStartButtonClicked()) {
             holder.setStartButtonClicked();
         }
         if (!calculationResults.get(position).getTime().equals("0 ms")) {
@@ -50,7 +44,7 @@ public class RecyclerAdapter extends RecyclerView.Adapter<ResultViewHolder> {
         return calculationResults.size();
     }
 
-    public void setCalculationResults(List<ListModel> calculationResults){
+    public void setCalculationResults(List<CalculationResult> calculationResults){
         this.calculationResults = calculationResults;
         this.notifyDataSetChanged();
     }
