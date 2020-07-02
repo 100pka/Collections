@@ -1,7 +1,10 @@
 package com.stopkaaaa.collections.model;
 
 
+import android.content.Context;
+
 import com.google.common.util.concurrent.ListenableFutureTask;
+import com.stopkaaaa.collections.R;
 
 import java.util.ArrayList;
 import java.util.concurrent.ExecutionException;
@@ -18,9 +21,12 @@ public class CollectionsResult implements ModelContract.Model{
 
     private ModelContract.ModelPresenter modelPresenter;
 
-    private CollectionsResult(ModelContract.ModelPresenter modelPresenter) {
+    private Context context;
+
+    private CollectionsResult(ModelContract.ModelPresenter modelPresenter, Context context) {
         this.calculationParameters = new CalculationParameters("", "", false);
         this.modelPresenter = modelPresenter;
+        this.context = context;
         init();
     }
 
@@ -31,20 +37,20 @@ public class CollectionsResult implements ModelContract.Model{
             StringBuilder listType = new StringBuilder();
 
             if (i % 3 == 0) {
-                listType.append(ListModel.listTypes[0]);
+                listType.append(context.getString(R.string.arrayList));
             } else {
                 if (i % 3 == 1) {
-                    listType.append(ListModel.listTypes[1]);
-                } else listType.append(ListModel.listTypes[2]);
+                    listType.append(context.getString(R.string.linkedList));
+                } else listType.append(context.getString(R.string.copyOnWriteArrayList));
             }
 
-            if (i < 3) operation.append(ListModel.operations[0]);
-            if (i > 2 && i < 6) operation.append(ListModel.operations[1]);
-            if (i > 5 && i < 9) operation.append(ListModel.operations[2]);
-            if (i > 8 && i < 12) operation.append(ListModel.operations[3]);
-            if (i > 11 && i < 15) operation.append(ListModel.operations[4]);
-            if (i > 14 && i < 18) operation.append(ListModel.operations[5]);
-            if (i > 17) operation.append(ListModel.operations[6]);
+            if (i < 3) operation.append(context.getString(R.string.addingToStart));
+            if (i > 2 && i < 6) operation.append(context.getString(R.string.addingToMiddle));
+            if (i > 5 && i < 9) operation.append(context.getString(R.string.addingToEnd));
+            if (i > 8 && i < 12) operation.append(context.getString(R.string.searchIn));
+            if (i > 11 && i < 15) operation.append(context.getString(R.string.removeFromStart));
+            if (i > 14 && i < 18) operation.append(context.getString(R.string.removeFromMiddle));
+            if (i > 17) operation.append(context.getString(R.string.removeFromEnd));
 
             ListModel listModel = new ListModel(listType.toString(), operation.toString());
 
@@ -81,9 +87,9 @@ public class CollectionsResult implements ModelContract.Model{
     }
 
 
-    public static synchronized CollectionsResult getInstance(ModelContract.ModelPresenter modelPresenter) {
+    public static synchronized CollectionsResult getInstance(ModelContract.ModelPresenter modelPresenter, Context context) {
         if (instance == null) {
-            instance = new CollectionsResult(modelPresenter);
+            instance = new CollectionsResult(modelPresenter, context);
         }
         return instance;
     }

@@ -13,18 +13,11 @@ public class ListModel {
     private String time;
     private ListenableFutureTask<String> task;
 
-    public static final String[] listTypes = {"ArrayList", "LinkedList", "CopyOnWriteArrayList"};
-
-    public static final String[] operations = {"Adding to start in ", "Adding to middle in ",
-            "Adding to end in ", "Search in ", "Remove from start in ", "Remove from middle in ",
-            "Remove from end in "};
-
-
     public ListModel(String listType, String operation) {
         this.listType = listType;
         this.operation = operation;
         this.time = "0 ms";
-        StringBuffer title = new StringBuffer().append(operation).append(listType);
+        StringBuffer title = new StringBuffer().append(operation).append(" ").append(listType);
         this.title = title.toString();
     }
 

@@ -1,5 +1,6 @@
 package com.stopkaaaa.collections.ui.fragment.collections;
 
+import android.content.Context;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -47,6 +48,8 @@ public class CollectionsFragment extends Fragment implements CollectionsFragment
 
     public static CollectionsFragment newInstance() { return new CollectionsFragment(); }
 
+
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -78,9 +81,21 @@ public class CollectionsFragment extends Fragment implements CollectionsFragment
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        mPresenter = new CollectionsFragmentPresenter(this);
     }
 
-//    public static List<String> getList() {
+    @Override
+    public void notifyRecyclerAdapter() {
+        recyclerAdapter.setCalculationResults(mPresenter.getRecyclerData());
+    }
+
+    @Nullable
+    @Override
+    public Context getContext() {
+        return super.getContext();
+    }
+
+    //    public static List<String> getList() {
 //        List<String> nameList = new ArrayList<String>();
 //        nameList.add("Adding to start in ArrayList");
 //        nameList.add("Adding to start in LinkedList");
@@ -124,8 +139,5 @@ public class CollectionsFragment extends Fragment implements CollectionsFragment
 //        super.onDestroyView();
 //    }
 
-    @Override
-    public void notifyRecyclerAdapter() {
-        recyclerAdapter.setCalculationResults(mPresenter.getRecyclerData());
-    }
+
 }

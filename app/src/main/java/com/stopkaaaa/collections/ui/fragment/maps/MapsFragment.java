@@ -5,6 +5,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import com.stopkaaaa.collections.R;
+
+import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
 
@@ -45,17 +47,24 @@ public class MapsFragment extends Fragment implements MapsFragmentContract.View{
         return view;
     }
 
-    public static List<String> getList() {
-        List<String> nameList = new ArrayList<String>();
-        nameList.add("Adding to HashMap");
-        nameList.add("Adding to TreeMap");
-
-        nameList.add("Search in HashMap");
-        nameList.add("Search in TreeMap");
-
-        nameList.add("Removing from HashMap");
-        nameList.add("Removing from TreeMap");
-
-        return nameList;
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        mPresenter = new MapsFragmentPresenter(this);
     }
+
+
+//    public static List<String> getList() {
+//        List<String> nameList = new ArrayList<String>();
+//        nameList.add("Adding to HashMap");
+//        nameList.add("Adding to TreeMap");
+//
+//        nameList.add("Search in HashMap");
+//        nameList.add("Search in TreeMap");
+//
+//        nameList.add("Removing from HashMap");
+//        nameList.add("Removing from TreeMap");
+//
+//        return nameList;
+//    }
 }

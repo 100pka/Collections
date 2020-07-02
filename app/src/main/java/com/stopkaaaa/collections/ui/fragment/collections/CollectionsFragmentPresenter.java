@@ -17,7 +17,7 @@ public class CollectionsFragmentPresenter implements CollectionsFragmentContract
 
     public CollectionsFragmentPresenter(CollectionsFragmentContract.View mCollectionsFragmentContractView) {
         this.mCollectionsFragmentContractView = mCollectionsFragmentContractView;
-        collectionsResult = CollectionsResult.getInstance(this);
+        collectionsResult = CollectionsResult.getInstance(this, mCollectionsFragmentContractView.getContext());
     }
 
     @Override
