@@ -39,38 +39,38 @@ public class CollectionsCalc implements Callable<String> {
     public String call() {
         long start, result;
         switch (operation) {
-            case ("Adding to start in "):
+            case ("Adding to start in"):
                 start = System.nanoTime();
                 list.add(0, 99);
                 result = System.nanoTime() - start;
                 return String.valueOf(result/1000000.0) + " ms";
-            case ("Adding to middle in "):
+            case ("Adding to middle in"):
                 start = System.nanoTime();
                 list.add(list.size()/2, 99);
                 result = System.nanoTime() - start;
                 return String.valueOf(result/1000000.0) + " ms";
-            case ("Adding to end in "):
+            case ("Adding to end in"):
                 start = System.nanoTime();
                 list.add(list.size()-1, 99);
                 result = System.nanoTime() - start;
                 return String.valueOf(result/1000000.0) + " ms";
-            case ("Search in "):
+            case ("Search in"):
                 start = System.nanoTime();
                 int rndIndex = new Random().nextInt(list.size());
                 list.get(rndIndex);
                 result = System.nanoTime() - start;
                 return String.valueOf(result/1000000.0) + " ms";
-            case ("Remove from start in "):
+            case ("Remove from start in"):
                 start = System.nanoTime();
                 list.remove(0);
                 result = System.nanoTime() - start;
                 return String.valueOf(result/1000000.0) + " ms";
-            case ("Remove from middle in "):
+            case ("Remove from middle in"):
                 start = System.nanoTime();
                 list.remove(list.size()/2);
                 result = System.nanoTime() - start;
                 return String.valueOf(result/1000000.0) + " ms";
-            case ("Remove from end in "):
+            case ("Remove from end in"):
                 start = System.nanoTime();
                 list.remove(list.size()-1);
                 result = System.nanoTime() - start;

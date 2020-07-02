@@ -34,7 +34,7 @@ public class ResultViewHolder extends RecyclerView.ViewHolder{
 
     public void setItemTime(String time) {
         itemTimeTextView.setText(time);
-    //    progressBar.setVisibility(View.INVISIBLE);
+        progressBar.setVisibility(View.INVISIBLE);
         itemTimeTextView.setVisibility(View.VISIBLE);
     }
 
