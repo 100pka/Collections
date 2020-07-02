@@ -30,8 +30,6 @@ public class CollectionsFragmentPresenter implements CollectionsFragmentContract
         CalculationResult.setStartButtonClicked(true);
         notifyRecyclerAdapter();
         startCalculation(calculationParameters);
-
-
     }
 
     @Override

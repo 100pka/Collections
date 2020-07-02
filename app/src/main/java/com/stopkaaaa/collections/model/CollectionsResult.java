@@ -61,7 +61,7 @@ public class CollectionsResult implements ModelContract.Model{
 
     @Override
     public void calculation() {
-        ExecutorService executor = Executors
+        final ExecutorService executor = Executors
                 .newFixedThreadPool(Integer.parseInt(calculationParameters.getThreads()));
         if (calculationParameters == null) return;
         for (final CalculationResult calculationResult : listArrayList
@@ -80,6 +80,9 @@ public class CollectionsResult implements ModelContract.Model{
                     catch (ExecutionException | InterruptedException e) {
                         e.printStackTrace();
                     }
+                    if (isCalculationFinished()) {
+                        executor.shutdown();
+                    }
                 }
             }, executor);
             executor.execute(calculationResult.getTask());
@@ -92,6 +95,16 @@ public class CollectionsResult implements ModelContract.Model{
             instance = new CollectionsResult(modelPresenter, context);
         }
         return instance;
+    }
+
+    public boolean isCalculationFinished() {
+        for (final CalculationResult calculationResult : listArrayList
+        ) {
+            if (calculationResult.getTime().equals("0 ms")) {
+                return false;
+            }
+        }
+        return true;
     }
 
     public ArrayList<CalculationResult> getListArrayList() {
