@@ -3,48 +3,38 @@ package com.stopkaaaa.collections;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentActivity;
 import androidx.fragment.app.FragmentManager;
-import androidx.fragment.app.FragmentPagerAdapter;
-
-import com.stopkaaaa.collections.ui.fragment.collections.CollectionsFragment;
-import com.stopkaaaa.collections.ui.fragment.collections.CollectionsFragmentPresenter;
-import com.stopkaaaa.collections.ui.fragment.maps.MapsFragment;
-import com.stopkaaaa.collections.ui.fragment.maps.MapsFragmentPresenter;
+import androidx.lifecycle.Lifecycle;
+import androidx.viewpager2.adapter.FragmentStateAdapter;
 
 import java.util.ArrayList;
 
-public class PageAdapter extends FragmentPagerAdapter {
+public class PageAdapter extends FragmentStateAdapter {
 
-    ArrayList<Fragment> mFragmentList;
-    ArrayList<String> mFragmentTitleList;
+    ArrayList<Fragment> fragments;
+    ArrayList<String> titles;
 
-    PageAdapter (FragmentManager fmng)
-    {
-        super(fmng);
-        mFragmentList = new ArrayList<>();
-        mFragmentTitleList = new ArrayList<>();
+    public PageAdapter(@NonNull FragmentManager fragmentManager, @NonNull Lifecycle lifecycle) {
+        super(fragmentManager, lifecycle);
+        this.fragments = new ArrayList<>();
+        this.titles = new ArrayList<>();
     }
 
     @NonNull
     @Override
-    public Fragment getItem(int position) {
-        return mFragmentList.get(position);
+    public Fragment createFragment(int position) {
+        return  fragments.get(position);
     }
 
     @Override
-    public int getCount() {
-        return mFragmentList.size();
+    public int getItemCount() {
+        return fragments.size();
     }
 
     public void addFragment (Fragment fragment, String title) {
-        mFragmentList.add(fragment);
-        mFragmentTitleList.add(title);
-    }
-
-    @Nullable
-    @Override
-    public CharSequence getPageTitle(int position) {
-        return mFragmentTitleList.get(position);
+        fragments.add(fragment);
+        titles.add(title);
     }
 }
 

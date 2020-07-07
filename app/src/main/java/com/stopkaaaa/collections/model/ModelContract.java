@@ -1,9 +1,6 @@
 package com.stopkaaaa.collections.model;
 
-import com.stopkaaaa.collections.BasePresenter;
-
-import java.util.ArrayList;
-import java.util.List;
+import com.stopkaaaa.collections.presenter.BasePresenter;
 
 public interface ModelContract {
     interface Model {

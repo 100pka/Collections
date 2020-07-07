@@ -44,13 +44,21 @@ public class CollectionsResult implements ModelContract.Model{
                 } else listType.append(context.getString(R.string.copyOnWriteArrayList));
             }
 
-            if (i < 3) operation.append(context.getString(R.string.addingToStart));
-            if (i > 2 && i < 6) operation.append(context.getString(R.string.addingToMiddle));
-            if (i > 5 && i < 9) operation.append(context.getString(R.string.addingToEnd));
-            if (i > 8 && i < 12) operation.append(context.getString(R.string.searchIn));
-            if (i > 11 && i < 15) operation.append(context.getString(R.string.removeFromStart));
-            if (i > 14 && i < 18) operation.append(context.getString(R.string.removeFromMiddle));
-            if (i > 17) operation.append(context.getString(R.string.removeFromEnd));
+            if (i < 3) {
+                operation.append(context.getString(R.string.addingToStart));
+            } else if (i > 2 && i < 6) {
+                operation.append(context.getString(R.string.addingToMiddle));
+            } else if (i > 5 && i < 9) {
+                operation.append(context.getString(R.string.addingToEnd));
+            } else if (i > 8 && i < 12) {
+                operation.append(context.getString(R.string.searchIn));
+            } else if (i > 11 && i < 15) {
+                operation.append(context.getString(R.string.removeFromStart));
+            } else if (i > 14 && i < 18) {
+                operation.append(context.getString(R.string.removeFromMiddle));
+            } else if (i > 17) {
+                operation.append(context.getString(R.string.removeFromEnd));
+            }
 
             CalculationResult calculationResult = new CalculationResult(listType.toString(), operation.toString());
 

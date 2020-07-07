@@ -1,6 +1,9 @@
 package com.stopkaaaa.collections.model;
 
+import com.stopkaaaa.collections.R;
+
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Random;
@@ -30,9 +33,7 @@ public class CollectionsCalc implements Callable<String> {
             default:
                 list = new ArrayList<>();
         }
-        for (int i = 0; i < amount; i++) {
-            list.add(i);
-        }
+        list.addAll(Collections.nCopies(amount,0));
     }
 
     @Override
@@ -43,41 +44,41 @@ public class CollectionsCalc implements Callable<String> {
                 start = System.nanoTime();
                 list.add(0, 99);
                 result = System.nanoTime() - start;
-                return String.valueOf(result/1000000.0) + " ms";
+                return String.valueOf(result/1000000.0);
             case ("Adding to middle in"):
                 start = System.nanoTime();
                 list.add(list.size()/2, 99);
                 result = System.nanoTime() - start;
-                return String.valueOf(result/1000000.0) + " ms";
+                return String.valueOf(result/1000000.0);
             case ("Adding to end in"):
                 start = System.nanoTime();
                 list.add(list.size()-1, 99);
                 result = System.nanoTime() - start;
-                return String.valueOf(result/1000000.0) + " ms";
+                return String.valueOf(result/1000000.0);
             case ("Search in"):
                 start = System.nanoTime();
                 int rndIndex = new Random().nextInt(list.size());
                 list.get(rndIndex);
                 result = System.nanoTime() - start;
-                return String.valueOf(result/1000000.0) + " ms";
+                return String.valueOf(result/1000000.0);
             case ("Remove from start in"):
                 start = System.nanoTime();
                 list.remove(0);
                 result = System.nanoTime() - start;
-                return String.valueOf(result/1000000.0) + " ms";
+                return String.valueOf(result/1000000.0);
             case ("Remove from middle in"):
                 start = System.nanoTime();
                 list.remove(list.size()/2);
                 result = System.nanoTime() - start;
-                return String.valueOf(result/1000000.0) + " ms";
+                return String.valueOf(result/1000000.0);
             case ("Remove from end in"):
                 start = System.nanoTime();
                 list.remove(list.size()-1);
                 result = System.nanoTime() - start;
-                return String.valueOf(result/1000000.0) + " ms";
+                return String.valueOf(result/1000000.0);
 
             default:
-                return "0 ms";
+                return null;
         }
     }
 }

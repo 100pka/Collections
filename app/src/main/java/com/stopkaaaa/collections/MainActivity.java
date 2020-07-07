@@ -1,12 +1,15 @@
 package com.stopkaaaa.collections;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.viewpager.widget.ViewPager;
+import androidx.viewpager2.widget.ViewPager2;
 
 import android.os.Bundle;
 import android.util.Log;
 
 import com.google.android.material.tabs.TabLayout;
+import com.google.android.material.tabs.TabLayoutMediator;
 import com.stopkaaaa.collections.ui.fragment.collections.CollectionsFragment;
 import com.stopkaaaa.collections.ui.fragment.collections.CollectionsFragmentPresenter;
 import com.stopkaaaa.collections.ui.fragment.maps.MapsFragment;
@@ -22,7 +25,7 @@ public class MainActivity extends AppCompatActivity {
     TabLayout tableLayout;
 
     @BindView(R.id.viewPager)
-    ViewPager viewPager;
+    ViewPager2 viewPager;
 
     PageAdapter pageAdapter;
 
@@ -36,12 +39,17 @@ public class MainActivity extends AppCompatActivity {
         CollectionsFragment collectionsFragment = CollectionsFragment.newInstance();
         MapsFragment mapsFragment = MapsFragment.newInstance();
 
-        pageAdapter = new PageAdapter(getSupportFragmentManager());
+        pageAdapter = new PageAdapter(getSupportFragmentManager(), getLifecycle());
         pageAdapter.addFragment(collectionsFragment, getString(R.string.collections));
         pageAdapter.addFragment(mapsFragment, getString(R.string.maps));
 
         viewPager.setAdapter(pageAdapter);
-        tableLayout.setupWithViewPager(viewPager);
+        new TabLayoutMediator(tableLayout, viewPager,
+                new TabLayoutMediator.TabConfigurationStrategy() {
+                    @Override public void onConfigureTab(@NonNull TabLayout.Tab tab, int position) {
+                        tab.setText(pageAdapter.titles.get(position));
+                    }
+                }).attach();
     }
 }
 
