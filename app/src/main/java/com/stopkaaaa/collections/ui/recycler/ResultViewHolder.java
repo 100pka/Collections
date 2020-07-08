@@ -39,14 +39,6 @@ public class ResultViewHolder extends RecyclerView.ViewHolder{
         itemTimeTextView.setVisibility(View.VISIBLE);
     }
 
-    public void setStartButtonClicked() {
-        progressBar.setVisibility(View.VISIBLE);
-        ObjectAnimator progressAnimator;
-        progressAnimator = ObjectAnimator.ofInt(progressBar, "progress", 0,1);
-        progressAnimator.setDuration(7000);
-        progressAnimator.start();
-    }
-
     public void bindItem(CalculationResult item) {
         setItemName(item.getTitle());
 

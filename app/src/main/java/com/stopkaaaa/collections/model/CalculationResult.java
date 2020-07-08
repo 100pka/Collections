@@ -4,20 +4,19 @@ import com.google.common.util.concurrent.ListenableFutureTask;
 
 
 public class CalculationResult {
-    private static boolean startButtonClicked = false;
 
     private String listType;
     private String operation;
     private String title;
     private String time;
     private ListenableFutureTask<String> task;
-    private State state;
+    private boolean state;
 
-    public CalculationResult(String listType, String operation, State state) {
+    public CalculationResult(String listType, String operation) {
         this.listType = listType;
         this.operation = operation;
-        this.state = state;
-        this.time = "0 ms";
+        this.state = false;
+        this.time = "0";
         StringBuffer title = new StringBuffer().append(operation).append(" ").append(listType);
         this.title = title.toString();
     }
@@ -36,14 +35,6 @@ public class CalculationResult {
 
     public void setTime(String time) {
         this.time = time;
-    }
-
-    public static boolean isStartButtonClicked() {
-        return startButtonClicked;
-    }
-
-    public static void setStartButtonClicked(boolean startButtonClicked) {
-        CalculationResult.startButtonClicked = startButtonClicked;
     }
 
     public ListenableFutureTask<String> getTask() {
@@ -70,16 +61,12 @@ public class CalculationResult {
         this.operation = operation;
     }
 
-    public State getState() {
+    public boolean isState() {
         return state;
     }
 
-    public void setState(State state) {
+    public void setState(boolean state) {
         this.state = state;
     }
 }
 
-enum State {
-    CALCULATION,
-    FINISHED
-}

@@ -29,8 +29,6 @@ public class CollectionsFragmentPresenter implements CollectionsFragmentContract
     @Override
     public void onStartButtonClicked(CalculationParameters calculationParameters) {
         if (calculationParameters != null && CalculationParameters.validateParameters(calculationParameters)) {
-            CalculationResult.setStartButtonClicked(true);
-            notifyRecyclerAdapter();
             startCalculation(calculationParameters);
         }
     }
