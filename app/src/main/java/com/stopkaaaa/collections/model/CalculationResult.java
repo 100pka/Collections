@@ -11,10 +11,12 @@ public class CalculationResult {
     private String title;
     private String time;
     private ListenableFutureTask<String> task;
+    private State state;
 
-    public CalculationResult(String listType, String operation) {
+    public CalculationResult(String listType, String operation, State state) {
         this.listType = listType;
         this.operation = operation;
+        this.state = state;
         this.time = "0 ms";
         StringBuffer title = new StringBuffer().append(operation).append(" ").append(listType);
         this.title = title.toString();
@@ -67,4 +69,17 @@ public class CalculationResult {
     public void setOperation(String operation) {
         this.operation = operation;
     }
+
+    public State getState() {
+        return state;
+    }
+
+    public void setState(State state) {
+        this.state = state;
+    }
+}
+
+enum State {
+    CALCULATION,
+    FINISHED
 }

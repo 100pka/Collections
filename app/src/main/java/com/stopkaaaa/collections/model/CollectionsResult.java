@@ -60,7 +60,7 @@ public class CollectionsResult implements ModelContract.Model{
                 operation.append(context.getString(R.string.removeFromEnd));
             }
 
-            CalculationResult calculationResult = new CalculationResult(listType.toString(), operation.toString());
+            CalculationResult calculationResult = new CalculationResult(listType.toString(), operation.toString(), State.FINISHED);
 
             listArrayList.add(calculationResult);
 
@@ -83,6 +83,7 @@ public class CollectionsResult implements ModelContract.Model{
                 public void run() {
                     try {
                         calculationResult.setTime(calculationResult.getTask().get());
+                        calculationResult.setState(State.FINISHED);
                         modelPresenter.notifyRecyclerAdapter();
                     }
                     catch (ExecutionException | InterruptedException e) {
@@ -94,6 +95,7 @@ public class CollectionsResult implements ModelContract.Model{
                 }
             }, executor);
             executor.execute(calculationResult.getTask());
+            calculationResult.setState(State.CALCULATION);
         }
     }
 
