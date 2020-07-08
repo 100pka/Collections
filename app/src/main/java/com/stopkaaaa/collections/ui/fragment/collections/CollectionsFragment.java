@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.CompoundButton;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -14,12 +15,9 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.stopkaaaa.collections.model.CalculationParameters;
 import com.stopkaaaa.collections.ui.StartAmountView;
-import com.stopkaaaa.collections.ui.recycler.RecyclerAdapter;
+import com.stopkaaaa.collections.ui.recycler.CollectionsRecyclerAdapter;
 
 import com.stopkaaaa.collections.R;
-
-import java.util.ArrayList;
-import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -40,7 +38,7 @@ public class CollectionsFragment extends Fragment implements CollectionsFragment
     @BindView(R.id.collectionsRecycler)
     RecyclerView collectionsRecycler;
 
-    RecyclerAdapter recyclerAdapter;
+    private final CollectionsRecyclerAdapter collectionsRecyclerAdapter = new CollectionsRecyclerAdapter();
 
     public CollectionsFragment() {
         // Required empty public constructor
@@ -65,17 +63,16 @@ public class CollectionsFragment extends Fragment implements CollectionsFragment
 //        amountFragment = (StartAmountFragment) getChildFragmentManager().findFragmentById(R.id.startAmountCollections);
 //        amountFragment.addOnNewCalculationDateListener(this);
         collectionsRecycler.setLayoutManager(new GridLayoutManager(getContext(), 3));
-        recyclerAdapter = new RecyclerAdapter(mPresenter.getRecyclerData());
-        collectionsRecycler.setAdapter(recyclerAdapter);
+        collectionsRecycler.setAdapter(collectionsRecyclerAdapter);
 
-        startAmountView.setOnStartButtonClickListener(new View.OnClickListener() {
+        startAmountView.setOnStartButtonClickListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
-            public void onClick(View v) {
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                buttonView.setChecked(isChecked);
                 final CalculationParameters calculationParameters = startAmountView.getCalculationData();
                 mPresenter.onStartButtonClicked(calculationParameters);
             }
         });
-
     }
 
     @Override
@@ -86,7 +83,7 @@ public class CollectionsFragment extends Fragment implements CollectionsFragment
 
     @Override
     public void notifyRecyclerAdapter() {
-        recyclerAdapter.setCalculationResults(mPresenter.getRecyclerData());
+        collectionsRecyclerAdapter.setItems(mPresenter.getRecyclerData());
     }
 
     @Nullable

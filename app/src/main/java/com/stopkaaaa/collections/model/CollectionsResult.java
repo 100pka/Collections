@@ -70,12 +70,12 @@ public class CollectionsResult implements ModelContract.Model{
     @Override
     public void calculation() {
         final ExecutorService executor = Executors
-                .newFixedThreadPool(Integer.parseInt(calculationParameters.getThreads()));
+                .newFixedThreadPool(calculationParameters.getThreads());
         if (calculationParameters == null) return;
         for (final CalculationResult calculationResult : listArrayList
              ) {
             ListenableFutureTask<String> task = ListenableFutureTask.create(new CollectionsCalc(
-                    Integer.parseInt(calculationParameters.getAmount()),
+                    calculationParameters.getAmount(),
                     calculationResult.getListType(), calculationResult.getOperation()));
             calculationResult.setTask(task);
             calculationResult.getTask().addListener(new Runnable() {

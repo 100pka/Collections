@@ -20,5 +20,10 @@
     <string name="removeFromStart">Remove from start in </string>
     <string name="removeFromMiddle">Remove from middle in </string>
     <string name="removeFromEnd">Remove from end in </string>
+    <string name="elements">Elements</string>
+    <string name="threads">Threads</string>
+    <string name="enter_elements_amount">Enter elements amount</string>
+    <string name="enter_threads_amount">Enter threads amount</string>
+    <string name="stop">STOP</string>
 
 </resources>

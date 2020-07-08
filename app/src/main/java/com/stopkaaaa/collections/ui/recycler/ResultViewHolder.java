@@ -10,6 +10,7 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.stopkaaaa.collections.R;
+import com.stopkaaaa.collections.model.CalculationResult;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -44,5 +45,10 @@ public class ResultViewHolder extends RecyclerView.ViewHolder{
         progressAnimator = ObjectAnimator.ofInt(progressBar, "progress", 0,1);
         progressAnimator.setDuration(7000);
         progressAnimator.start();
+    }
+
+    public void bindItem(CalculationResult item) {
+        setItemName(item.getTitle());
+
     }
 }

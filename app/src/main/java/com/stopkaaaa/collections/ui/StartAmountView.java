@@ -4,11 +4,13 @@ import android.content.Context;
 import android.text.TextUtils;
 import android.util.AttributeSet;
 import android.view.LayoutInflater;
+import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.ToggleButton;
 
 import androidx.constraintlayout.widget.ConstraintLayout;
 
+import com.google.android.material.button.MaterialButtonToggleGroup;
 import com.stopkaaaa.collections.R;
 import com.stopkaaaa.collections.model.CalculationParameters;
 
@@ -59,8 +61,8 @@ public class StartAmountView extends ConstraintLayout {
         return threadsAmountEditText.getText().toString();
     }
 
-    public void setOnStartButtonClickListener(OnClickListener onClickListener) {
-        startButton.setOnClickListener(onClickListener);
+    public void setOnStartButtonClickListener(CompoundButton.OnCheckedChangeListener onCheckedChangeListener) {
+        startButton.setOnCheckedChangeListener(onCheckedChangeListener);
     }
 
     public boolean startButtonIsChecked() {

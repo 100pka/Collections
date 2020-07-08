@@ -11,14 +11,14 @@ import com.stopkaaaa.collections.R;
 import com.stopkaaaa.collections.model.CalculationResult;
 
 
+import java.util.ArrayList;
 import java.util.List;
 
-public class RecyclerAdapter extends RecyclerView.Adapter<ResultViewHolder> {
+public class CollectionsRecyclerAdapter extends RecyclerView.Adapter<ResultViewHolder> {
 
-    private List<CalculationResult> calculationResults;
+    private final List<CalculationResult> calculationResults = new ArrayList<>();
 
-    public RecyclerAdapter(List<CalculationResult> calculationResults) {
-        this.calculationResults = calculationResults;
+    public CollectionsRecyclerAdapter() {
     }
 
     @NonNull
@@ -30,7 +30,7 @@ public class RecyclerAdapter extends RecyclerView.Adapter<ResultViewHolder> {
 
     @Override
     public void onBindViewHolder(@NonNull ResultViewHolder holder, int position) {
-        holder.setItemName(calculationResults.get(position).getTitle());
+        holder.bindItem(calculationResults.get(position));
         if (CalculationResult.isStartButtonClicked()) {
             holder.setStartButtonClicked();
         }
@@ -44,8 +44,9 @@ public class RecyclerAdapter extends RecyclerView.Adapter<ResultViewHolder> {
         return calculationResults.size();
     }
 
-    public void setCalculationResults(List<CalculationResult> calculationResults){
-        this.calculationResults = calculationResults;
+    public void setItems(List<CalculationResult> calculationResults){
+        this.calculationResults.clear();
+        this.calculationResults.addAll(calculationResults);
         this.notifyDataSetChanged();
     }
 }
