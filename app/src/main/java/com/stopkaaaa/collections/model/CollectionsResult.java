@@ -110,7 +110,7 @@ public class CollectionsResult implements ModelContract.Model{
     public boolean isCalculationFinished() {
         for (final CalculationResult calculationResult : listArrayList
         ) {
-            if (calculationResult.getTime().equals("0 ms")) {
+            if (calculationResult.getTime().equals("0")) {
                 return false;
             }
         }

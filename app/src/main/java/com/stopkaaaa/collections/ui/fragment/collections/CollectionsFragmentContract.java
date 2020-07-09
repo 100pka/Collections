@@ -8,6 +8,7 @@ import com.stopkaaaa.collections.model.CalculationParameters;
 import com.stopkaaaa.collections.model.CalculationResult;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public interface CollectionsFragmentContract {
     interface View extends BaseView<Presenter>{
