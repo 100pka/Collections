@@ -71,12 +71,20 @@ public class CollectionsResult implements ModelContract.Model{
     public void calculation() {
         final ExecutorService executor = Executors
                 .newFixedThreadPool(calculationParameters.getThreads());
+        final ExecutorService listenersExecutor = Executors
+                .newFixedThreadPool(calculationParameters.getThreads());
         if (calculationParameters == null) return;
+
+        for (final CalculationResult calculationResult : listArrayList
+        ) {
+            calculationResult.setState(true);
+        }
+        modelPresenter.updateRecyclerData();
         for (final CalculationResult calculationResult : listArrayList
              ) {
             ListenableFutureTask<String> task = ListenableFutureTask.create(new CollectionsCalc(
                     calculationParameters.getAmount(),
-                    calculationResult.getListType(), calculationResult.getOperation()));
+                    calculationResult.getListType(), calculationResult.getOperation(), context));
             calculationResult.setTask(task);
             calculationResult.getTask().addListener(new Runnable() {
                 @Override
@@ -84,18 +92,19 @@ public class CollectionsResult implements ModelContract.Model{
                     try {
                         calculationResult.setTime(calculationResult.getTask().get());
                         calculationResult.setState(false);
-                        modelPresenter.notifyRecyclerAdapter();
+                        modelPresenter.updateRecyclerData();
                     }
                     catch (ExecutionException | InterruptedException e) {
                         e.printStackTrace();
                     }
                     if (isCalculationFinished()) {
                         executor.shutdown();
+                        listenersExecutor.shutdown();
+                        modelPresenter.calculationFinished();
                     }
                 }
-            }, executor);
+            }, listenersExecutor);
             executor.execute(calculationResult.getTask());
-            calculationResult.setState(true);
         }
     }
 

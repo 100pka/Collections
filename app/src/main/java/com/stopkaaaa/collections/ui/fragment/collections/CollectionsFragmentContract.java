@@ -13,6 +13,7 @@ import java.util.List;
 public interface CollectionsFragmentContract {
     interface View extends BaseView<Presenter>{
         void notifyRecyclerAdapter();
+        void uncheckStartButton();
         Context getContext();
     }
     interface Presenter extends BasePresenter{

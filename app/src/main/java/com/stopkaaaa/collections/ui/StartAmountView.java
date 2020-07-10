@@ -69,4 +69,8 @@ public class StartAmountView extends ConstraintLayout {
         return startButton.isChecked();
     }
 
+    public void uncheckStartButton() {
+        startButton.setChecked(false);
+    }
+
 }

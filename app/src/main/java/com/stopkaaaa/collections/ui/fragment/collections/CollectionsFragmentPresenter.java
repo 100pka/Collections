@@ -34,8 +34,13 @@ public class CollectionsFragmentPresenter implements CollectionsFragmentContract
     }
 
     @Override
-    public void notifyRecyclerAdapter() {
+    public void updateRecyclerData() {
         mCollectionsFragmentContractView.notifyRecyclerAdapter();
+    }
+
+    @Override
+    public void calculationFinished() {
+        mCollectionsFragmentContractView.uncheckStartButton();
     }
 
     private void startCalculation(CalculationParameters calculationParameters) {

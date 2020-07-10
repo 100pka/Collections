@@ -73,8 +73,10 @@ public class CollectionsFragment extends Fragment implements CollectionsFragment
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 buttonView.setChecked(isChecked);
-                final CalculationParameters calculationParameters = startAmountView.getCalculationData();
-                mPresenter.onStartButtonClicked(calculationParameters);
+                if (isChecked) {
+                    final CalculationParameters calculationParameters = startAmountView.getCalculationData();
+                    mPresenter.onStartButtonClicked(calculationParameters);
+                }
             }
         });
     }
@@ -94,6 +96,11 @@ public class CollectionsFragment extends Fragment implements CollectionsFragment
     @Override
     public Context getContext() {
         return super.getContext();
+    }
+
+    @Override
+    public void uncheckStartButton() {
+        startAmountView.uncheckStartButton();
     }
 
     //    public static List<String> getList() {

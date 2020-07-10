@@ -1,5 +1,7 @@
 package com.stopkaaaa.collections.model;
 
+import android.content.Context;
+
 import com.stopkaaaa.collections.R;
 
 import java.text.DecimalFormat;
@@ -17,22 +19,23 @@ public class CollectionsCalc implements Callable<String> {
     private int amount;
     private String operation;
     private String listType;
+    private Context context;
 
-    public CollectionsCalc(int amount, String listType, String operation) {
+    public CollectionsCalc(int amount, String listType, String operation, Context context) {
         this.amount = amount;
         this.operation = operation;
         this.listType = listType;
+        this.context = context;
         listInit();
     }
 
     private void listInit(){
-        switch (listType) {
-            case ("LinkedList"):
-                list = new LinkedList<>();
-            case ("CopyOnWriteArrayList"):
-                list = new CopyOnWriteArrayList<>();
-            default:
-                list = new ArrayList<>();
+        if (listType.equals(context.getString(R.string.linkedList))) {
+            list = new LinkedList<>();
+        } else if (listType.equals(context.getString(R.string.copyOnWriteArrayList))) {
+            list = new CopyOnWriteArrayList<>();
+        } else {
+            list = new ArrayList<>();
         }
         list.addAll(Collections.nCopies(amount,0));
     }
