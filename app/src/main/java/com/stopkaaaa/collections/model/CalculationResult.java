@@ -9,7 +9,6 @@ public class CalculationResult {
     private String operation;
     private String title;
     private String time;
-    private ListenableFutureTask<String> task;
     private boolean state;
 
     public CalculationResult(String listType, String operation) {
@@ -35,14 +34,6 @@ public class CalculationResult {
 
     public void setTime(String time) {
         this.time = time;
-    }
-
-    public ListenableFutureTask<String> getTask() {
-        return task;
-    }
-
-    public void setTask(ListenableFutureTask<String> task) {
-        this.task = task;
     }
 
     public String getListType() {

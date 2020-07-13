@@ -79,6 +79,7 @@ public class CollectionsResult implements ModelContract.Model{
                 .newFixedThreadPool(calculationParameters.getThreads());
         final ExecutorService listenersExecutor = Executors
                 .newFixedThreadPool(calculationParameters.getThreads());
+
         if (calculationParameters == null) return;
 
         for (final CalculationResult calculationResult :listArrayList
@@ -86,19 +87,26 @@ public class CollectionsResult implements ModelContract.Model{
             calculationResult.setState(true);
         }
         liveData.setValue(listArrayList);
+
         for (final CalculationResult calculationResult : listArrayList
              ) {
-            ListenableFutureTask<String> task = ListenableFutureTask.create(new CollectionsCalc(
+            final ListenableFutureTask<String> task = ListenableFutureTask.create(new CollectionsCalc(
                     calculationParameters.getAmount(),
                     calculationResult.getListType(), calculationResult.getOperation(), context));
-            calculationResult.setTask(task);
-            calculationResult.getTask().addListener(new Runnable() {
+            task.addListener(new Runnable() {
                 @Override
                 public void run() {
                     try {
-                        calculationResult.setTime(calculationResult.getTask().get());
-                        calculationResult.setState(false);
-                        liveData.postValue(listArrayList);
+                        String[] result = task.get().split("_");
+                        for (final CalculationResult calculationResult : listArrayList
+                        ) {
+                            if (calculationResult.getListType().equals(result[0]) &&
+                            calculationResult.getOperation().equals(result[1])) {
+                                calculationResult.setTime(result[2]);
+                                calculationResult.setState(false);
+                                liveData.postValue(listArrayList);
+                            }
+                        }
                     }
                     catch (ExecutionException | InterruptedException e) {
                         e.printStackTrace();
@@ -110,7 +118,7 @@ public class CollectionsResult implements ModelContract.Model{
                     }
                 }
             }, listenersExecutor);
-            executor.execute(calculationResult.getTask());
+            executor.execute(task);
         }
     }
 

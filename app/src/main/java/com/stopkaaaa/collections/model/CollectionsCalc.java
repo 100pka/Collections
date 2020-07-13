@@ -48,38 +48,38 @@ public class CollectionsCalc implements Callable<String> {
             start = System.nanoTime();
             list.add(0, 99);
             result = System.nanoTime() - start;
-            return decimalFormat.format(result / 1000000.0);
+            return listType + "_" + operation + "_" + decimalFormat.format(result / 1000000.0);
         } else if (operation.equals(context.getString(R.string.addingToMiddle))) {
             start = System.nanoTime();
             list.add(list.size()/2, 99);
             result = System.nanoTime() - start;
-            return decimalFormat.format(result / 1000000.0);
+            return listType + "_" + operation + "_" + decimalFormat.format(result / 1000000.0);
         } else if (operation.equals(context.getString(R.string.addingToEnd))) {
             start = System.nanoTime();
             list.add(list.size()-1, 99);
             result = System.nanoTime() - start;
-            return decimalFormat.format(result / 1000000.0);
+            return listType + "_" + operation + "_" + decimalFormat.format(result / 1000000.0);
         } else if (operation.equals(context.getString(R.string.searchIn))) {
             start = System.nanoTime();
             int rndIndex = new Random().nextInt(list.size());
             list.get(rndIndex);
             result = System.nanoTime() - start;
-            return decimalFormat.format(result / 1000000.0);
+            return listType + "_" + operation + "_" + decimalFormat.format(result / 1000000.0);
         } else if (operation.equals(context.getString(R.string.removeFromStart))) {
             start = System.nanoTime();
             list.remove(0);
             result = System.nanoTime() - start;
-            return decimalFormat.format(result / 1000000.0);
+            return listType + "_" + operation + "_" + decimalFormat.format(result / 1000000.0);
         } else if (operation.equals(context.getString(R.string.removeFromMiddle))) {
             start = System.nanoTime();
             list.remove(list.size()/2);
             result = System.nanoTime() - start;
-            return decimalFormat.format(result / 1000000.0);
+            return listType + "_" + operation + "_" + decimalFormat.format(result / 1000000.0);
         } else if (operation.equals(context.getString(R.string.removeFromEnd))) {
             start = System.nanoTime();
             list.remove(list.size()-1);
             result = System.nanoTime() - start;
-            return decimalFormat.format(result / 1000000.0);
+            return listType + "_" + operation + "_" + decimalFormat.format(result / 1000000.0);
         } else return null;
     }
 }
