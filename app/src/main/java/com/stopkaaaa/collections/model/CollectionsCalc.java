@@ -44,46 +44,42 @@ public class CollectionsCalc implements Callable<String> {
     public String call() {
         long start, result;
         DecimalFormat decimalFormat = new DecimalFormat("0.00");
-        switch (operation) {
-            case ("Adding to start in"):
-                start = System.nanoTime();
-                list.add(0, 99);
-                result = System.nanoTime() - start;
-                return decimalFormat.format(result / 1000000.0);
-            case ("Adding to middle in"):
-                start = System.nanoTime();
-                list.add(list.size()/2, 99);
-                result = System.nanoTime() - start;
-                return decimalFormat.format(result / 1000000.0);
-            case ("Adding to end in"):
-                start = System.nanoTime();
-                list.add(list.size()-1, 99);
-                result = System.nanoTime() - start;
-                return decimalFormat.format(result / 1000000.0);
-            case ("Search in"):
-                start = System.nanoTime();
-                int rndIndex = new Random().nextInt(list.size());
-                list.get(rndIndex);
-                result = System.nanoTime() - start;
-                return decimalFormat.format(result / 1000000.0);
-            case ("Remove from start in"):
-                start = System.nanoTime();
-                list.remove(0);
-                result = System.nanoTime() - start;
-                return decimalFormat.format(result / 1000000.0);
-            case ("Remove from middle in"):
-                start = System.nanoTime();
-                list.remove(list.size()/2);
-                result = System.nanoTime() - start;
-                return decimalFormat.format(result / 1000000.0);
-            case ("Remove from end in"):
-                start = System.nanoTime();
-                list.remove(list.size()-1);
-                result = System.nanoTime() - start;
-                return decimalFormat.format(result / 1000000.0);
-
-            default:
-                return null;
-        }
+        if (operation.equals(context.getString(R.string.addingToStart))) {
+            start = System.nanoTime();
+            list.add(0, 99);
+            result = System.nanoTime() - start;
+            return decimalFormat.format(result / 1000000.0);
+        } else if (operation.equals(context.getString(R.string.addingToMiddle))) {
+            start = System.nanoTime();
+            list.add(list.size()/2, 99);
+            result = System.nanoTime() - start;
+            return decimalFormat.format(result / 1000000.0);
+        } else if (operation.equals(context.getString(R.string.addingToEnd))) {
+            start = System.nanoTime();
+            list.add(list.size()-1, 99);
+            result = System.nanoTime() - start;
+            return decimalFormat.format(result / 1000000.0);
+        } else if (operation.equals(context.getString(R.string.searchIn))) {
+            start = System.nanoTime();
+            int rndIndex = new Random().nextInt(list.size());
+            list.get(rndIndex);
+            result = System.nanoTime() - start;
+            return decimalFormat.format(result / 1000000.0);
+        } else if (operation.equals(context.getString(R.string.removeFromStart))) {
+            start = System.nanoTime();
+            list.remove(0);
+            result = System.nanoTime() - start;
+            return decimalFormat.format(result / 1000000.0);
+        } else if (operation.equals(context.getString(R.string.removeFromMiddle))) {
+            start = System.nanoTime();
+            list.remove(list.size()/2);
+            result = System.nanoTime() - start;
+            return decimalFormat.format(result / 1000000.0);
+        } else if (operation.equals(context.getString(R.string.removeFromEnd))) {
+            start = System.nanoTime();
+            list.remove(list.size()-1);
+            result = System.nanoTime() - start;
+            return decimalFormat.format(result / 1000000.0);
+        } else return null;
     }
 }
