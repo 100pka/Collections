@@ -29,18 +29,15 @@ public class ResultViewHolder extends RecyclerView.ViewHolder{
         ButterKnife.bind(this, view);
     }
 
-    public void setItemName(String title) {
-        itemNameTextView.setText(title);
-    }
-
-    public void setItemTime(String time) {
-        itemTimeTextView.setText(time);
-        progressBar.setVisibility(View.INVISIBLE);
-        itemTimeTextView.setVisibility(View.VISIBLE);
-    }
-
     public void bindItem(CalculationResult item) {
-        setItemName(item.getTitle());
-
+        itemNameTextView.setText(item.getTitle());
+        if (item.isState()) {
+            progressBar.setVisibility(View.VISIBLE);
+        }
+        progressBar.animate().alpha(item.isState()?1:0).start();
+        if (!item.getTime().equals("0")) {
+            progressBar.setVisibility(View.INVISIBLE);
+            itemTimeTextView.setText(item.getTime() + " ms");
+        }
     }
 }

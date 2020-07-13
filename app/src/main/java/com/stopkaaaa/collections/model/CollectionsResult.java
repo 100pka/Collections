@@ -3,6 +3,8 @@ package com.stopkaaaa.collections.model;
 
 import android.content.Context;
 
+import androidx.lifecycle.MutableLiveData;
+
 import com.google.common.util.concurrent.ListenableFutureTask;
 import com.stopkaaaa.collections.R;
 
@@ -14,6 +16,8 @@ import java.util.concurrent.Executors;
 public class CollectionsResult implements ModelContract.Model{
 
     private static CollectionsResult instance;
+
+    private MutableLiveData<ArrayList<CalculationResult>> liveData = new MutableLiveData<>();
 
     private ArrayList<CalculationResult> listArrayList;
 
@@ -63,6 +67,8 @@ public class CollectionsResult implements ModelContract.Model{
             CalculationResult calculationResult = new CalculationResult(listType.toString(), operation.toString());
 
             listArrayList.add(calculationResult);
+            liveData.setValue(listArrayList);
+
 
         }
     }
@@ -75,11 +81,11 @@ public class CollectionsResult implements ModelContract.Model{
                 .newFixedThreadPool(calculationParameters.getThreads());
         if (calculationParameters == null) return;
 
-        for (final CalculationResult calculationResult : listArrayList
+        for (final CalculationResult calculationResult :listArrayList
         ) {
             calculationResult.setState(true);
         }
-        modelPresenter.updateRecyclerData();
+        liveData.setValue(listArrayList);
         for (final CalculationResult calculationResult : listArrayList
              ) {
             ListenableFutureTask<String> task = ListenableFutureTask.create(new CollectionsCalc(
@@ -92,7 +98,7 @@ public class CollectionsResult implements ModelContract.Model{
                     try {
                         calculationResult.setTime(calculationResult.getTask().get());
                         calculationResult.setState(false);
-                        modelPresenter.updateRecyclerData();
+                        liveData.postValue(listArrayList);
                     }
                     catch (ExecutionException | InterruptedException e) {
                         e.printStackTrace();
@@ -127,18 +133,14 @@ public class CollectionsResult implements ModelContract.Model{
     }
 
     public ArrayList<CalculationResult> getListArrayList() {
-        return listArrayList;
-    }
-
-    public void setListArrayList(ArrayList<CalculationResult> listArrayList) {
-        this.listArrayList = listArrayList;
-    }
-
-    public CalculationParameters getCalculationParameters() {
-        return calculationParameters;
+        return liveData.getValue();
     }
 
     public void setCalculationParameters(CalculationParameters calculationParameters) {
         this.calculationParameters = calculationParameters;
+    }
+
+    public MutableLiveData<ArrayList<CalculationResult>> getData() {
+        return liveData;
     }
 }

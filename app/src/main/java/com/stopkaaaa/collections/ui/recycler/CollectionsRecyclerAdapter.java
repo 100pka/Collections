@@ -31,14 +31,6 @@ public class CollectionsRecyclerAdapter extends RecyclerView.Adapter<ResultViewH
     @Override
     public void onBindViewHolder(@NonNull ResultViewHolder holder, int position) {
         holder.bindItem(calculationResults.get(position));
-        if (calculationResults.get(position).isState()) {
-            holder.progressBar.setVisibility(View.VISIBLE);
-        }
-        holder.progressBar.animate().alpha(calculationResults.get(position).isState()?1:0).start();
-        if (!calculationResults.get(position).getTime().equals("0")) {
-            holder.progressBar.setVisibility(View.INVISIBLE);
-            holder.setItemTime(calculationResults.get(position).getTime() + " ms");
-        }
     }
 
     @Override

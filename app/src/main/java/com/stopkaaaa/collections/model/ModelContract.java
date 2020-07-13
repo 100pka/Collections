@@ -8,7 +8,6 @@ public interface ModelContract {
 
     }
     interface ModelPresenter extends BasePresenter {
-        void updateRecyclerData();
         void calculationFinished();
     }
 }
