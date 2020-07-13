@@ -43,17 +43,20 @@ public class CollectionsFragment extends Fragment implements CollectionsFragment
 
     private final CollectionsRecyclerAdapter collectionsRecyclerAdapter = new CollectionsRecyclerAdapter();
 
+    public static CollectionsFragment newInstance() { return new CollectionsFragment(); }
+
     public CollectionsFragment() {
         // Required empty public constructor
     }
 
-    public static CollectionsFragment newInstance() { return new CollectionsFragment(); }
-
-
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        mPresenter = new CollectionsFragmentPresenter(this);
+    }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         final View view = inflater.inflate(R.layout.fragment_collections, container, false);
         ButterKnife.bind(this, view);
@@ -63,8 +66,6 @@ public class CollectionsFragment extends Fragment implements CollectionsFragment
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-//        amountFragment = (StartAmountFragment) getChildFragmentManager().findFragmentById(R.id.startAmountCollections);
-//        amountFragment.addOnNewCalculationDateListener(this);
         collectionsRecyclerAdapter.setItems(mPresenter.getRecyclerData());
         collectionsRecycler.setLayoutManager(new GridLayoutManager(getContext(), 3));
         collectionsRecycler.setAdapter(collectionsRecyclerAdapter);
@@ -82,12 +83,6 @@ public class CollectionsFragment extends Fragment implements CollectionsFragment
     }
 
     @Override
-    public void onCreate(@Nullable Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        mPresenter = new CollectionsFragmentPresenter(this);
-    }
-
-    @Override
     public void notifyRecyclerAdapter() {
         collectionsRecyclerAdapter.setItems(mPresenter.getRecyclerData());
     }
@@ -102,50 +97,4 @@ public class CollectionsFragment extends Fragment implements CollectionsFragment
     public void uncheckStartButton() {
         startAmountView.uncheckStartButton();
     }
-
-    //    public static List<String> getList() {
-//        List<String> nameList = new ArrayList<String>();
-//        nameList.add("Adding to start in ArrayList");
-//        nameList.add("Adding to start in LinkedList");
-//        nameList.add("Adding to start in CopyOnWriteList");
-//
-//        nameList.add("Adding to middle in ArrayList");
-//        nameList.add("Adding to middle in LinkedList");
-//        nameList.add("Adding to middle in CopyOnWriteList");
-//
-//        nameList.add("Adding to end in ArrayList");
-//        nameList.add("Adding to end in LinkedList");
-//        nameList.add("Adding to end in CopyOnWriteList");
-//
-//        nameList.add("Search in ArrayList");
-//        nameList.add("Search in LinkedList");
-//        nameList.add("Search in CopyOnWriteList");
-//
-//        nameList.add("Remove from start in ArrayList");
-//        nameList.add("Remove from start in LinkedList");
-//        nameList.add("Remove from start in CopyOnWriteList");
-//
-//        nameList.add("Remove from middle in ArrayList");
-//        nameList.add("Remove from middle in LinkedList");
-//        nameList.add("Remove from middle in CopyOnWriteList");
-//
-//        nameList.add("Remove from end in ArrayList");
-//        nameList.add("Remove from end in LinkedList");
-//        nameList.add("Remove from end in CopyOnWriteList");
-//
-//        return nameList;
-//    }
-
-//    @Override
-//    public void onNewCalculationData(CalculationData calculationData) {
-//        Log.d("LOGG", "Clicked " + calculationData);
-//    }
-//
-//    @Override
-//    public void onDestroyView() {
-//        amountFragment.removeOnNewCalculationDateListener(this);
-//        super.onDestroyView();
-//    }
-
-
 }
