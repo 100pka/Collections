@@ -1,5 +1,7 @@
 package com.stopkaaaa.collections.ui.fragment.collections;
 
+import android.content.Context;
+
 import androidx.lifecycle.LifecycleOwner;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.Observer;
@@ -19,14 +21,19 @@ public class CollectionsFragmentPresenter implements CollectionsFragmentContract
 
     private LiveData<ArrayList<CalculationResult>> liveData;
 
-    public CollectionsFragmentPresenter(CollectionsFragmentContract.View mCollectionsFragmentContractView) {
+    private Context context;
+
+    private CollectionsResult collectionsResult;
+
+    public CollectionsFragmentPresenter(CollectionsFragmentContract.View mCollectionsFragmentContractView, Context context) {
         this.mCollectionsFragmentContractView = mCollectionsFragmentContractView;
+        this.context = context;
+        collectionsResult = CollectionsResult.getInstance(this, context);
     }
 
     @Override
     public ArrayList<CalculationResult> getRecyclerData() {
-        return CollectionsResult.getInstance(this, mCollectionsFragmentContractView.getContext())
-                .getListArrayList();
+        return collectionsResult.getListArrayList();
     }
 
     @Override
@@ -42,16 +49,14 @@ public class CollectionsFragmentPresenter implements CollectionsFragmentContract
     }
 
     private void startCalculation(CalculationParameters calculationParameters) {
-        liveData = CollectionsResult.getInstance(this, mCollectionsFragmentContractView.getContext()).getData();
+        liveData = collectionsResult.getData();
         liveData.observe((LifecycleOwner) mCollectionsFragmentContractView.getContext(), new Observer<ArrayList<CalculationResult>>() {
             @Override
             public void onChanged(ArrayList<CalculationResult> calculationResults) {
                 mCollectionsFragmentContractView.notifyRecyclerAdapter();
             }
         });
-        CollectionsResult.getInstance(this, mCollectionsFragmentContractView.getContext())
-                .setCalculationParameters(calculationParameters);
-        CollectionsResult.getInstance(this, mCollectionsFragmentContractView.getContext())
-                .calculation();
+        collectionsResult.setCalculationParameters(calculationParameters);
+        collectionsResult.calculation();
     }
 }

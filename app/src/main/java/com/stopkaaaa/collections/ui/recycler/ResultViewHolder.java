@@ -1,6 +1,7 @@
 package com.stopkaaaa.collections.ui.recycler;
 
 import android.animation.ObjectAnimator;
+import android.content.Context;
 import android.view.View;
 import android.view.animation.Animation;
 import android.widget.ProgressBar;
@@ -24,8 +25,11 @@ public class ResultViewHolder extends RecyclerView.ViewHolder{
     @BindView(R.id.progressBar)
     ProgressBar progressBar;
 
-    public ResultViewHolder(@NonNull View view) {
+    private Context context;
+
+    public ResultViewHolder(@NonNull View view, Context context) {
         super(view);
+        this.context = context;
         ButterKnife.bind(this, view);
     }
 
@@ -35,9 +39,8 @@ public class ResultViewHolder extends RecyclerView.ViewHolder{
             progressBar.setVisibility(View.VISIBLE);
         }
         progressBar.animate().alpha(item.isState()?1:0).start();
-        if (!item.getTime().equals("0")) {
-            progressBar.setVisibility(View.INVISIBLE);
-            itemTimeTextView.setText(item.getTime() + " ms");
+        if (item.getTime() != null && !item.getTime().equals("0")) {
+            itemTimeTextView.setText(item.getTime() + context.getString(R.string.ms));
         }
     }
 }

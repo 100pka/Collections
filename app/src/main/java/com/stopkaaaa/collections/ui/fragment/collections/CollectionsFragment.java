@@ -1,6 +1,5 @@
 package com.stopkaaaa.collections.ui.fragment.collections;
 
-import android.content.Context;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -14,13 +13,10 @@ import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.stopkaaaa.collections.model.CalculationParameters;
-import com.stopkaaaa.collections.model.CalculationResult;
 import com.stopkaaaa.collections.ui.StartAmountView;
 import com.stopkaaaa.collections.ui.recycler.CollectionsRecyclerAdapter;
 
 import com.stopkaaaa.collections.R;
-
-import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -33,7 +29,7 @@ import butterknife.ButterKnife;
  */
 public class CollectionsFragment extends Fragment implements CollectionsFragmentContract.View {
 
-    private CollectionsFragmentContract.Presenter mPresenter;
+    private CollectionsFragmentContract.Presenter collectionsFragmentPresenter;
 
     @BindView(R.id.startAmountCollections)
     StartAmountView startAmountView;
@@ -41,7 +37,8 @@ public class CollectionsFragment extends Fragment implements CollectionsFragment
     @BindView(R.id.collectionsRecycler)
     RecyclerView collectionsRecycler;
 
-    private final CollectionsRecyclerAdapter collectionsRecyclerAdapter = new CollectionsRecyclerAdapter();
+    private final CollectionsRecyclerAdapter collectionsRecyclerAdapter =
+            new CollectionsRecyclerAdapter(getActivity().getApplicationContext());
 
     public CollectionsFragment() {
         // Required empty public constructor
@@ -65,7 +62,7 @@ public class CollectionsFragment extends Fragment implements CollectionsFragment
         super.onViewCreated(view, savedInstanceState);
 //        amountFragment = (StartAmountFragment) getChildFragmentManager().findFragmentById(R.id.startAmountCollections);
 //        amountFragment.addOnNewCalculationDateListener(this);
-        collectionsRecyclerAdapter.setItems(mPresenter.getRecyclerData());
+        collectionsRecyclerAdapter.setItems(collectionsFragmentPresenter.getRecyclerData());
         collectionsRecycler.setLayoutManager(new GridLayoutManager(getContext(), 3));
         collectionsRecycler.setAdapter(collectionsRecyclerAdapter);
 
@@ -75,7 +72,7 @@ public class CollectionsFragment extends Fragment implements CollectionsFragment
                 buttonView.setChecked(isChecked);
                 if (isChecked) {
                     final CalculationParameters calculationParameters = startAmountView.getCalculationData();
-                    mPresenter.onStartButtonClicked(calculationParameters);
+                    collectionsFragmentPresenter.onStartButtonClicked(calculationParameters);
                 }
             }
         });
@@ -84,18 +81,14 @@ public class CollectionsFragment extends Fragment implements CollectionsFragment
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        mPresenter = new CollectionsFragmentPresenter(this);
+        collectionsFragmentPresenter =
+                new CollectionsFragmentPresenter(this, getActivity().getApplicationContext());
+        collectionsFragmentPresenter.setup();
     }
 
     @Override
     public void notifyRecyclerAdapter() {
-        collectionsRecyclerAdapter.setItems(mPresenter.getRecyclerData());
-    }
-
-    @Nullable
-    @Override
-    public Context getContext() {
-        return super.getContext();
+        collectionsRecyclerAdapter.setItems(collectionsFragmentPresenter.getRecyclerData());
     }
 
     @Override

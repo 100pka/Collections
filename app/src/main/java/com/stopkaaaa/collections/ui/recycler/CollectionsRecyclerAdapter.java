@@ -1,5 +1,6 @@
 package com.stopkaaaa.collections.ui.recycler;
 
+import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -18,14 +19,17 @@ public class CollectionsRecyclerAdapter extends RecyclerView.Adapter<ResultViewH
 
     private final List<CalculationResult> calculationResults = new ArrayList<>();
 
-    public CollectionsRecyclerAdapter() {
+    private Context context;
+
+    public CollectionsRecyclerAdapter(Context context) {
+        this.context = context;
     }
 
     @NonNull
     @Override
     public ResultViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         final View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_calculation_result, parent, false);
-        return new ResultViewHolder(view);
+        return new ResultViewHolder(view, context);
     }
 
     @Override
