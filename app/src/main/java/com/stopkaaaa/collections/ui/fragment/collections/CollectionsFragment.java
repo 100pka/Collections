@@ -66,7 +66,7 @@ public class CollectionsFragment extends Fragment implements CollectionsFragment
         super.onViewCreated(view, savedInstanceState);
 //        amountFragment = (StartAmountFragment) getChildFragmentManager().findFragmentById(R.id.startAmountCollections);
 //        amountFragment.addOnNewCalculationDateListener(this);
-        collectionsRecyclerAdapter.setItems(mPresenter.getRecyclerData());
+        collectionsRecyclerAdapter.setItems(collectionsFragmentPresenter.getRecyclerData());
         collectionsRecycler.setLayoutManager(new GridLayoutManager(getContext(), 3));
         collectionsRecycler.setAdapter(collectionsRecyclerAdapter);
 
@@ -87,7 +87,7 @@ public class CollectionsFragment extends Fragment implements CollectionsFragment
         super.onCreate(savedInstanceState);
         collectionsFragmentPresenter =
                 new CollectionsFragmentPresenter(this, getActivity().getApplicationContext());
-        collectionsFragmentPresenter.setup();
+       // collectionsFragmentPresenter.setup();
     }
 
     @Override
