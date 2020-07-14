@@ -1,5 +1,6 @@
 package com.stopkaaaa.collections.ui.fragment.collections;
 
+import android.content.Context;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -13,10 +14,13 @@ import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.stopkaaaa.collections.model.CalculationParameters;
+import com.stopkaaaa.collections.model.CalculationResult;
 import com.stopkaaaa.collections.ui.StartAmountView;
 import com.stopkaaaa.collections.ui.recycler.CollectionsRecyclerAdapter;
 
 import com.stopkaaaa.collections.R;
+
+import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -62,7 +66,7 @@ public class CollectionsFragment extends Fragment implements CollectionsFragment
         super.onViewCreated(view, savedInstanceState);
 //        amountFragment = (StartAmountFragment) getChildFragmentManager().findFragmentById(R.id.startAmountCollections);
 //        amountFragment.addOnNewCalculationDateListener(this);
-        collectionsRecyclerAdapter.setItems(collectionsFragmentPresenter.getRecyclerData());
+        collectionsRecyclerAdapter.setItems(mPresenter.getRecyclerData());
         collectionsRecycler.setLayoutManager(new GridLayoutManager(getContext(), 3));
         collectionsRecycler.setAdapter(collectionsRecyclerAdapter);
 
