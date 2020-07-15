@@ -13,7 +13,7 @@ import java.util.Random;
 import java.util.concurrent.Callable;
 import java.util.concurrent.CopyOnWriteArrayList;
 
-public class CollectionsCalc implements Callable<String> {
+public class Calculator implements Callable<String> {
 
     private List<Integer> list;
     private int amount;
@@ -21,7 +21,7 @@ public class CollectionsCalc implements Callable<String> {
     private String listType;
     private Context context;
 
-    public CollectionsCalc(int amount, String listType, String operation, Context context) {
+    public Calculator(int amount, String listType, String operation, Context context) {
         this.amount = amount;
         this.operation = operation;
         this.listType = listType;

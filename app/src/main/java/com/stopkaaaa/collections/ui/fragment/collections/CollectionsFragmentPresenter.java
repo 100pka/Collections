@@ -8,8 +8,8 @@ import androidx.lifecycle.Observer;
 
 import com.stopkaaaa.collections.model.CalculationParameters;
 
-import com.stopkaaaa.collections.model.CollectionsResult;
-import com.stopkaaaa.collections.model.CalculationResult;
+import com.stopkaaaa.collections.model.CollectionSupplier;
+import com.stopkaaaa.collections.model.CalculationResultItem;
 import com.stopkaaaa.collections.model.ModelContract;
 
 import java.util.ArrayList;
@@ -17,23 +17,22 @@ import java.util.ArrayList;
 
 public class CollectionsFragmentPresenter implements CollectionsFragmentContract.Presenter, ModelContract.ModelPresenter {
 
-    private final CollectionsFragmentContract.View mCollectionsFragmentContractView;
+    private final CollectionsFragmentContract.View collectionsFragmentContractView;
 
-    private LiveData<ArrayList<CalculationResult>> liveData;
+    private LiveData<ArrayList<CalculationResultItem>> liveData;
 
     private Context context;
 
-    private CollectionsResult collectionsResult;
+    private CollectionSupplier collectionSupplier;
 
-    public CollectionsFragmentPresenter(CollectionsFragmentContract.View mCollectionsFragmentContractView, Context context) {
-        this.mCollectionsFragmentContractView = mCollectionsFragmentContractView;
+    public CollectionsFragmentPresenter(CollectionsFragmentContract.View collectionsFragmentContractView, Context context) {
+        this.collectionsFragmentContractView = collectionsFragmentContractView;
         this.context = context;
-        collectionsResult = CollectionsResult.getInstance(this, context);
+        collectionSupplier = CollectionSupplier.getInstance(this, context);
     }
 
-    @Override
-    public ArrayList<CalculationResult> getRecyclerData() {
-        return collectionsResult.getListArrayList();
+    public void setup() {
+        collectionsFragmentContractView.setRecyclerAdapterData(collectionSupplier.getListArrayList());
     }
 
     @Override
@@ -45,18 +44,18 @@ public class CollectionsFragmentPresenter implements CollectionsFragmentContract
 
     @Override
     public void calculationFinished() {
-        mCollectionsFragmentContractView.uncheckStartButton();
+        collectionsFragmentContractView.uncheckStartButton();
     }
 
     private void startCalculation(CalculationParameters calculationParameters) {
-        liveData = collectionsResult.getData();
-        liveData.observe((LifecycleOwner) mCollectionsFragmentContractView.getContext(), new Observer<ArrayList<CalculationResult>>() {
+        liveData = collectionSupplier.getData();
+        liveData.observe((LifecycleOwner) collectionsFragmentContractView.getContext(), new Observer<ArrayList<CalculationResultItem>>() {
             @Override
-            public void onChanged(ArrayList<CalculationResult> calculationResults) {
-                mCollectionsFragmentContractView.notifyRecyclerAdapter();
+            public void onChanged(ArrayList<CalculationResultItem> calculationResultItems) {
+                collectionsFragmentContractView.setRecyclerAdapterData(collectionSupplier.getListArrayList());
             }
         });
-        collectionsResult.setCalculationParameters(calculationParameters);
-        collectionsResult.calculation();
+        collectionSupplier.setCalculationParameters(calculationParameters);
+        collectionSupplier.calculation();
     }
 }

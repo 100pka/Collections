@@ -3,7 +3,7 @@ package com.stopkaaaa.collections.model;
 import com.google.common.util.concurrent.ListenableFutureTask;
 
 
-public class CalculationResult {
+public class CalculationResultItem {
 
     private String listType;
     private String operation;
@@ -11,11 +11,11 @@ public class CalculationResult {
     private String time;
     private boolean state;
 
-    public CalculationResult(String listType, String operation) {
+    public CalculationResultItem(String listType, String operation) {
         this.listType = listType;
         this.operation = operation;
         this.state = false;
-        this.time = "0";
+        this.time = null;
         StringBuffer title = new StringBuffer().append(operation).append(" ").append(listType);
         this.title = title.toString();
     }

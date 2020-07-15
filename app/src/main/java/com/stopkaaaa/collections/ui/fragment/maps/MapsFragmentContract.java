@@ -1,12 +1,11 @@
 package com.stopkaaaa.collections.ui.fragment.maps;
 
-import com.stopkaaaa.collections.presenter.BasePresenter;
-import com.stopkaaaa.collections.presenter.BaseView;
+import com.stopkaaaa.collections.base.BaseContract;
 
 public interface MapsFragmentContract {
-    interface View extends BaseView<Presenter> {
+    interface View extends BaseContract.BaseView<Presenter> {
 
     }
-    interface Presenter extends BasePresenter {
+    interface Presenter extends BaseContract.BasePresenter {
     }
 }

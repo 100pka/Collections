@@ -9,7 +9,7 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.stopkaaaa.collections.R;
-import com.stopkaaaa.collections.model.CalculationResult;
+import com.stopkaaaa.collections.model.CalculationResultItem;
 
 
 import java.util.ArrayList;
@@ -17,7 +17,7 @@ import java.util.List;
 
 public class CollectionsRecyclerAdapter extends RecyclerView.Adapter<ResultViewHolder> {
 
-    private final List<CalculationResult> calculationResults = new ArrayList<>();
+    private final List<CalculationResultItem> calculationResultItems = new ArrayList<>();
 
     private Context context;
 
@@ -34,17 +34,17 @@ public class CollectionsRecyclerAdapter extends RecyclerView.Adapter<ResultViewH
 
     @Override
     public void onBindViewHolder(@NonNull ResultViewHolder holder, int position) {
-        holder.bindItem(calculationResults.get(position));
+        holder.bindItem(calculationResultItems.get(position));
     }
 
     @Override
     public int getItemCount() {
-        return calculationResults.size();
+        return calculationResultItems.size();
     }
 
-    public void setItems(List<CalculationResult> calculationResults){
-        this.calculationResults.clear();
-        this.calculationResults.addAll(calculationResults);
+    public void setItems(List<CalculationResultItem> calculationResultItems){
+        this.calculationResultItems.clear();
+        this.calculationResultItems.addAll(calculationResultItems);
         this.notifyDataSetChanged();
     }
 }

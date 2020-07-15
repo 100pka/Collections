@@ -13,13 +13,13 @@ import java.util.concurrent.ExecutionException;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
-public class CollectionsResult implements ModelContract.Model{
+public class CollectionSupplier implements ModelContract.Model{
 
-    private static CollectionsResult instance;
+    private static CollectionSupplier instance;
 
-    private MutableLiveData<ArrayList<CalculationResult>> liveData = new MutableLiveData<>();
+    private MutableLiveData<ArrayList<CalculationResultItem>> liveData = new MutableLiveData<>();
 
-    private ArrayList<CalculationResult> listArrayList;
+    private ArrayList<CalculationResultItem> listArrayList;
 
     private CalculationParameters calculationParameters;
 
@@ -27,7 +27,7 @@ public class CollectionsResult implements ModelContract.Model{
 
     private Context context;
 
-    private CollectionsResult(ModelContract.ModelPresenter modelPresenter, Context context) {
+    private CollectionSupplier(ModelContract.ModelPresenter modelPresenter, Context context) {
         this.calculationParameters = new CalculationParameters("", "", false);
         this.modelPresenter = modelPresenter;
         this.context = context;
@@ -64,9 +64,9 @@ public class CollectionsResult implements ModelContract.Model{
                 operation.append(context.getString(R.string.removeFromEnd));
             }
 
-            CalculationResult calculationResult = new CalculationResult(listType.toString(), operation.toString());
+            CalculationResultItem calculationResultItem = new CalculationResultItem(listType.toString(), operation.toString());
 
-            listArrayList.add(calculationResult);
+            listArrayList.add(calculationResultItem);
             liveData.setValue(listArrayList);
 
 
@@ -82,28 +82,28 @@ public class CollectionsResult implements ModelContract.Model{
 
         if (calculationParameters == null) return;
 
-        for (final CalculationResult calculationResult :listArrayList
+        for (final CalculationResultItem calculationResultItem :listArrayList
         ) {
-            calculationResult.setState(true);
+            calculationResultItem.setState(true);
         }
         liveData.setValue(listArrayList);
 
-        for (final CalculationResult calculationResult : listArrayList
+        for (final CalculationResultItem calculationResultItem : listArrayList
              ) {
-            final ListenableFutureTask<String> task = ListenableFutureTask.create(new CollectionsCalc(
+            final ListenableFutureTask<String> task = ListenableFutureTask.create(new Calculator(
                     calculationParameters.getAmount(),
-                    calculationResult.getListType(), calculationResult.getOperation(), context));
+                    calculationResultItem.getListType(), calculationResultItem.getOperation(), context));
             task.addListener(new Runnable() {
                 @Override
                 public void run() {
                     try {
                         String[] result = task.get().split("_");
-                        for (final CalculationResult calculationResult : listArrayList
+                        for (final CalculationResultItem calculationResultItem : listArrayList
                         ) {
-                            if (calculationResult.getListType().equals(result[0]) &&
-                            calculationResult.getOperation().equals(result[1])) {
-                                calculationResult.setTime(result[2]);
-                                calculationResult.setState(false);
+                            if (calculationResultItem.getListType().equals(result[0]) &&
+                            calculationResultItem.getOperation().equals(result[1])) {
+                                calculationResultItem.setTime(result[2]);
+                                calculationResultItem.setState(false);
                                 liveData.postValue(listArrayList);
                             }
                         }
@@ -123,24 +123,24 @@ public class CollectionsResult implements ModelContract.Model{
     }
 
 
-    public static synchronized CollectionsResult getInstance(ModelContract.ModelPresenter modelPresenter, Context context) {
+    public static synchronized CollectionSupplier getInstance(ModelContract.ModelPresenter modelPresenter, Context context) {
         if (instance == null) {
-            instance = new CollectionsResult(modelPresenter, context);
+            instance = new CollectionSupplier(modelPresenter, context);
         }
         return instance;
     }
 
     public boolean isCalculationFinished() {
-        for (final CalculationResult calculationResult : listArrayList
+        for (final CalculationResultItem calculationResultItem : listArrayList
         ) {
-            if (calculationResult.getTime().equals("0")) {
+            if (calculationResultItem.getTime().equals("0")) {
                 return false;
             }
         }
         return true;
     }
 
-    public ArrayList<CalculationResult> getListArrayList() {
+    public ArrayList<CalculationResultItem> getListArrayList() {
         return liveData.getValue();
     }
 
@@ -148,7 +148,7 @@ public class CollectionsResult implements ModelContract.Model{
         this.calculationParameters = calculationParameters;
     }
 
-    public MutableLiveData<ArrayList<CalculationResult>> getData() {
+    public MutableLiveData<ArrayList<CalculationResultItem>> getData() {
         return liveData;
     }
 }
