@@ -4,7 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <com.stopkaaaa.collections.ui.StartAmountView
+    <com.stopkaaaa.collections.ui.fragment.view.StartAmountView
         android:id="@+id/startAmountCollections"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"

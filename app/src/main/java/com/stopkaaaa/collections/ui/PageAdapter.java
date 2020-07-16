@@ -1,9 +1,7 @@
-package com.stopkaaaa.collections;
+package com.stopkaaaa.collections.ui;
 
 import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentActivity;
 import androidx.fragment.app.FragmentManager;
 import androidx.lifecycle.Lifecycle;
 import androidx.viewpager2.adapter.FragmentStateAdapter;
@@ -24,7 +22,7 @@ public class PageAdapter extends FragmentStateAdapter {
     @NonNull
     @Override
     public Fragment createFragment(int position) {
-        return  fragments.get(position);
+        return fragments.get(position);
     }
 
     @Override
@@ -32,7 +30,7 @@ public class PageAdapter extends FragmentStateAdapter {
         return fragments.size();
     }
 
-    public void addFragment (Fragment fragment, String title) {
+    public void addFragment(Fragment fragment, String title) {
         fragments.add(fragment);
         titles.add(title);
     }

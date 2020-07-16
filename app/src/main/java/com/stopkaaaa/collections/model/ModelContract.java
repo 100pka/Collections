@@ -7,6 +7,7 @@ public interface ModelContract {
         void calculation();
 
     }
+
     interface ModelPresenter extends BaseContract.BasePresenter {
         void calculationFinished();
     }

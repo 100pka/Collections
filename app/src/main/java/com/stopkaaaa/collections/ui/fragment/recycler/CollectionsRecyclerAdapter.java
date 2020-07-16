@@ -1,4 +1,4 @@
-package com.stopkaaaa.collections.ui.recycler;
+package com.stopkaaaa.collections.ui.fragment.recycler;
 
 import android.content.Context;
 import android.view.LayoutInflater;
@@ -9,8 +9,7 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.stopkaaaa.collections.R;
-import com.stopkaaaa.collections.model.CalculationResultItem;
-
+import com.stopkaaaa.collections.dto.CalculationResultItem;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -42,7 +41,7 @@ public class CollectionsRecyclerAdapter extends RecyclerView.Adapter<ResultViewH
         return calculationResultItems.size();
     }
 
-    public void setItems(List<CalculationResultItem> calculationResultItems){
+    public void setItems(List<CalculationResultItem> calculationResultItems) {
         this.calculationResultItems.clear();
         this.calculationResultItems.addAll(calculationResultItems);
         this.notifyDataSetChanged();

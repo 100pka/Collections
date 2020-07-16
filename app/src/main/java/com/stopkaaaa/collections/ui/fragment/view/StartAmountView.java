@@ -1,4 +1,4 @@
-package com.stopkaaaa.collections.ui;
+package com.stopkaaaa.collections.ui.fragment.view;
 
 import android.content.Context;
 import android.text.TextUtils;
@@ -10,9 +10,8 @@ import android.widget.ToggleButton;
 
 import androidx.constraintlayout.widget.ConstraintLayout;
 
-import com.google.android.material.button.MaterialButtonToggleGroup;
 import com.stopkaaaa.collections.R;
-import com.stopkaaaa.collections.model.CalculationParameters;
+import com.stopkaaaa.collections.dto.CalculationParameters;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -48,14 +47,14 @@ public class StartAmountView extends ConstraintLayout {
     }
 
     public String getElementsAmount() {
-        if (TextUtils.isEmpty(elementsAmountEditText.getText().toString())){
+        if (TextUtils.isEmpty(elementsAmountEditText.getText().toString())) {
             return "";
         }
         return elementsAmountEditText.getText().toString();
     }
 
     public String getThreadsAmount() {
-        if (TextUtils.isEmpty(elementsAmountEditText.getText().toString())){
+        if (TextUtils.isEmpty(elementsAmountEditText.getText().toString())) {
             return "";
         }
         return threadsAmountEditText.getText().toString();

@@ -4,20 +4,17 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import com.stopkaaaa.collections.R;
 
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
-
-import java.util.ArrayList;
-import java.util.List;
+import com.stopkaaaa.collections.R;
 
 /**
  * A simple {@link Fragment} subclass.
  * create an instance of this fragment.
  */
-public class MapsFragment extends Fragment implements MapsFragmentContract.View{
+public class MapsFragment extends Fragment implements MapsFragmentContract.View {
 
     private MapsFragmentContract.Presenter mPresenter;
 

@@ -29,7 +29,7 @@ public class Calculator implements Callable<String> {
         listInit();
     }
 
-    private void listInit(){
+    private void listInit() {
         if (listType.equals(context.getString(R.string.linkedList))) {
             list = new LinkedList<>();
         } else if (listType.equals(context.getString(R.string.copyOnWriteArrayList))) {
@@ -37,7 +37,7 @@ public class Calculator implements Callable<String> {
         } else {
             list = new ArrayList<>();
         }
-        list.addAll(Collections.nCopies(amount,0));
+        list.addAll(Collections.nCopies(amount, 0));
     }
 
     @Override
@@ -51,12 +51,12 @@ public class Calculator implements Callable<String> {
             return listType + "_" + operation + "_" + decimalFormat.format(result / 1000000.0);
         } else if (operation.equals(context.getString(R.string.addingToMiddle))) {
             start = System.nanoTime();
-            list.add(list.size()/2, 99);
+            list.add(list.size() / 2, 99);
             result = System.nanoTime() - start;
             return listType + "_" + operation + "_" + decimalFormat.format(result / 1000000.0);
         } else if (operation.equals(context.getString(R.string.addingToEnd))) {
             start = System.nanoTime();
-            list.add(list.size()-1, 99);
+            list.add(list.size() - 1, 99);
             result = System.nanoTime() - start;
             return listType + "_" + operation + "_" + decimalFormat.format(result / 1000000.0);
         } else if (operation.equals(context.getString(R.string.searchIn))) {
@@ -72,12 +72,12 @@ public class Calculator implements Callable<String> {
             return listType + "_" + operation + "_" + decimalFormat.format(result / 1000000.0);
         } else if (operation.equals(context.getString(R.string.removeFromMiddle))) {
             start = System.nanoTime();
-            list.remove(list.size()/2);
+            list.remove(list.size() / 2);
             result = System.nanoTime() - start;
             return listType + "_" + operation + "_" + decimalFormat.format(result / 1000000.0);
         } else if (operation.equals(context.getString(R.string.removeFromEnd))) {
             start = System.nanoTime();
-            list.remove(list.size()-1);
+            list.remove(list.size() - 1);
             result = System.nanoTime() - start;
             return listType + "_" + operation + "_" + decimalFormat.format(result / 1000000.0);
         } else return null;

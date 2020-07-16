@@ -1,20 +1,16 @@
-package com.stopkaaaa.collections;
+package com.stopkaaaa.collections.ui;
+
+import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.viewpager.widget.ViewPager;
 import androidx.viewpager2.widget.ViewPager2;
-
-import android.os.Bundle;
-import android.util.Log;
 
 import com.google.android.material.tabs.TabLayout;
 import com.google.android.material.tabs.TabLayoutMediator;
+import com.stopkaaaa.collections.R;
 import com.stopkaaaa.collections.ui.fragment.collections.CollectionsFragment;
-import com.stopkaaaa.collections.ui.fragment.collections.CollectionsFragmentPresenter;
 import com.stopkaaaa.collections.ui.fragment.maps.MapsFragment;
-import com.stopkaaaa.collections.ui.fragment.maps.MapsFragmentPresenter;
-
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -46,7 +42,8 @@ public class MainActivity extends AppCompatActivity {
         viewPager.setAdapter(pageAdapter);
         new TabLayoutMediator(tableLayout, viewPager,
                 new TabLayoutMediator.TabConfigurationStrategy() {
-                    @Override public void onConfigureTab(@NonNull TabLayout.Tab tab, int position) {
+                    @Override
+                    public void onConfigureTab(@NonNull TabLayout.Tab tab, int position) {
                         tab.setText(pageAdapter.titles.get(position));
                     }
                 }).attach();

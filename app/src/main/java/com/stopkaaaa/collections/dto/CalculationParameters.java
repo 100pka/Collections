@@ -1,4 +1,4 @@
-package com.stopkaaaa.collections.model;
+package com.stopkaaaa.collections.dto;
 
 public class CalculationParameters {
     private final String amount;
@@ -25,11 +25,11 @@ public class CalculationParameters {
         return checked;
     }
 
-    public static boolean validateParameters(CalculationParameters calculationParameters){
+    public static boolean validateParameters(CalculationParameters calculationParameters) {
         try {
             calculationParameters.amountValidated = Integer.parseInt(calculationParameters.amount);
             calculationParameters.threadsValidated = Integer.parseInt(calculationParameters.threads);
-        } catch (NumberFormatException e){
+        } catch (NumberFormatException e) {
             return false;
         }
         if (calculationParameters.checked) {

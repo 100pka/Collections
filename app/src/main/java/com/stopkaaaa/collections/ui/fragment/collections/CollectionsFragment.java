@@ -12,12 +12,11 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.stopkaaaa.collections.model.CalculationParameters;
-import com.stopkaaaa.collections.model.CalculationResultItem;
-import com.stopkaaaa.collections.ui.StartAmountView;
-import com.stopkaaaa.collections.ui.recycler.CollectionsRecyclerAdapter;
-
 import com.stopkaaaa.collections.R;
+import com.stopkaaaa.collections.dto.CalculationParameters;
+import com.stopkaaaa.collections.dto.CalculationResultItem;
+import com.stopkaaaa.collections.ui.fragment.recycler.CollectionsRecyclerAdapter;
+import com.stopkaaaa.collections.ui.fragment.view.StartAmountView;
 
 import java.util.ArrayList;
 
@@ -47,8 +46,9 @@ public class CollectionsFragment extends Fragment implements CollectionsFragment
         // Required empty public constructor
     }
 
-    public static CollectionsFragment newInstance() { return new CollectionsFragment(); }
-
+    public static CollectionsFragment newInstance() {
+        return new CollectionsFragment();
+    }
 
 
     @Override
