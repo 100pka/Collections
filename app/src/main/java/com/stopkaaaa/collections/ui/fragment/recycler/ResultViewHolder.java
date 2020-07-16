@@ -1,4 +1,4 @@
-package com.stopkaaaa.collections.ui.recycler;
+package com.stopkaaaa.collections.ui.fragment.recycler;
 
 import android.content.Context;
 import android.view.View;
@@ -9,12 +9,12 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.stopkaaaa.collections.R;
-import com.stopkaaaa.collections.model.CalculationResultItem;
+import com.stopkaaaa.collections.dto.CalculationResultItem;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
-public class ResultViewHolder extends RecyclerView.ViewHolder{
+public class ResultViewHolder extends RecyclerView.ViewHolder {
     @BindView(R.id.itemName)
     TextView itemNameTextView;
     @BindView(R.id.itemTime)
@@ -30,7 +30,7 @@ public class ResultViewHolder extends RecyclerView.ViewHolder{
 
     public void bindItem(CalculationResultItem item) {
         itemNameTextView.setText(item.getTitle());
-        progressBar.animate().alpha(item.isState()?1:0).start();
+        progressBar.animate().alpha(item.isState() ? 1 : 0).start();
         if (item.getTime() != null) {
             itemTimeTextView.setText(item.getTime() + itemTimeTextView.getContext().getString(R.string.ms));
         }

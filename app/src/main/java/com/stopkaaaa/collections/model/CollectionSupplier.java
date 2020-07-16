@@ -7,13 +7,15 @@ import androidx.lifecycle.MutableLiveData;
 
 import com.google.common.util.concurrent.ListenableFutureTask;
 import com.stopkaaaa.collections.R;
+import com.stopkaaaa.collections.dto.CalculationParameters;
+import com.stopkaaaa.collections.dto.CalculationResultItem;
 
 import java.util.ArrayList;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
-public class CollectionSupplier implements ModelContract.Model{
+public class CollectionSupplier implements ModelContract.Model {
 
     private static CollectionSupplier instance;
 
@@ -72,21 +74,21 @@ public class CollectionSupplier implements ModelContract.Model{
 
     @Override
     public void calculation() {
-        final ExecutorService executor = Executors
-                .newFixedThreadPool(calculationParameters.getThreads());
-        final ExecutorService listenersExecutor = Executors
-                .newFixedThreadPool(calculationParameters.getThreads());
+        final ExecutorService executor = Executors.newFixedThreadPool(calculationParameters.getThreads());
+        final ExecutorService listenersExecutor = Executors.newFixedThreadPool(calculationParameters.getThreads());
 
-        if (calculationParameters == null) return;
+        if (calculationParameters == null) {
+            return;
+        }
 
-        for (final CalculationResultItem calculationResultItem :listArrayList
+        for (final CalculationResultItem calculationResultItem : listArrayList
         ) {
             calculationResultItem.setState(true);
         }
         liveData.setValue(listArrayList);
 
         for (final CalculationResultItem calculationResultItem : listArrayList
-             ) {
+        ) {
             final ListenableFutureTask<String> task = ListenableFutureTask.create(new Calculator(
                     calculationParameters.getAmount(),
                     calculationResultItem.getListType(), calculationResultItem.getOperation(), context));
@@ -98,14 +100,13 @@ public class CollectionSupplier implements ModelContract.Model{
                         for (final CalculationResultItem calculationResultItem : listArrayList
                         ) {
                             if (calculationResultItem.getListType().equals(result[0]) &&
-                            calculationResultItem.getOperation().equals(result[1])) {
+                                    calculationResultItem.getOperation().equals(result[1])) {
                                 calculationResultItem.setTime(result[2]);
                                 calculationResultItem.setState(false);
                                 liveData.postValue(listArrayList);
                             }
                         }
-                    }
-                    catch (ExecutionException | InterruptedException e) {
+                    } catch (ExecutionException | InterruptedException e) {
                         e.printStackTrace();
                     }
                     if (isCalculationFinished()) {
@@ -114,6 +115,7 @@ public class CollectionSupplier implements ModelContract.Model{
                     }
                 }
             }, listenersExecutor);
+
             executor.execute(task);
         }
     }

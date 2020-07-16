@@ -1,7 +1,4 @@
-package com.stopkaaaa.collections.model;
-
-import com.google.common.util.concurrent.ListenableFutureTask;
-
+package com.stopkaaaa.collections.dto;
 
 public class CalculationResultItem {
 

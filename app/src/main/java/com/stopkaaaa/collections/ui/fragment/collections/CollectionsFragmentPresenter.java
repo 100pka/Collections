@@ -6,10 +6,9 @@ import androidx.lifecycle.LifecycleOwner;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.Observer;
 
-import com.stopkaaaa.collections.model.CalculationParameters;
-
+import com.stopkaaaa.collections.dto.CalculationParameters;
+import com.stopkaaaa.collections.dto.CalculationResultItem;
 import com.stopkaaaa.collections.model.CollectionSupplier;
-import com.stopkaaaa.collections.model.CalculationResultItem;
 import com.stopkaaaa.collections.model.ModelContract;
 
 import java.util.ArrayList;

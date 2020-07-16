@@ -11,9 +11,8 @@ import android.widget.ToggleButton;
 
 import androidx.constraintlayout.widget.ConstraintLayout;
 
-import com.google.android.material.button.MaterialButtonToggleGroup;
 import com.stopkaaaa.collections.R;
-import com.stopkaaaa.collections.model.CalculationParameters;
+import com.stopkaaaa.collections.dto.CalculationParameters;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;

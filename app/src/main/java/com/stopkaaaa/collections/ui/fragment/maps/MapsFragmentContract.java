@@ -6,6 +6,7 @@ public interface MapsFragmentContract {
     interface View extends BaseContract.BaseView<Presenter> {
 
     }
+
     interface Presenter extends BaseContract.BasePresenter {
     }
 }
