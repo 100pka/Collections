@@ -23,22 +23,16 @@ public class ResultViewHolder extends RecyclerView.ViewHolder{
     @BindView(R.id.progressBar)
     ProgressBar progressBar;
 
-    private Context context;
-
-    public ResultViewHolder(@NonNull View view, Context context) {
+    public ResultViewHolder(@NonNull View view) {
         super(view);
-        this.context = context;
         ButterKnife.bind(this, view);
     }
 
     public void bindItem(CalculationResultItem item) {
         itemNameTextView.setText(item.getTitle());
-        if (item.isState()) {
-            progressBar.setVisibility(View.VISIBLE);
-        }
         progressBar.animate().alpha(item.isState()?1:0).start();
         if (item.getTime() != null) {
-            itemTimeTextView.setText(item.getTime() + context.getString(R.string.ms));
+            itemTimeTextView.setText(item.getTime() + itemTimeTextView.getContext().getString(R.string.ms));
         }
     }
 }

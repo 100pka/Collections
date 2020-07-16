@@ -16,23 +16,27 @@ import java.util.ArrayList;
 
 
 public class CollectionsFragmentPresenter implements CollectionsFragmentContract.Presenter, ModelContract.ModelPresenter {
+    private static final int SPAN_COUNT = 3;
 
     private final CollectionsFragmentContract.View collectionsFragmentContractView;
 
     private LiveData<ArrayList<CalculationResultItem>> liveData;
 
-    private Context context;
-
     private CollectionSupplier collectionSupplier;
 
-    public CollectionsFragmentPresenter(CollectionsFragmentContract.View collectionsFragmentContractView, Context context) {
+    public CollectionsFragmentPresenter(CollectionsFragmentContract.View collectionsFragmentContractView, CollectionSupplier collectionSupplier) {
         this.collectionsFragmentContractView = collectionsFragmentContractView;
-        this.context = context;
-        collectionSupplier = CollectionSupplier.getInstance(this, context);
+        this.collectionSupplier = collectionSupplier;
     }
 
+    @Override
     public void setup() {
         collectionsFragmentContractView.setRecyclerAdapterData(collectionSupplier.getListArrayList());
+    }
+
+    @Override
+    public int getSpanCount(){
+        return SPAN_COUNT;
     }
 
     @Override

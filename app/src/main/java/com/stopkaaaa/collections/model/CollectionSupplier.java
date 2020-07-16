@@ -23,13 +23,10 @@ public class CollectionSupplier implements ModelContract.Model{
 
     private CalculationParameters calculationParameters;
 
-    private ModelContract.ModelPresenter modelPresenter;
-
     private Context context;
 
-    private CollectionSupplier(ModelContract.ModelPresenter modelPresenter, Context context) {
+    private CollectionSupplier(Context context) {
         this.calculationParameters = new CalculationParameters("", "", false);
-        this.modelPresenter = modelPresenter;
         this.context = context;
         init();
     }
@@ -114,7 +111,6 @@ public class CollectionSupplier implements ModelContract.Model{
                     if (isCalculationFinished()) {
                         executor.shutdown();
                         listenersExecutor.shutdown();
-                        modelPresenter.calculationFinished();
                     }
                 }
             }, listenersExecutor);
@@ -123,9 +119,9 @@ public class CollectionSupplier implements ModelContract.Model{
     }
 
 
-    public static synchronized CollectionSupplier getInstance(ModelContract.ModelPresenter modelPresenter, Context context) {
+    public static synchronized CollectionSupplier getInstance(Context context) {
         if (instance == null) {
-            instance = new CollectionSupplier(modelPresenter, context);
+            instance = new CollectionSupplier(context);
         }
         return instance;
     }
@@ -133,7 +129,7 @@ public class CollectionSupplier implements ModelContract.Model{
     public boolean isCalculationFinished() {
         for (final CalculationResultItem calculationResultItem : listArrayList
         ) {
-            if (calculationResultItem.getTime().equals("0")) {
+            if (calculationResultItem.getTime() == null) {
                 return false;
             }
         }

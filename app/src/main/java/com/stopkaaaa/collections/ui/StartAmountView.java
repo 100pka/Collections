@@ -1,6 +1,7 @@
 package com.stopkaaaa.collections.ui;
 
 import android.content.Context;
+import android.text.Editable;
 import android.text.TextUtils;
 import android.util.AttributeSet;
 import android.view.LayoutInflater;
@@ -48,20 +49,20 @@ public class StartAmountView extends ConstraintLayout {
     }
 
     public String getElementsAmount() {
-        if (TextUtils.isEmpty(elementsAmountEditText.getText().toString())){
+        if (TextUtils.isEmpty(getText(elementsAmountEditText.getText()))) {
             return "";
         }
-        return elementsAmountEditText.getText().toString();
+        return getText(elementsAmountEditText.getText());
     }
 
     public String getThreadsAmount() {
-        if (TextUtils.isEmpty(elementsAmountEditText.getText().toString())){
+        if (TextUtils.isEmpty(getText(threadsAmountEditText.getText()))) {
             return "";
         }
-        return threadsAmountEditText.getText().toString();
+        return getText(threadsAmountEditText.getText());
     }
 
-    public void setOnStartButtonClickListener(CompoundButton.OnCheckedChangeListener onCheckedChangeListener) {
+    public void setOnStartCheckedChangeListener(CompoundButton.OnCheckedChangeListener onCheckedChangeListener) {
         startButton.setOnCheckedChangeListener(onCheckedChangeListener);
     }
 
@@ -71,6 +72,10 @@ public class StartAmountView extends ConstraintLayout {
 
     public void uncheckStartButton() {
         startButton.setChecked(false);
+    }
+
+    public String getText(Editable editText) {
+        return editText.toString();
     }
 
 }

@@ -17,5 +17,6 @@ public interface CollectionsFragmentContract {
     interface Presenter extends BaseContract.BasePresenter {
         void onStartButtonClicked (CalculationParameters calculationParameters);
         void setup();
+        int getSpanCount();
     }
 }

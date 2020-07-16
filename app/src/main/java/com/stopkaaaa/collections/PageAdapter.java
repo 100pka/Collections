@@ -12,8 +12,8 @@ import java.util.ArrayList;
 
 public class PageAdapter extends FragmentStateAdapter {
 
-    ArrayList<Fragment> fragments;
-    ArrayList<String> titles;
+    private final ArrayList<Fragment> fragments;
+    private final ArrayList<String> titles;
 
     public PageAdapter(@NonNull FragmentManager fragmentManager, @NonNull Lifecycle lifecycle) {
         super(fragmentManager, lifecycle);

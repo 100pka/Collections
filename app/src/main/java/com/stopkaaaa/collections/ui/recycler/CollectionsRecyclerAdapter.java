@@ -19,17 +19,15 @@ public class CollectionsRecyclerAdapter extends RecyclerView.Adapter<ResultViewH
 
     private final List<CalculationResultItem> calculationResultItems = new ArrayList<>();
 
-    private Context context;
+    public CollectionsRecyclerAdapter() {
 
-    public CollectionsRecyclerAdapter(Context context) {
-        this.context = context;
     }
 
     @NonNull
     @Override
     public ResultViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         final View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_calculation_result, parent, false);
-        return new ResultViewHolder(view, context);
+        return new ResultViewHolder(view);
     }
 
     @Override

@@ -14,6 +14,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.stopkaaaa.collections.model.CalculationParameters;
 import com.stopkaaaa.collections.model.CalculationResultItem;
+import com.stopkaaaa.collections.model.CollectionSupplier;
 import com.stopkaaaa.collections.ui.StartAmountView;
 import com.stopkaaaa.collections.ui.recycler.CollectionsRecyclerAdapter;
 
@@ -41,7 +42,7 @@ public class CollectionsFragment extends Fragment implements CollectionsFragment
     RecyclerView collectionsRecycler;
 
     private final CollectionsRecyclerAdapter collectionsRecyclerAdapter =
-            new CollectionsRecyclerAdapter(getActivity().getApplicationContext());
+            new CollectionsRecyclerAdapter();
 
     public CollectionsFragment() {
         // Required empty public constructor
@@ -63,11 +64,7 @@ public class CollectionsFragment extends Fragment implements CollectionsFragment
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-//        amountFragment = (StartAmountFragment) getChildFragmentManager().findFragmentById(R.id.startAmountCollections);
-//        amountFragment.addOnNewCalculationDateListener(this);
-
-
-        startAmountView.setOnStartButtonClickListener(new CompoundButton.OnCheckedChangeListener() {
+        startAmountView.setOnStartCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 buttonView.setChecked(isChecked);
@@ -77,71 +74,26 @@ public class CollectionsFragment extends Fragment implements CollectionsFragment
                 }
             }
         });
+        collectionsRecycler.setLayoutManager(new GridLayoutManager(getContext(), collectionsFragmentPresenter.getSpanCount()));
+        collectionsRecycler.setAdapter(collectionsRecyclerAdapter);
     }
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         collectionsFragmentPresenter =
-                new CollectionsFragmentPresenter(this, getActivity().getApplicationContext());
+                new CollectionsFragmentPresenter(this, CollectionSupplier.getInstance(getActivity().getApplicationContext()));
         collectionsFragmentPresenter.setup();
     }
 
     @Override
     public void setRecyclerAdapterData(ArrayList<CalculationResultItem> list) {
         collectionsRecyclerAdapter.setItems(list);
-        collectionsRecycler.setLayoutManager(new GridLayoutManager(getContext(), 3));
-        collectionsRecycler.setAdapter(collectionsRecyclerAdapter);
     }
 
     @Override
     public void uncheckStartButton() {
         startAmountView.uncheckStartButton();
     }
-
-    //    public static List<String> getList() {
-//        List<String> nameList = new ArrayList<String>();
-//        nameList.add("Adding to start in ArrayList");
-//        nameList.add("Adding to start in LinkedList");
-//        nameList.add("Adding to start in CopyOnWriteList");
-//
-//        nameList.add("Adding to middle in ArrayList");
-//        nameList.add("Adding to middle in LinkedList");
-//        nameList.add("Adding to middle in CopyOnWriteList");
-//
-//        nameList.add("Adding to end in ArrayList");
-//        nameList.add("Adding to end in LinkedList");
-//        nameList.add("Adding to end in CopyOnWriteList");
-//
-//        nameList.add("Search in ArrayList");
-//        nameList.add("Search in LinkedList");
-//        nameList.add("Search in CopyOnWriteList");
-//
-//        nameList.add("Remove from start in ArrayList");
-//        nameList.add("Remove from start in LinkedList");
-//        nameList.add("Remove from start in CopyOnWriteList");
-//
-//        nameList.add("Remove from middle in ArrayList");
-//        nameList.add("Remove from middle in LinkedList");
-//        nameList.add("Remove from middle in CopyOnWriteList");
-//
-//        nameList.add("Remove from end in ArrayList");
-//        nameList.add("Remove from end in LinkedList");
-//        nameList.add("Remove from end in CopyOnWriteList");
-//
-//        return nameList;
-//    }
-
-//    @Override
-//    public void onNewCalculationData(CalculationData calculationData) {
-//        Log.d("LOGG", "Clicked " + calculationData);
-//    }
-//
-//    @Override
-//    public void onDestroyView() {
-//        amountFragment.removeOnNewCalculationDateListener(this);
-//        super.onDestroyView();
-//    }
-
 
 }
