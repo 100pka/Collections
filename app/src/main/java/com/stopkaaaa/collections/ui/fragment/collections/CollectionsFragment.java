@@ -1,6 +1,5 @@
 package com.stopkaaaa.collections.ui.fragment.collections;
 
-import android.content.Context;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -17,9 +16,8 @@ import com.stopkaaaa.collections.R;
 import com.stopkaaaa.collections.dto.CalculationParameters;
 import com.stopkaaaa.collections.dto.CalculationResultItem;
 import com.stopkaaaa.collections.model.CollectionSupplier;
-
-import com.stopkaaaa.collections.ui.StartAmountView;
 import com.stopkaaaa.collections.ui.fragment.recycler.CollectionsRecyclerAdapter;
+import com.stopkaaaa.collections.ui.fragment.view.StartAmountView;
 
 import java.util.ArrayList;
 

@@ -12,7 +12,6 @@ import com.stopkaaaa.collections.R;
 import com.stopkaaaa.collections.ui.fragment.collections.CollectionsFragment;
 import com.stopkaaaa.collections.ui.fragment.maps.MapsFragment;
 
-
 import butterknife.BindView;
 import butterknife.ButterKnife;
 

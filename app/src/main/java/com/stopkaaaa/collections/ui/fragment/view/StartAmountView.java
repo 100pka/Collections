@@ -1,4 +1,4 @@
-package com.stopkaaaa.collections.ui;
+package com.stopkaaaa.collections.ui.fragment.view;
 
 import android.content.Context;
 import android.text.Editable;

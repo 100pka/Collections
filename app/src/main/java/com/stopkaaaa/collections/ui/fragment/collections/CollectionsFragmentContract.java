@@ -1,7 +1,5 @@
 package com.stopkaaaa.collections.ui.fragment.collections;
 
-import android.content.Context;
-
 import com.stopkaaaa.collections.base.BaseContract;
 import com.stopkaaaa.collections.dto.CalculationParameters;
 import com.stopkaaaa.collections.dto.CalculationResultItem;
@@ -19,6 +17,7 @@ public interface CollectionsFragmentContract {
         void onStartButtonClicked(CalculationParameters calculationParameters);
 
         void setup();
+
         int getSpanCount();
     }
 }
