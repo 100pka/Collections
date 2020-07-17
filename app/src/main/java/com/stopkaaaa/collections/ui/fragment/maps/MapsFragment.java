@@ -4,11 +4,25 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.CompoundButton;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.GridLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.stopkaaaa.collections.R;
+import com.stopkaaaa.collections.dto.CalculationParameters;
+import com.stopkaaaa.collections.dto.CalculationResultItem;
+import com.stopkaaaa.collections.model.MapsSupplier;
+import com.stopkaaaa.collections.ui.fragment.recycler.CollectionsRecyclerAdapter;
+import com.stopkaaaa.collections.ui.fragment.view.StartAmountView;
+
+import java.util.ArrayList;
+
+import butterknife.BindView;
+import butterknife.ButterKnife;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -16,13 +30,17 @@ import com.stopkaaaa.collections.R;
  */
 public class MapsFragment extends Fragment implements MapsFragmentContract.View {
 
-    private MapsFragmentContract.Presenter mPresenter;
+    private MapsFragmentContract.Presenter mapsFragmentPresenter;
 
 
-//    @BindView(R.id.mapsRecycler)
-//    RecyclerView mapsRecycler;
-//
-//    RecyclerAdapter recyclerAdapter;
+    @BindView(R.id.startAmountCollections)
+    StartAmountView startAmountView;
+
+    @BindView(R.id.mapsRecycler)
+    RecyclerView mapsRecycler;
+
+    private final CollectionsRecyclerAdapter mapsRecyclerAdapter =
+            new CollectionsRecyclerAdapter();
 
     public MapsFragment() {
         // Required empty public constructor
@@ -37,17 +55,42 @@ public class MapsFragment extends Fragment implements MapsFragmentContract.View 
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         final View view = inflater.inflate(R.layout.fragment_maps, container, false);
-//        ButterKnife.bind(this, view);
-//        mapsRecycler.setLayoutManager(new GridLayoutManager(getContext(), 2));
-//        recyclerAdapter = new RecyclerAdapter(getContext(), getList(), getList());
-//        mapsRecycler.setAdapter(recyclerAdapter);
+        ButterKnife.bind(this, view);
         return view;
     }
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        mPresenter = new MapsFragmentPresenter(this);
+        mapsFragmentPresenter = new MapsFragmentPresenter(this, MapsSupplier.getInstance(getContext()));
+        mapsFragmentPresenter.setup();
+    }
+
+    @Override
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+        startAmountView.setOnStartCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                buttonView.setChecked(isChecked);
+                if (isChecked) {
+                    final CalculationParameters calculationParameters = startAmountView.getCalculationData();
+                    mapsFragmentPresenter.onStartButtonClicked(calculationParameters);
+                }
+            }
+        });
+        mapsRecycler.setLayoutManager(new GridLayoutManager(getContext(), mapsFragmentPresenter.getSpanCount()));
+        mapsRecycler.setAdapter(mapsRecyclerAdapter);
+    }
+
+    @Override
+    public void setRecyclerAdapterData(ArrayList<CalculationResultItem> list) {
+        mapsRecyclerAdapter.setItems(list);
+    }
+
+    @Override
+    public void uncheckStartButton() {
+        startAmountView.uncheckStartButton();
     }
 
 

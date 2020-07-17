@@ -1,6 +1,5 @@
 package com.stopkaaaa.collections.model;
 
-
 import android.content.Context;
 
 import androidx.lifecycle.MutableLiveData;
@@ -15,9 +14,8 @@ import java.util.concurrent.ExecutionException;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
-public class CollectionSupplier implements ModelContract.Model {
-
-    private static CollectionSupplier instance;
+public class MapsSupplier implements ModelContract.Model{
+    private static MapsSupplier instance;
 
     private MutableLiveData<ArrayList<CalculationResultItem>> liveData = new MutableLiveData<>();
 
@@ -27,7 +25,7 @@ public class CollectionSupplier implements ModelContract.Model {
 
     private Context context;
 
-    private CollectionSupplier(Context context) {
+    private MapsSupplier(Context context) {
         this.calculationParameters = new CalculationParameters("", "", false);
         this.context = context;
         init();
@@ -37,38 +35,26 @@ public class CollectionSupplier implements ModelContract.Model {
         listArrayList = new ArrayList<>();
         for (int i = 0; i < 21; i++) {
             StringBuilder operation = new StringBuilder();
-            StringBuilder listType = new StringBuilder();
+            StringBuilder mapType = new StringBuilder();
 
-            if (i % 3 == 0) {
-                listType.append(context.getString(R.string.arrayList));
+            if (i % 2 == 0) {
+                mapType.append(context.getString(R.string.hashMap));
             } else {
-                if (i % 3 == 1) {
-                    listType.append(context.getString(R.string.linkedList));
-                } else listType.append(context.getString(R.string.copyOnWriteArrayList));
+                mapType.append(context.getString(R.string.treeMap));
             }
 
-            if (i < 3) {
-                operation.append(context.getString(R.string.addingToStart));
-            } else if (i > 2 && i < 6) {
-                operation.append(context.getString(R.string.addingToMiddle));
-            } else if (i > 5 && i < 9) {
-                operation.append(context.getString(R.string.addingToEnd));
-            } else if (i > 8 && i < 12) {
-                operation.append(context.getString(R.string.searchIn));
-            } else if (i > 11 && i < 15) {
-                operation.append(context.getString(R.string.removeFromStart));
-            } else if (i > 14 && i < 18) {
-                operation.append(context.getString(R.string.removeFromMiddle));
-            } else if (i > 17) {
-                operation.append(context.getString(R.string.removeFromEnd));
+            if (i < 2) {
+                operation.append(context.getString(R.string.addingTo));
+            } else if (i > 1 && i < 4) {
+                operation.append(context.getString(R.string.searchInMap));
+            } else {
+                operation.append(context.getString(R.string.removeFrom));
             }
 
-            CalculationResultItem calculationResultItem = new CalculationResultItem(listType.toString(), operation.toString());
+            CalculationResultItem calculationResultItem = new CalculationResultItem(mapType.toString(), operation.toString());
 
             listArrayList.add(calculationResultItem);
             liveData.setValue(listArrayList);
-
-
         }
     }
 
@@ -121,9 +107,9 @@ public class CollectionSupplier implements ModelContract.Model {
     }
 
 
-    public static synchronized CollectionSupplier getInstance(Context context) {
+    public static synchronized MapsSupplier getInstance(Context context) {
         if (instance == null) {
-            instance = new CollectionSupplier(context);
+            instance = new MapsSupplier(context);
         }
         return instance;
     }
@@ -149,5 +135,4 @@ public class CollectionSupplier implements ModelContract.Model {
     public MutableLiveData<ArrayList<CalculationResultItem>> getData() {
         return liveData;
     }
-
 }

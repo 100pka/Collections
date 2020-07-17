@@ -26,5 +26,10 @@
     <string name="enter_threads_amount">Enter threads amount</string>
     <string name="stop">STOP</string>
     <string name="ms">" ms"</string>
+    <string name="hashMap">HashMap</string>
+    <string name="treeMap">TreeMap</string>
+    <string name="addingTo">Adding to</string>
+    <string name="removeFrom">Removing from</string>
+    <string name="searchInMap">Search in map</string>
 
 </resources>
