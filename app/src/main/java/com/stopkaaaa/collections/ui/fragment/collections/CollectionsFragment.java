@@ -15,8 +15,9 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.stopkaaaa.collections.R;
 import com.stopkaaaa.collections.dto.CalculationParameters;
 import com.stopkaaaa.collections.dto.CalculationResultItem;
+import com.stopkaaaa.collections.model.CollectionSupplier;
+import com.stopkaaaa.collections.ui.StartAmountView;
 import com.stopkaaaa.collections.ui.fragment.recycler.CollectionsRecyclerAdapter;
-import com.stopkaaaa.collections.ui.fragment.view.StartAmountView;
 
 import java.util.ArrayList;
 
