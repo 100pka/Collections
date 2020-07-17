@@ -13,8 +13,6 @@ public interface CollectionsFragmentContract {
         void setRecyclerAdapterData(ArrayList<CalculationResultItem> list);
 
         void uncheckStartButton();
-
-        Context getContext();
     }
 
     interface Presenter extends BaseContract.BasePresenter {

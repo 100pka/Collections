@@ -12,6 +12,7 @@ import com.stopkaaaa.collections.R;
 import com.stopkaaaa.collections.ui.fragment.collections.CollectionsFragment;
 import com.stopkaaaa.collections.ui.fragment.maps.MapsFragment;
 
+
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
@@ -44,7 +45,7 @@ public class MainActivity extends AppCompatActivity {
                 new TabLayoutMediator.TabConfigurationStrategy() {
                     @Override
                     public void onConfigureTab(@NonNull TabLayout.Tab tab, int position) {
-                        tab.setText(pageAdapter.titles.get(position));
+                        tab.setText(pageAdapter.getTitles().get(position));
                     }
                 }).attach();
     }

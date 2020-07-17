@@ -25,6 +25,8 @@ public class CollectionSupplier implements ModelContract.Model {
 
     private CalculationParameters calculationParameters;
 
+    private boolean state = false;
+
     private Context context;
 
     private CollectionSupplier(Context context) {
@@ -74,6 +76,7 @@ public class CollectionSupplier implements ModelContract.Model {
 
     @Override
     public void calculation() {
+        state = true;
         final ExecutorService executor = Executors.newFixedThreadPool(calculationParameters.getThreads());
         final ExecutorService listenersExecutor = Executors.newFixedThreadPool(calculationParameters.getThreads());
 
@@ -135,6 +138,7 @@ public class CollectionSupplier implements ModelContract.Model {
                 return false;
             }
         }
+        state = false;
         return true;
     }
 
@@ -148,5 +152,9 @@ public class CollectionSupplier implements ModelContract.Model {
 
     public MutableLiveData<ArrayList<CalculationResultItem>> getData() {
         return liveData;
+    }
+
+    public boolean isState() {
+        return state;
     }
 }

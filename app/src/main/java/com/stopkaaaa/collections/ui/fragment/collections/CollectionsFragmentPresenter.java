@@ -34,7 +34,7 @@ public class CollectionsFragmentPresenter implements CollectionsFragmentContract
     }
 
     @Override
-    public int getSpanCount(){
+    public int getSpanCount() {
         return SPAN_COUNT;
     }
 
@@ -52,10 +52,17 @@ public class CollectionsFragmentPresenter implements CollectionsFragmentContract
 
     private void startCalculation(CalculationParameters calculationParameters) {
         liveData = collectionSupplier.getData();
-        liveData.observe((LifecycleOwner) collectionsFragmentContractView.getContext(), new Observer<ArrayList<CalculationResultItem>>() {
+        liveData.observe((LifecycleOwner) collectionsFragmentContractView, new Observer<ArrayList<CalculationResultItem>>() {
             @Override
             public void onChanged(ArrayList<CalculationResultItem> calculationResultItems) {
                 collectionsFragmentContractView.setRecyclerAdapterData(collectionSupplier.getListArrayList());
+                for (CalculationResultItem item : collectionSupplier.getListArrayList()
+                ) {
+                    if (item.isState()) {
+                        return;
+                    }
+                    collectionsFragmentContractView.uncheckStartButton();
+                }
             }
         });
         collectionSupplier.setCalculationParameters(calculationParameters);

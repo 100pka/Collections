@@ -34,5 +34,9 @@ public class PageAdapter extends FragmentStateAdapter {
         fragments.add(fragment);
         titles.add(title);
     }
+
+    public ArrayList<String> getTitles() {
+        return titles;
+    }
 }
 

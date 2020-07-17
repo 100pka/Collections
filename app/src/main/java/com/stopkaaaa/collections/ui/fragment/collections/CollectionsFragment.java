@@ -1,5 +1,6 @@
 package com.stopkaaaa.collections.ui.fragment.collections;
 
+import android.content.Context;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -16,6 +17,7 @@ import com.stopkaaaa.collections.R;
 import com.stopkaaaa.collections.dto.CalculationParameters;
 import com.stopkaaaa.collections.dto.CalculationResultItem;
 import com.stopkaaaa.collections.model.CollectionSupplier;
+
 import com.stopkaaaa.collections.ui.StartAmountView;
 import com.stopkaaaa.collections.ui.fragment.recycler.CollectionsRecyclerAdapter;
 
@@ -82,7 +84,7 @@ public class CollectionsFragment extends Fragment implements CollectionsFragment
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         collectionsFragmentPresenter =
-                new CollectionsFragmentPresenter(this, CollectionSupplier.getInstance(getActivity().getApplicationContext()));
+                new CollectionsFragmentPresenter(this, CollectionSupplier.getInstance(getContext()));
         collectionsFragmentPresenter.setup();
     }
 
