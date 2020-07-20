@@ -26,7 +26,7 @@ public class StartAmountView extends ConstraintLayout {
     EditText threadsAmountEditText;
 
     public StartAmountView(Context context) {
-        super(context, null);
+        this(context, null);
         LayoutInflater inflater = (LayoutInflater) context
                 .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         inflater.inflate(R.layout.custom_view_start_amount, this);
@@ -34,11 +34,15 @@ public class StartAmountView extends ConstraintLayout {
     }
 
     public StartAmountView(Context context, AttributeSet attributeSet) {
-        super(context, attributeSet, 0);
+        this(context, attributeSet, 0);
         LayoutInflater inflater = (LayoutInflater) context
                 .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         inflater.inflate(R.layout.custom_view_start_amount, this);
         ButterKnife.bind(this);
+    }
+
+    public StartAmountView(Context context, AttributeSet attributeSet, int defStyleAttr) {
+        super(context, attributeSet, defStyleAttr);
     }
 
     public CalculationParameters getCalculationData() {
@@ -48,17 +52,17 @@ public class StartAmountView extends ConstraintLayout {
     }
 
     public String getElementsAmount() {
-        if (TextUtils.isEmpty(getText(elementsAmountEditText.getText()))) {
+        if (TextUtils.isEmpty(getText(elementsAmountEditText))) {
             return "";
         }
-        return getText(elementsAmountEditText.getText());
+        return getText(elementsAmountEditText);
     }
 
     public String getThreadsAmount() {
-        if (TextUtils.isEmpty(getText(threadsAmountEditText.getText()))) {
+        if (TextUtils.isEmpty(getText(threadsAmountEditText))) {
             return "";
         }
-        return getText(threadsAmountEditText.getText());
+        return getText(threadsAmountEditText);
     }
 
     public void setOnStartCheckedChangeListener(CompoundButton.OnCheckedChangeListener onCheckedChangeListener) {
@@ -73,8 +77,8 @@ public class StartAmountView extends ConstraintLayout {
         startButton.setChecked(false);
     }
 
-    public String getText(Editable editText) {
-        return editText.toString();
+    public String getText(EditText editText) {
+        return editText.getText().toString();
     }
 
 }

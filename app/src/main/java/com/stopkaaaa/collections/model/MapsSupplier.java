@@ -10,6 +10,9 @@ import com.stopkaaaa.collections.dto.CalculationParameters;
 import com.stopkaaaa.collections.dto.CalculationResultItem;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.TreeMap;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -33,7 +36,7 @@ public class MapsSupplier implements ModelContract.Model{
 
     private void init() {
         listArrayList = new ArrayList<>();
-        for (int i = 0; i < 21; i++) {
+        for (int i = 0; i < 6; i++) {
             StringBuilder operation = new StringBuilder();
             StringBuilder mapType = new StringBuilder();
 
@@ -72,12 +75,20 @@ public class MapsSupplier implements ModelContract.Model{
             calculationResultItem.setState(true);
         }
         liveData.setValue(listArrayList);
+        Map<Integer, Integer> map = null;
 
         for (final CalculationResultItem calculationResultItem : listArrayList
         ) {
-            final ListenableFutureTask<String> task = ListenableFutureTask.create(new Calculator(
-                    calculationParameters.getAmount(),
-                    calculationResultItem.getListType(), calculationResultItem.getOperation(), context));
+            String mapType = calculationResultItem.getListType();
+            if (mapType.equals(context.getString(R.string.hashMap))) {
+                map = new HashMap<>();
+            } else if (mapType.equals(context.getString(R.string.treeMap))) {
+                map = new TreeMap<>();
+            }
+
+            final ListenableFutureTask<String> task = ListenableFutureTask.create(new MapCalculator(
+                    calculationParameters.getAmount(), map,
+                    calculationResultItem.getOperation(), context));
             task.addListener(new Runnable() {
                 @Override
                 public void run() {

@@ -4,11 +4,11 @@ import com.stopkaaaa.collections.base.BaseContract;
 import com.stopkaaaa.collections.dto.CalculationParameters;
 import com.stopkaaaa.collections.dto.CalculationResultItem;
 
-import java.util.ArrayList;
+import java.util.List;
 
 public interface CollectionsFragmentContract {
     interface View extends BaseContract.BaseView<Presenter> {
-        void setRecyclerAdapterData(ArrayList<CalculationResultItem> list);
+        void setRecyclerAdapterData(List<CalculationResultItem> list);
 
         void uncheckStartButton();
     }

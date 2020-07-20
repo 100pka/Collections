@@ -26,15 +26,29 @@ public class CalculationParameters {
     }
 
     public static boolean validateParameters(CalculationParameters calculationParameters) {
-        try {
-            calculationParameters.amountValidated = Integer.parseInt(calculationParameters.amount);
-            calculationParameters.threadsValidated = Integer.parseInt(calculationParameters.threads);
-        } catch (NumberFormatException e) {
+        if (!isThreadsValid(calculationParameters) || !isAmountValid(calculationParameters)) {
             return false;
         }
         if (calculationParameters.checked) {
             return true;
         } else return false;
+    }
+    public static boolean isThreadsValid (CalculationParameters calculationParameters) {
+        try {
+            calculationParameters.threadsValidated = Integer.parseInt(calculationParameters.threads);
+        } catch (NumberFormatException e) {
+            return false;
+        }
+        return true;
+    }
+
+    public static boolean isAmountValid (CalculationParameters calculationParameters) {
+        try {
+            calculationParameters.amountValidated = Integer.parseInt(calculationParameters.amount);
+        } catch (NumberFormatException e) {
+            return false;
+        }
+        return true;
     }
 
     @Override

@@ -19,7 +19,7 @@ import com.stopkaaaa.collections.model.CollectionSupplier;
 import com.stopkaaaa.collections.ui.fragment.recycler.CollectionsRecyclerAdapter;
 import com.stopkaaaa.collections.ui.fragment.view.StartAmountView;
 
-import java.util.ArrayList;
+import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -81,13 +81,13 @@ public class CollectionsFragment extends Fragment implements CollectionsFragment
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        collectionsFragmentPresenter =
-                new CollectionsFragmentPresenter(this, CollectionSupplier.getInstance(getContext()));
+        collectionsFragmentPresenter = CollectionFragmentInjector.getPresenter(
+                this, getContext());
         collectionsFragmentPresenter.setup();
     }
 
     @Override
-    public void setRecyclerAdapterData(ArrayList<CalculationResultItem> list) {
+    public void setRecyclerAdapterData(List<CalculationResultItem> list) {
         collectionsRecyclerAdapter.setItems(list);
     }
 

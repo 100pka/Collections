@@ -11,6 +11,9 @@ import com.stopkaaaa.collections.dto.CalculationParameters;
 import com.stopkaaaa.collections.dto.CalculationResultItem;
 
 import java.util.ArrayList;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -87,11 +90,22 @@ public class CollectionSupplier implements ModelContract.Model {
         }
         liveData.setValue(listArrayList);
 
+        List<Integer> list = null;
+
         for (final CalculationResultItem calculationResultItem : listArrayList
         ) {
-            final ListenableFutureTask<String> task = ListenableFutureTask.create(new Calculator(
-                    calculationParameters.getAmount(),
-                    calculationResultItem.getListType(), calculationResultItem.getOperation(), context));
+            String listType = calculationResultItem.getListType();
+            if (listType.equals(context.getString(R.string.linkedList))) {
+                list = new LinkedList<>();
+            } else if (listType.equals(context.getString(R.string.copyOnWriteArrayList))) {
+                list = new CopyOnWriteArrayList<>();
+            } else if (listType.equals(context.getString(R.string.arrayList))) {
+                list = new ArrayList<>();
+            }
+
+            final ListenableFutureTask<String> task = ListenableFutureTask.create(
+                    new CollectionCalculator(calculationParameters.getAmount(), list,
+                            calculationResultItem.getOperation(), context));
             task.addListener(new Runnable() {
                 @Override
                 public void run() {
