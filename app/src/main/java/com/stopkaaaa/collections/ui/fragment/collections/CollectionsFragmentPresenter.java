@@ -13,7 +13,6 @@ import java.util.ArrayList;
 
 
 public class CollectionsFragmentPresenter implements CollectionsFragmentContract.Presenter, ModelContract.ModelPresenter {
-    private static final int SPAN_COUNT = 3;
 
     private final CollectionsFragmentContract.View collectionsFragmentContractView;
 
@@ -33,11 +32,11 @@ public class CollectionsFragmentPresenter implements CollectionsFragmentContract
 
     @Override
     public int getSpanCount() {
-        return SPAN_COUNT;
+        return CollectionSupplier.getSpanCount();
     }
 
     @Override
-    public void onStartButtonClicked(CalculationParameters calculationParameters) {
+    public void onCalculationLaunch(CalculationParameters calculationParameters) {
         if (calculationParameters != null && CalculationParameters.validateParameters(calculationParameters)) {
             startCalculation(calculationParameters);
         }

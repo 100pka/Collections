@@ -20,6 +20,7 @@ import java.util.concurrent.Executors;
 
 public class CollectionSupplier implements ModelContract.Model {
 
+    public static final int SPAN_COUNT = 3;
     private static CollectionSupplier instance;
 
     private MutableLiveData<ArrayList<CalculationResultItem>> liveData = new MutableLiveData<>();
@@ -164,4 +165,7 @@ public class CollectionSupplier implements ModelContract.Model {
         return liveData;
     }
 
+    public static int getSpanCount() {
+        return SPAN_COUNT;
+    }
 }

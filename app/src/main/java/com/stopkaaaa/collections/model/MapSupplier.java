@@ -17,8 +17,9 @@ import java.util.concurrent.ExecutionException;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
-public class MapsSupplier implements ModelContract.Model{
-    private static MapsSupplier instance;
+public class MapSupplier implements ModelContract.Model{
+    public static final int SPAN_COUNT = 2;
+    private static MapSupplier instance;
 
     private MutableLiveData<ArrayList<CalculationResultItem>> liveData = new MutableLiveData<>();
 
@@ -28,7 +29,7 @@ public class MapsSupplier implements ModelContract.Model{
 
     private Context context;
 
-    private MapsSupplier(Context context) {
+    private MapSupplier(Context context) {
         this.calculationParameters = new CalculationParameters("", "", false);
         this.context = context;
         init();
@@ -118,9 +119,9 @@ public class MapsSupplier implements ModelContract.Model{
     }
 
 
-    public static synchronized MapsSupplier getInstance(Context context) {
+    public static synchronized MapSupplier getInstance(Context context) {
         if (instance == null) {
-            instance = new MapsSupplier(context);
+            instance = new MapSupplier(context);
         }
         return instance;
     }
@@ -145,5 +146,9 @@ public class MapsSupplier implements ModelContract.Model{
 
     public MutableLiveData<ArrayList<CalculationResultItem>> getData() {
         return liveData;
+    }
+
+    public static int getSpanCount() {
+        return SPAN_COUNT;
     }
 }

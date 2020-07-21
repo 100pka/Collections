@@ -6,37 +6,36 @@ import androidx.lifecycle.Observer;
 
 import com.stopkaaaa.collections.dto.CalculationParameters;
 import com.stopkaaaa.collections.dto.CalculationResultItem;
-import com.stopkaaaa.collections.model.MapsSupplier;
+import com.stopkaaaa.collections.model.MapSupplier;
 import com.stopkaaaa.collections.model.ModelContract;
 
 import java.util.ArrayList;
 
 public class MapsFragmentPresenter implements MapsFragmentContract.Presenter, ModelContract.ModelPresenter {
-    private static final int SPAN_COUNT = 2;
 
     private final MapsFragmentContract.View mapsFragmentContractView;
 
     private LiveData<ArrayList<CalculationResultItem>> liveData;
 
-    private MapsSupplier mapsSupplier;
+    private MapSupplier mapSupplier;
 
-    public MapsFragmentPresenter(MapsFragmentContract.View mapsFragmentContractView, MapsSupplier mapsSupplier) {
+    public MapsFragmentPresenter(MapsFragmentContract.View mapsFragmentContractView, MapSupplier mapSupplier) {
         this.mapsFragmentContractView = mapsFragmentContractView;
-        this.mapsSupplier = mapsSupplier;
+        this.mapSupplier = mapSupplier;
     }
 
     @Override
     public void setup() {
-        mapsFragmentContractView.setRecyclerAdapterData(mapsSupplier.getListArrayList());
+        mapsFragmentContractView.setRecyclerAdapterData(mapSupplier.getListArrayList());
     }
 
     @Override
     public int getSpanCount() {
-        return SPAN_COUNT;
+        return MapSupplier.getSpanCount();
     }
 
     @Override
-    public void onStartButtonClicked(CalculationParameters calculationParameters) {
+    public void onCalculationLaunch(CalculationParameters calculationParameters) {
         if (calculationParameters != null && CalculationParameters.validateParameters(calculationParameters)) {
             startCalculation(calculationParameters);
         }
@@ -48,12 +47,12 @@ public class MapsFragmentPresenter implements MapsFragmentContract.Presenter, Mo
     }
 
     private void startCalculation(CalculationParameters calculationParameters) {
-        liveData = mapsSupplier.getData();
+        liveData = mapSupplier.getData();
         liveData.observe((LifecycleOwner) mapsFragmentContractView, new Observer<ArrayList<CalculationResultItem>>() {
             @Override
             public void onChanged(ArrayList<CalculationResultItem> calculationResultItems) {
-                mapsFragmentContractView.setRecyclerAdapterData(mapsSupplier.getListArrayList());
-                for (CalculationResultItem item : mapsSupplier.getListArrayList()
+                mapsFragmentContractView.setRecyclerAdapterData(mapSupplier.getListArrayList());
+                for (CalculationResultItem item : mapSupplier.getListArrayList()
                 ) {
                     if (item.isState()) {
                         return;
@@ -62,7 +61,7 @@ public class MapsFragmentPresenter implements MapsFragmentContract.Presenter, Mo
                 }
             }
         });
-        mapsSupplier.setCalculationParameters(calculationParameters);
-        mapsSupplier.calculation();
+        mapSupplier.setCalculationParameters(calculationParameters);
+        mapSupplier.calculation();
     }
 }

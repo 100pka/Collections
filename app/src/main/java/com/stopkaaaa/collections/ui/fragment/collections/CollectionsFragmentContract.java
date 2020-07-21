@@ -14,7 +14,7 @@ public interface CollectionsFragmentContract {
     }
 
     interface Presenter extends BaseContract.BasePresenter {
-        void onStartButtonClicked(CalculationParameters calculationParameters);
+        void onCalculationLaunch(CalculationParameters calculationParameters);
 
         void setup();
 

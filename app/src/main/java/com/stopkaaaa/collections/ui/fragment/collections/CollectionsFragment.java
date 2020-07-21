@@ -15,7 +15,6 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.stopkaaaa.collections.R;
 import com.stopkaaaa.collections.dto.CalculationParameters;
 import com.stopkaaaa.collections.dto.CalculationResultItem;
-import com.stopkaaaa.collections.model.CollectionSupplier;
 import com.stopkaaaa.collections.ui.fragment.recycler.CollectionsRecyclerAdapter;
 import com.stopkaaaa.collections.ui.fragment.view.StartAmountView;
 
@@ -70,7 +69,7 @@ public class CollectionsFragment extends Fragment implements CollectionsFragment
                 buttonView.setChecked(isChecked);
                 if (isChecked) {
                     final CalculationParameters calculationParameters = startAmountView.getCalculationData();
-                    collectionsFragmentPresenter.onStartButtonClicked(calculationParameters);
+                    collectionsFragmentPresenter.onCalculationLaunch(calculationParameters);
                 }
             }
         });
@@ -83,7 +82,14 @@ public class CollectionsFragment extends Fragment implements CollectionsFragment
         super.onCreate(savedInstanceState);
         collectionsFragmentPresenter = CollectionFragmentInjector.getPresenter(
                 this, getContext());
-        collectionsFragmentPresenter.setup();
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+        if (collectionsRecyclerAdapter.getItemCount() == 0) {
+            collectionsFragmentPresenter.setup();
+        }
     }
 
     @Override

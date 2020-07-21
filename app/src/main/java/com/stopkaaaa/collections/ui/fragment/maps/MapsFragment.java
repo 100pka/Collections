@@ -15,11 +15,10 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.stopkaaaa.collections.R;
 import com.stopkaaaa.collections.dto.CalculationParameters;
 import com.stopkaaaa.collections.dto.CalculationResultItem;
-import com.stopkaaaa.collections.model.MapsSupplier;
 import com.stopkaaaa.collections.ui.fragment.recycler.CollectionsRecyclerAdapter;
 import com.stopkaaaa.collections.ui.fragment.view.StartAmountView;
 
-import java.util.ArrayList;
+import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -62,7 +61,8 @@ public class MapsFragment extends Fragment implements MapsFragmentContract.View 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        mapsFragmentPresenter = new MapsFragmentPresenter(this, MapsSupplier.getInstance(getContext()));
+        mapsFragmentPresenter = MapFragmentInjector.getPresenter(
+                this, getContext());
         mapsFragmentPresenter.setup();
     }
 
@@ -75,7 +75,7 @@ public class MapsFragment extends Fragment implements MapsFragmentContract.View 
                 buttonView.setChecked(isChecked);
                 if (isChecked) {
                     final CalculationParameters calculationParameters = startAmountView.getCalculationData();
-                    mapsFragmentPresenter.onStartButtonClicked(calculationParameters);
+                    mapsFragmentPresenter.onCalculationLaunch(calculationParameters);
                 }
             }
         });
@@ -84,7 +84,15 @@ public class MapsFragment extends Fragment implements MapsFragmentContract.View 
     }
 
     @Override
-    public void setRecyclerAdapterData(ArrayList<CalculationResultItem> list) {
+    public void onStart() {
+        super.onStart();
+        if (mapsRecyclerAdapter.getItemCount() == 0) {
+            mapsFragmentPresenter.setup();
+        }
+    }
+
+    @Override
+    public void setRecyclerAdapterData(List<CalculationResultItem> list) {
         mapsRecyclerAdapter.setItems(list);
     }
 
@@ -93,18 +101,4 @@ public class MapsFragment extends Fragment implements MapsFragmentContract.View 
         startAmountView.uncheckStartButton();
     }
 
-
-//    public static List<String> getList() {
-//        List<String> nameList = new ArrayList<String>();
-//        nameList.add("Adding to HashMap");
-//        nameList.add("Adding to TreeMap");
-//
-//        nameList.add("Search in HashMap");
-//        nameList.add("Search in TreeMap");
-//
-//        nameList.add("Removing from HashMap");
-//        nameList.add("Removing from TreeMap");
-//
-//        return nameList;
-//    }
 }
