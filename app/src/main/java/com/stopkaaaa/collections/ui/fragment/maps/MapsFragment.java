@@ -94,11 +94,22 @@ public class MapsFragment extends Fragment implements MapsFragmentContract.View 
     @Override
     public void setRecyclerAdapterData(List<CalculationResultItem> list) {
         mapsRecyclerAdapter.setItems(list);
+        mapsRecyclerAdapter.notifyDataSetChanged();
     }
 
     @Override
     public void uncheckStartButton() {
         startAmountView.uncheckStartButton();
+    }
+
+    @Override
+    public void amountValidationError() {
+        startAmountView.amountValidationError();
+    }
+
+    @Override
+    public void threadValidationError() {
+        startAmountView.threadValidationError();
     }
 
 }

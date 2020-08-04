@@ -18,7 +18,6 @@ public class CollectionsRecyclerAdapter extends RecyclerView.Adapter<ResultViewH
     private final List<CalculationResultItem> calculationResultItems = new ArrayList<>();
 
     public CollectionsRecyclerAdapter() {
-
     }
 
     @NonNull
@@ -41,6 +40,5 @@ public class CollectionsRecyclerAdapter extends RecyclerView.Adapter<ResultViewH
     public void setItems(List<CalculationResultItem> calculationResultItems) {
         this.calculationResultItems.clear();
         this.calculationResultItems.addAll(calculationResultItems);
-        this.notifyDataSetChanged();
     }
 }

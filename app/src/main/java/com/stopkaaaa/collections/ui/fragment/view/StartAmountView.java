@@ -1,7 +1,6 @@
 package com.stopkaaaa.collections.ui.fragment.view;
 
 import android.content.Context;
-import android.text.Editable;
 import android.text.TextUtils;
 import android.util.AttributeSet;
 import android.view.LayoutInflater;
@@ -79,6 +78,16 @@ public class StartAmountView extends ConstraintLayout {
 
     public String getText(EditText editText) {
         return editText.getText().toString();
+    }
+
+    public void amountValidationError() {
+        elementsAmountEditText.setText("");
+        elementsAmountEditText.setHint(R.string.enter_valid_number);
+    }
+
+    public void threadValidationError() {
+        threadsAmountEditText.setText("");
+        threadsAmountEditText.setHint(R.string.enter_valid_number);
     }
 
 }

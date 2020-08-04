@@ -1,35 +1,53 @@
-package com.stopkaaaa.collections.model;
+package com.stopkaaaa.collections.model.collections;
 
 import android.content.Context;
+import android.util.Log;
 
 import com.stopkaaaa.collections.R;
 
 import java.text.DecimalFormat;
+import java.util.ArrayList;
 import java.util.Collections;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Random;
-import java.util.concurrent.Callable;
+import java.util.concurrent.CopyOnWriteArrayList;
 
 
-public class CollectionCalculator implements Callable<String> {
-
-    private final List<Integer> list;
-    private String operation;
+public class CollectionCalculator implements Runnable {
+    private static final String TAG = "CollectionCalculator";
+    private List<Integer> list;
     private String listType;
+    private String operation;
+    private String resultString;
     private Context context;
 
-    public CollectionCalculator(int amount, List<Integer> list, String operation, Context context) {
+    public CollectionCalculator(int amount, String listType, String operation, Context context) {
         this.operation = operation;
-        this.list = list;
-        this.listType = list.getClass().getSimpleName();
         this.context = context;
+        this.listType = listType;
+        if (listType.equals(context.getString(R.string.linkedList))) {
+            list = new LinkedList<>();
+        } else if (listType.equals(context.getString(R.string.copyOnWriteArrayList))) {
+            list = new CopyOnWriteArrayList<>();
+        } else if (listType.equals(context.getString(R.string.arrayList))) {
+            list = new ArrayList<>();
+        }
         list.addAll(Collections.nCopies(amount, 0));
     }
 
     @Override
-    public String call() {
+    public void run() {
+        if (calculation()) {
+            CollectionSupplier.getInstance(context).updateItem(listType, operation, resultString);
+        }
+    }
+
+    private boolean calculation() {
+        Log.i(TAG, ": " + listType + " " + operation + " " + Thread.currentThread().getName());
         long start, result;
         int rndIndex;
+        StringBuilder resultStringBuilder = new StringBuilder();
         DecimalFormat decimalFormat = new DecimalFormat("0.00");
         rndIndex = new Random().nextInt(list.size());
 
@@ -37,37 +55,39 @@ public class CollectionCalculator implements Callable<String> {
             start = System.nanoTime();
             list.add(0, 99);
             result = System.nanoTime() - start;
-            return listType + "_" + operation + "_" + decimalFormat.format(result / 1000000.0);
+            resultStringBuilder.append(decimalFormat.format(result / 1000000.0));
         } else if (operation.equals(context.getString(R.string.addingToMiddle))) {
             start = System.nanoTime();
             list.add(list.size() / 2, 99);
             result = System.nanoTime() - start;
-            return listType + "_" + operation + "_" + decimalFormat.format(result / 1000000.0);
+            resultStringBuilder.append(decimalFormat.format(result / 1000000.0));
         } else if (operation.equals(context.getString(R.string.addingToEnd))) {
             start = System.nanoTime();
             list.add(list.size() - 1, 99);
             result = System.nanoTime() - start;
-            return listType + "_" + operation + "_" + decimalFormat.format(result / 1000000.0);
+            resultStringBuilder.append(decimalFormat.format(result / 1000000.0));
         } else if (operation.equals(context.getString(R.string.searchIn))) {
             start = System.nanoTime();
             list.get(rndIndex);
             result = System.nanoTime() - start;
-            return listType + "_" + operation + "_" + decimalFormat.format(result / 1000000.0);
+            resultStringBuilder.append(decimalFormat.format(result / 1000000.0));
         } else if (operation.equals(context.getString(R.string.removeFromStart))) {
             start = System.nanoTime();
             list.remove(0);
             result = System.nanoTime() - start;
-            return listType + "_" + operation + "_" + decimalFormat.format(result / 1000000.0);
+            resultStringBuilder.append(decimalFormat.format(result / 1000000.0));
         } else if (operation.equals(context.getString(R.string.removeFromMiddle))) {
             start = System.nanoTime();
             list.remove(list.size() / 2);
             result = System.nanoTime() - start;
-            return listType + "_" + operation + "_" + decimalFormat.format(result / 1000000.0);
+            resultStringBuilder.append(decimalFormat.format(result / 1000000.0));
         } else if (operation.equals(context.getString(R.string.removeFromEnd))) {
             start = System.nanoTime();
             list.remove(list.size() - 1);
             result = System.nanoTime() - start;
-            return listType + "_" + operation + "_" + decimalFormat.format(result / 1000000.0);
-        } else return null;
+            resultStringBuilder.append(decimalFormat.format(result / 1000000.0));
+        } else return false;
+        resultString = resultStringBuilder.toString();
+        return true;
     }
 }

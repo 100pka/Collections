@@ -11,6 +11,11 @@ public interface CollectionsFragmentContract {
         void setRecyclerAdapterData(List<CalculationResultItem> list);
 
         void uncheckStartButton();
+
+        void amountValidationError();
+
+        void threadValidationError();
+
     }
 
     interface Presenter extends BaseContract.BasePresenter {

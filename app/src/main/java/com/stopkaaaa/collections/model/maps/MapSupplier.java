@@ -1,37 +1,38 @@
-package com.stopkaaaa.collections.model;
+package com.stopkaaaa.collections.model.maps;
 
 import android.content.Context;
 
 import androidx.lifecycle.MutableLiveData;
 
-import com.google.common.util.concurrent.ListenableFutureTask;
 import com.stopkaaaa.collections.R;
 import com.stopkaaaa.collections.dto.CalculationParameters;
 import com.stopkaaaa.collections.dto.CalculationResultItem;
+import com.stopkaaaa.collections.model.ModelContract;
 
 import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.TreeMap;
-import java.util.concurrent.ExecutionException;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
+import java.util.concurrent.BlockingQueue;
+import java.util.concurrent.LinkedBlockingQueue;
+import java.util.concurrent.ThreadPoolExecutor;
+import java.util.concurrent.TimeUnit;
 
-public class MapSupplier implements ModelContract.Model{
+public class MapSupplier implements ModelContract.Model, Runnable {
     public static final int SPAN_COUNT = 2;
     private static MapSupplier instance;
 
     private MutableLiveData<ArrayList<CalculationResultItem>> liveData = new MutableLiveData<>();
-
     private ArrayList<CalculationResultItem> listArrayList;
-
     private CalculationParameters calculationParameters;
-
     private Context context;
+
+    private final BlockingQueue<Runnable> calculationQueue;
+    private final ThreadPoolExecutor calculationThreadPool;
 
     private MapSupplier(Context context) {
         this.calculationParameters = new CalculationParameters("", "", false);
         this.context = context;
+        this.calculationQueue = new LinkedBlockingQueue<Runnable>();
+        this.calculationThreadPool = new ThreadPoolExecutor(1, 1,
+                50, TimeUnit.MILLISECONDS, calculationQueue);
         init();
     }
 
@@ -62,62 +63,21 @@ public class MapSupplier implements ModelContract.Model{
         }
     }
 
-    @Override
-    public void calculation() {
-        final ExecutorService executor = Executors.newFixedThreadPool(calculationParameters.getThreads());
-        final ExecutorService listenersExecutor = Executors.newFixedThreadPool(calculationParameters.getThreads());
-
-        if (calculationParameters == null) {
-            return;
-        }
-
+    public void showProgress() {
         for (final CalculationResultItem calculationResultItem : listArrayList
         ) {
             calculationResultItem.setState(true);
         }
-        liveData.setValue(listArrayList);
-        Map<Integer, Integer> map = null;
-
-        for (final CalculationResultItem calculationResultItem : listArrayList
-        ) {
-            String mapType = calculationResultItem.getListType();
-            if (mapType.equals(context.getString(R.string.hashMap))) {
-                map = new HashMap<>();
-            } else if (mapType.equals(context.getString(R.string.treeMap))) {
-                map = new TreeMap<>();
-            }
-
-            final ListenableFutureTask<String> task = ListenableFutureTask.create(new MapCalculator(
-                    calculationParameters.getAmount(), map,
-                    calculationResultItem.getOperation(), context));
-            task.addListener(new Runnable() {
-                @Override
-                public void run() {
-                    try {
-                        String[] result = task.get().split("_");
-                        for (final CalculationResultItem calculationResultItem : listArrayList
-                        ) {
-                            if (calculationResultItem.getListType().equals(result[0]) &&
-                                    calculationResultItem.getOperation().equals(result[1])) {
-                                calculationResultItem.setTime(result[2]);
-                                calculationResultItem.setState(false);
-                                liveData.postValue(listArrayList);
-                            }
-                        }
-                    } catch (ExecutionException | InterruptedException e) {
-                        e.printStackTrace();
-                    }
-                    if (isCalculationFinished()) {
-                        executor.shutdown();
-                        listenersExecutor.shutdown();
-                    }
-                }
-            }, listenersExecutor);
-
-            executor.execute(task);
-        }
+        liveData.postValue(listArrayList);
     }
 
+    @Override
+    public void run() {
+        for (final CalculationResultItem calculationResultItem : listArrayList
+        ) {
+            startCalculation(calculationResultItem.getListType(), calculationResultItem.getOperation());
+        }
+    }
 
     public static synchronized MapSupplier getInstance(Context context) {
         if (instance == null) {
@@ -142,6 +102,8 @@ public class MapSupplier implements ModelContract.Model{
 
     public void setCalculationParameters(CalculationParameters calculationParameters) {
         this.calculationParameters = calculationParameters;
+        calculationThreadPool.setCorePoolSize(calculationParameters.getThreads());
+        calculationThreadPool.setMaximumPoolSize(calculationParameters.getThreads());
     }
 
     public MutableLiveData<ArrayList<CalculationResultItem>> getData() {
@@ -150,5 +112,23 @@ public class MapSupplier implements ModelContract.Model{
 
     public static int getSpanCount() {
         return SPAN_COUNT;
+    }
+
+    public synchronized void updateItem(String listType, String operation, String time) {
+        for (final CalculationResultItem calculationResultItem : listArrayList
+        ) {
+            if (calculationResultItem.getListType().equals(listType) &&
+                    calculationResultItem.getOperation().equals(operation) &&
+                    (calculationResultItem.getTime() == null || calculationResultItem.getTime().isEmpty())) {
+                calculationResultItem.setTime(time);
+                calculationResultItem.setState(false);
+            }
+        }
+        liveData.postValue(listArrayList);
+    }
+    public void startCalculation(String mapType, String operation) {
+        MapCalculator calculator = new MapCalculator(
+                calculationParameters.getAmount(), mapType, operation, context);
+        calculationThreadPool.execute(calculator);
     }
 }

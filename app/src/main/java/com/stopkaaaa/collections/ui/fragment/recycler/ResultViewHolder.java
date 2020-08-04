@@ -31,7 +31,17 @@ public class ResultViewHolder extends RecyclerView.ViewHolder {
         itemNameTextView.setText(item.getTitle());
         progressBar.animate().alpha(item.isState() ? 1 : 0).start();
         if (item.getTime() != null) {
-            itemTimeTextView.setText(item.getTime() + itemTimeTextView.getContext().getString(R.string.ms));
+            StringBuilder time = new StringBuilder(item.getTime())
+                    .append(itemTimeTextView.getContext().getString(R.string.ms));
+            itemTimeTextView.setText(time.toString());
         }
+    }
+
+    public ProgressBar getProgressBar() {
+        return progressBar;
+    }
+
+    public TextView getItemTimeTextView() {
+        return itemTimeTextView;
     }
 }

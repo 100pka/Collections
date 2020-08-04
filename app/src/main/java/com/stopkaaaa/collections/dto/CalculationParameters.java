@@ -25,14 +25,7 @@ public class CalculationParameters {
         return checked;
     }
 
-    public static boolean validateParameters(CalculationParameters calculationParameters) {
-        if (!isThreadsValid(calculationParameters) || !isAmountValid(calculationParameters)) {
-            return false;
-        }
-        if (calculationParameters.checked) {
-            return true;
-        } else return false;
-    }
+
     public static boolean isThreadsValid (CalculationParameters calculationParameters) {
         try {
             calculationParameters.threadsValidated = Integer.parseInt(calculationParameters.threads);

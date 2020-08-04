@@ -1,39 +1,42 @@
-package com.stopkaaaa.collections.model;
+package com.stopkaaaa.collections.model.collections;
 
 
 import android.content.Context;
 
 import androidx.lifecycle.MutableLiveData;
 
-import com.google.common.util.concurrent.ListenableFutureTask;
 import com.stopkaaaa.collections.R;
 import com.stopkaaaa.collections.dto.CalculationParameters;
 import com.stopkaaaa.collections.dto.CalculationResultItem;
+import com.stopkaaaa.collections.model.ModelContract;
+
 
 import java.util.ArrayList;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.concurrent.CopyOnWriteArrayList;
-import java.util.concurrent.ExecutionException;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
+import java.util.concurrent.BlockingQueue;
+import java.util.concurrent.LinkedBlockingQueue;
+import java.util.concurrent.ThreadPoolExecutor;
+import java.util.concurrent.TimeUnit;
 
-public class CollectionSupplier implements ModelContract.Model {
+public class CollectionSupplier implements ModelContract.Model, Runnable {
 
     public static final int SPAN_COUNT = 3;
+
     private static CollectionSupplier instance;
 
     private MutableLiveData<ArrayList<CalculationResultItem>> liveData = new MutableLiveData<>();
-
     private ArrayList<CalculationResultItem> listArrayList;
-
     private CalculationParameters calculationParameters;
-
     private Context context;
+
+    private final BlockingQueue<Runnable> calculationQueue;
+    private final ThreadPoolExecutor calculationThreadPool;
 
     private CollectionSupplier(Context context) {
         this.calculationParameters = new CalculationParameters("", "", false);
         this.context = context;
+        this.calculationQueue = new LinkedBlockingQueue<Runnable>();
+        this.calculationThreadPool = new ThreadPoolExecutor(1, 1,
+                50, TimeUnit.MILLISECONDS, calculationQueue);
         init();
     }
 
@@ -76,65 +79,21 @@ public class CollectionSupplier implements ModelContract.Model {
         }
     }
 
-    @Override
-    public void calculation() {
-        final ExecutorService executor = Executors.newFixedThreadPool(calculationParameters.getThreads());
-        final ExecutorService listenersExecutor = Executors.newFixedThreadPool(calculationParameters.getThreads());
-
-        if (calculationParameters == null) {
-            return;
-        }
-
+    public void showProgress() {
         for (final CalculationResultItem calculationResultItem : listArrayList
         ) {
             calculationResultItem.setState(true);
         }
-        liveData.setValue(listArrayList);
-
-        List<Integer> list = null;
-
-        for (final CalculationResultItem calculationResultItem : listArrayList
-        ) {
-            String listType = calculationResultItem.getListType();
-            if (listType.equals(context.getString(R.string.linkedList))) {
-                list = new LinkedList<>();
-            } else if (listType.equals(context.getString(R.string.copyOnWriteArrayList))) {
-                list = new CopyOnWriteArrayList<>();
-            } else if (listType.equals(context.getString(R.string.arrayList))) {
-                list = new ArrayList<>();
-            }
-
-            final ListenableFutureTask<String> task = ListenableFutureTask.create(
-                    new CollectionCalculator(calculationParameters.getAmount(), list,
-                            calculationResultItem.getOperation(), context));
-            task.addListener(new Runnable() {
-                @Override
-                public void run() {
-                    try {
-                        String[] result = task.get().split("_");
-                        for (final CalculationResultItem calculationResultItem : listArrayList
-                        ) {
-                            if (calculationResultItem.getListType().equals(result[0]) &&
-                                    calculationResultItem.getOperation().equals(result[1])) {
-                                calculationResultItem.setTime(result[2]);
-                                calculationResultItem.setState(false);
-                                liveData.postValue(listArrayList);
-                            }
-                        }
-                    } catch (ExecutionException | InterruptedException e) {
-                        e.printStackTrace();
-                    }
-                    if (isCalculationFinished()) {
-                        executor.shutdown();
-                        listenersExecutor.shutdown();
-                    }
-                }
-            }, listenersExecutor);
-
-            executor.execute(task);
-        }
+        liveData.postValue(listArrayList);
     }
 
+    @Override
+    public void run() {
+        for (final CalculationResultItem calculationResultItem : listArrayList
+        ) {
+            startCalculation(calculationResultItem.getListType(), calculationResultItem.getOperation());
+        }
+    }
 
     public static synchronized CollectionSupplier getInstance(Context context) {
         if (instance == null) {
@@ -157,10 +116,6 @@ public class CollectionSupplier implements ModelContract.Model {
         return liveData.getValue();
     }
 
-    public void setCalculationParameters(CalculationParameters calculationParameters) {
-        this.calculationParameters = calculationParameters;
-    }
-
     public MutableLiveData<ArrayList<CalculationResultItem>> getData() {
         return liveData;
     }
@@ -168,4 +123,33 @@ public class CollectionSupplier implements ModelContract.Model {
     public static int getSpanCount() {
         return SPAN_COUNT;
     }
+
+    public CalculationParameters getCalculationParameters() {
+        return calculationParameters;
+    }
+
+    public void setCalculationParameters(CalculationParameters calculationParameters) {
+        this.calculationParameters = calculationParameters;
+        calculationThreadPool.setCorePoolSize(calculationParameters.getThreads());
+        calculationThreadPool.setMaximumPoolSize(calculationParameters.getThreads());
+    }
+
+    public synchronized void updateItem(String listType, String operation, String time) {
+        for (final CalculationResultItem calculationResultItem : listArrayList
+             ) {
+            if (calculationResultItem.getListType().equals(listType) &&
+            calculationResultItem.getOperation().equals(operation) &&
+            (calculationResultItem.getTime() == null || calculationResultItem.getTime().isEmpty())) {
+                calculationResultItem.setTime(time);
+                calculationResultItem.setState(false);
+            }
+        }
+        liveData.postValue(listArrayList);
+    }
+    public void startCalculation(String listType, String operation) {
+        CollectionCalculator calculator = new CollectionCalculator(
+                calculationParameters.getAmount(), listType, operation, context);
+        calculationThreadPool.execute(calculator);
+    }
+
 }

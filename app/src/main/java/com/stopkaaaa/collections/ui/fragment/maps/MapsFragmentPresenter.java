@@ -6,10 +6,14 @@ import androidx.lifecycle.Observer;
 
 import com.stopkaaaa.collections.dto.CalculationParameters;
 import com.stopkaaaa.collections.dto.CalculationResultItem;
-import com.stopkaaaa.collections.model.MapSupplier;
+import com.stopkaaaa.collections.model.maps.MapSupplier;
 import com.stopkaaaa.collections.model.ModelContract;
 
 import java.util.ArrayList;
+import java.util.concurrent.BlockingQueue;
+import java.util.concurrent.LinkedBlockingQueue;
+import java.util.concurrent.ThreadPoolExecutor;
+import java.util.concurrent.TimeUnit;
 
 public class MapsFragmentPresenter implements MapsFragmentContract.Presenter, ModelContract.ModelPresenter {
 
@@ -36,8 +40,26 @@ public class MapsFragmentPresenter implements MapsFragmentContract.Presenter, Mo
 
     @Override
     public void onCalculationLaunch(CalculationParameters calculationParameters) {
-        if (calculationParameters != null && CalculationParameters.validateParameters(calculationParameters)) {
-            startCalculation(calculationParameters);
+        if (calculationParameters != null && CalculationParameters.isAmountValid(calculationParameters) &&
+                CalculationParameters.isThreadsValid(calculationParameters) && calculationParameters.isChecked()) {
+            liveData = mapSupplier.getData();
+            liveData.observe((LifecycleOwner) mapsFragmentContractView, new Observer<ArrayList<CalculationResultItem>>() {
+                @Override
+                public void onChanged(ArrayList<CalculationResultItem> calculationResultItems) {
+                    mapsFragmentContractView.setRecyclerAdapterData(mapSupplier.getListArrayList());
+                    if (!mapSupplier.isCalculationFinished()) {
+                        return;
+                    }
+                    calculationFinished();
+                }
+            });
+            mapSupplier.showProgress();
+            mapSupplier.setCalculationParameters(calculationParameters);
+            startCalculation();
+        } else if (!CalculationParameters.isAmountValid(calculationParameters)) {
+            mapsFragmentContractView.amountValidationError();
+        } else if (!CalculationParameters.isThreadsValid(calculationParameters)) {
+            mapsFragmentContractView.threadValidationError();
         }
     }
 
@@ -46,22 +68,10 @@ public class MapsFragmentPresenter implements MapsFragmentContract.Presenter, Mo
         mapsFragmentContractView.uncheckStartButton();
     }
 
-    private void startCalculation(CalculationParameters calculationParameters) {
-        liveData = mapSupplier.getData();
-        liveData.observe((LifecycleOwner) mapsFragmentContractView, new Observer<ArrayList<CalculationResultItem>>() {
-            @Override
-            public void onChanged(ArrayList<CalculationResultItem> calculationResultItems) {
-                mapsFragmentContractView.setRecyclerAdapterData(mapSupplier.getListArrayList());
-                for (CalculationResultItem item : mapSupplier.getListArrayList()
-                ) {
-                    if (item.isState()) {
-                        return;
-                    }
-                    mapsFragmentContractView.uncheckStartButton();
-                }
-            }
-        });
-        mapSupplier.setCalculationParameters(calculationParameters);
-        mapSupplier.calculation();
+    private void startCalculation() {
+        BlockingQueue<Runnable> calculationQueue = new LinkedBlockingQueue<Runnable>();
+        ThreadPoolExecutor calculationThreadPool = new ThreadPoolExecutor(1, 1,
+                50, TimeUnit.MILLISECONDS, calculationQueue);
+        calculationThreadPool.execute(mapSupplier);
     }
 }

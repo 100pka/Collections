@@ -6,10 +6,14 @@ import androidx.lifecycle.Observer;
 
 import com.stopkaaaa.collections.dto.CalculationParameters;
 import com.stopkaaaa.collections.dto.CalculationResultItem;
-import com.stopkaaaa.collections.model.CollectionSupplier;
+import com.stopkaaaa.collections.model.collections.CollectionSupplier;
 import com.stopkaaaa.collections.model.ModelContract;
 
 import java.util.ArrayList;
+import java.util.concurrent.BlockingQueue;
+import java.util.concurrent.LinkedBlockingQueue;
+import java.util.concurrent.ThreadPoolExecutor;
+import java.util.concurrent.TimeUnit;
 
 
 public class CollectionsFragmentPresenter implements CollectionsFragmentContract.Presenter, ModelContract.ModelPresenter {
@@ -37,9 +41,31 @@ public class CollectionsFragmentPresenter implements CollectionsFragmentContract
 
     @Override
     public void onCalculationLaunch(CalculationParameters calculationParameters) {
-        if (calculationParameters != null && CalculationParameters.validateParameters(calculationParameters)) {
-            startCalculation(calculationParameters);
+
+        if (calculationParameters != null && CalculationParameters.isAmountValid(calculationParameters) &&
+        CalculationParameters.isThreadsValid(calculationParameters) && calculationParameters.isChecked()) {
+            liveData = collectionSupplier.getData();
+            liveData.observe((LifecycleOwner) collectionsFragmentContractView, new Observer<ArrayList<CalculationResultItem>>() {
+                @Override
+                public void onChanged(ArrayList<CalculationResultItem> calculationResultItems) {
+                    collectionsFragmentContractView.setRecyclerAdapterData(collectionSupplier.getListArrayList());
+                    if (!collectionSupplier.isCalculationFinished()) {
+                        return;
+                    }
+                    calculationFinished();
+                }
+            });
+            collectionSupplier.showProgress();
+            collectionSupplier.setCalculationParameters(calculationParameters);
+            startCalculation();
+        } else if (!CalculationParameters.isAmountValid(calculationParameters)) {
+            collectionsFragmentContractView.amountValidationError();
+            collectionsFragmentContractView.uncheckStartButton();
+        } else if (!CalculationParameters.isThreadsValid(calculationParameters)) {
+            collectionsFragmentContractView.threadValidationError();
+            collectionsFragmentContractView.uncheckStartButton();
         }
+
     }
 
     @Override
@@ -47,22 +73,10 @@ public class CollectionsFragmentPresenter implements CollectionsFragmentContract
         collectionsFragmentContractView.uncheckStartButton();
     }
 
-    private void startCalculation(CalculationParameters calculationParameters) {
-        liveData = collectionSupplier.getData();
-        liveData.observe((LifecycleOwner) collectionsFragmentContractView, new Observer<ArrayList<CalculationResultItem>>() {
-            @Override
-            public void onChanged(ArrayList<CalculationResultItem> calculationResultItems) {
-                collectionsFragmentContractView.setRecyclerAdapterData(collectionSupplier.getListArrayList());
-                for (CalculationResultItem item : collectionSupplier.getListArrayList()
-                ) {
-                    if (item.isState()) {
-                        return;
-                    }
-                    collectionsFragmentContractView.uncheckStartButton();
-                }
-            }
-        });
-        collectionSupplier.setCalculationParameters(calculationParameters);
-        collectionSupplier.calculation();
+    private void startCalculation() {
+        BlockingQueue<Runnable> calculationQueue = new LinkedBlockingQueue<Runnable>();
+        ThreadPoolExecutor calculationThreadPool = new ThreadPoolExecutor(1, 1,
+                50, TimeUnit.MILLISECONDS, calculationQueue);
+        calculationThreadPool.execute(collectionSupplier);
     }
 }

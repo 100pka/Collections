@@ -95,11 +95,22 @@ public class CollectionsFragment extends Fragment implements CollectionsFragment
     @Override
     public void setRecyclerAdapterData(List<CalculationResultItem> list) {
         collectionsRecyclerAdapter.setItems(list);
+        collectionsRecyclerAdapter.notifyDataSetChanged();
     }
 
     @Override
     public void uncheckStartButton() {
         startAmountView.uncheckStartButton();
+    }
+
+    @Override
+    public void amountValidationError() {
+        startAmountView.amountValidationError();
+    }
+
+    @Override
+    public void threadValidationError() {
+        startAmountView.threadValidationError();
     }
 
 }
