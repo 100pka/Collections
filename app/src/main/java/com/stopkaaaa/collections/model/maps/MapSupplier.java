@@ -75,7 +75,7 @@ public class MapSupplier implements ModelContract.Model, Runnable {
     public void run() {
         for (final CalculationResultItem calculationResultItem : listArrayList
         ) {
-            startCalculation(calculationResultItem.getListType(), calculationResultItem.getOperation());
+            startCalculationItem(calculationResultItem.getListType(), calculationResultItem.getOperation());
         }
     }
 
@@ -126,9 +126,14 @@ public class MapSupplier implements ModelContract.Model, Runnable {
         }
         liveData.postValue(listArrayList);
     }
-    public void startCalculation(String mapType, String operation) {
+    public void startCalculationItem(String mapType, String operation) {
         MapCalculator calculator = new MapCalculator(
                 calculationParameters.getAmount(), mapType, operation, context);
         calculationThreadPool.execute(calculator);
+    }
+
+    @Override
+    public void startCalculation() {
+        new Thread(this).start();
     }
 }

@@ -91,7 +91,7 @@ public class CollectionSupplier implements ModelContract.Model, Runnable {
     public void run() {
         for (final CalculationResultItem calculationResultItem : listArrayList
         ) {
-            startCalculation(calculationResultItem.getListType(), calculationResultItem.getOperation());
+            startCalculationItem(calculationResultItem.getListType(), calculationResultItem.getOperation());
         }
     }
 
@@ -124,10 +124,6 @@ public class CollectionSupplier implements ModelContract.Model, Runnable {
         return SPAN_COUNT;
     }
 
-    public CalculationParameters getCalculationParameters() {
-        return calculationParameters;
-    }
-
     public void setCalculationParameters(CalculationParameters calculationParameters) {
         this.calculationParameters = calculationParameters;
         calculationThreadPool.setCorePoolSize(calculationParameters.getThreads());
@@ -146,10 +142,14 @@ public class CollectionSupplier implements ModelContract.Model, Runnable {
         }
         liveData.postValue(listArrayList);
     }
-    public void startCalculation(String listType, String operation) {
+    private void startCalculationItem(String listType, String operation) {
         CollectionCalculator calculator = new CollectionCalculator(
                 calculationParameters.getAmount(), listType, operation, context);
         calculationThreadPool.execute(calculator);
     }
 
+    @Override
+    public void startCalculation() {
+        new Thread(this).start();
+    }
 }

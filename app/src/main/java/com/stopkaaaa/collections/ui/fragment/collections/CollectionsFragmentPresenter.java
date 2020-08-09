@@ -57,7 +57,7 @@ public class CollectionsFragmentPresenter implements CollectionsFragmentContract
             });
             collectionSupplier.showProgress();
             collectionSupplier.setCalculationParameters(calculationParameters);
-            startCalculation();
+            collectionSupplier.startCalculation();
         } else if (!CalculationParameters.isAmountValid(calculationParameters)) {
             collectionsFragmentContractView.amountValidationError();
             collectionsFragmentContractView.uncheckStartButton();
@@ -71,12 +71,5 @@ public class CollectionsFragmentPresenter implements CollectionsFragmentContract
     @Override
     public void calculationFinished() {
         collectionsFragmentContractView.uncheckStartButton();
-    }
-
-    private void startCalculation() {
-        BlockingQueue<Runnable> calculationQueue = new LinkedBlockingQueue<Runnable>();
-        ThreadPoolExecutor calculationThreadPool = new ThreadPoolExecutor(1, 1,
-                50, TimeUnit.MILLISECONDS, calculationQueue);
-        calculationThreadPool.execute(collectionSupplier);
     }
 }

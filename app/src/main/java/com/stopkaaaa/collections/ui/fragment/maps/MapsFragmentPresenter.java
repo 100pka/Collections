@@ -55,7 +55,7 @@ public class MapsFragmentPresenter implements MapsFragmentContract.Presenter, Mo
             });
             mapSupplier.showProgress();
             mapSupplier.setCalculationParameters(calculationParameters);
-            startCalculation();
+            mapSupplier.startCalculation();
         } else if (!CalculationParameters.isAmountValid(calculationParameters)) {
             mapsFragmentContractView.amountValidationError();
         } else if (!CalculationParameters.isThreadsValid(calculationParameters)) {
@@ -68,10 +68,4 @@ public class MapsFragmentPresenter implements MapsFragmentContract.Presenter, Mo
         mapsFragmentContractView.uncheckStartButton();
     }
 
-    private void startCalculation() {
-        BlockingQueue<Runnable> calculationQueue = new LinkedBlockingQueue<Runnable>();
-        ThreadPoolExecutor calculationThreadPool = new ThreadPoolExecutor(1, 1,
-                50, TimeUnit.MILLISECONDS, calculationQueue);
-        calculationThreadPool.execute(mapSupplier);
-    }
 }

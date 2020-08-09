@@ -15,7 +15,6 @@ public interface CollectionsFragmentContract {
         void amountValidationError();
 
         void threadValidationError();
-
     }
 
     interface Presenter extends BaseContract.BasePresenter {

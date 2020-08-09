@@ -1,21 +1,28 @@
 package com.stopkaaaa.collections.ui.fragment.recycler;
 
+import android.os.Handler;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
+import androidx.recyclerview.widget.DiffUtil;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.stopkaaaa.collections.R;
 import com.stopkaaaa.collections.dto.CalculationResultItem;
 
+import java.util.ArrayDeque;
 import java.util.ArrayList;
+import java.util.Deque;
 import java.util.List;
 
 public class CollectionsRecyclerAdapter extends RecyclerView.Adapter<ResultViewHolder> {
 
     private final List<CalculationResultItem> calculationResultItems = new ArrayList<>();
+
+    private final Deque<List<CalculationResultItem>> pendingUpdates =
+            new ArrayDeque<>();
 
     public CollectionsRecyclerAdapter() {
     }

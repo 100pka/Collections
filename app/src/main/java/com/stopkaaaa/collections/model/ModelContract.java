@@ -5,7 +5,7 @@ import com.stopkaaaa.collections.dto.CalculationParameters;
 
 public interface ModelContract {
     interface Model {
-
+        void startCalculation();
     }
 
     interface ModelPresenter extends BaseContract.BasePresenter {

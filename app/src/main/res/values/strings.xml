@@ -32,5 +32,6 @@
     <string name="removeFrom">Removing from</string>
     <string name="searchInMap">Search in map</string>
     <string name="enter_valid_number">please enter valid number</string>
+    <string name="ViewHolder">ViewHolder</string>
 
 </resources>
