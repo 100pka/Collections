@@ -1,6 +1,8 @@
 package com.stopkaaaa.collections.ui.fragment.collections;
 
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Looper;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -41,6 +43,7 @@ public class CollectionsFragment extends Fragment implements CollectionsFragment
 
     private final CollectionsRecyclerAdapter collectionsRecyclerAdapter =
             new CollectionsRecyclerAdapter();
+    private final Handler handler = new Handler(Looper.getMainLooper());
 
     public CollectionsFragment() {
         // Required empty public constructor
@@ -67,6 +70,7 @@ public class CollectionsFragment extends Fragment implements CollectionsFragment
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 buttonView.setChecked(isChecked);
+                collectionsRecyclerAdapter.showProgress(isChecked);
                 if (isChecked) {
                     final CalculationParameters calculationParameters = startAmountView.getCalculationData();
                     collectionsFragmentPresenter.onCalculationLaunch(calculationParameters);
@@ -95,22 +99,35 @@ public class CollectionsFragment extends Fragment implements CollectionsFragment
     @Override
     public void setRecyclerAdapterData(List<CalculationResultItem> list) {
         collectionsRecyclerAdapter.setItems(list);
-        collectionsRecyclerAdapter.notifyDataSetChanged();
+    }
+
+    @Override
+    public void updateItem(final int itemIndex, final String time) {
+        handler.post(new Runnable() {
+            @Override
+            public void run() {
+                collectionsRecyclerAdapter.updateItem(itemIndex, time);
+            }
+        });
     }
 
     @Override
     public void uncheckStartButton() {
-        startAmountView.uncheckStartButton();
+        handler.post(new Runnable() {
+            @Override
+            public void run() {
+                startAmountView.uncheckStartButton();
+            }
+        });
     }
 
     @Override
-    public void amountValidationError() {
-        startAmountView.amountValidationError();
+    public void invalidCollectionSize() {
+        startAmountView.invalidSizeNotification();
     }
 
     @Override
-    public void threadValidationError() {
-        startAmountView.threadValidationError();
+    public void invalidThreadsAmount() {
+        startAmountView.invalidThreadsAmountNotification();
     }
-
 }

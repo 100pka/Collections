@@ -1,6 +1,8 @@
 package com.stopkaaaa.collections.ui.fragment.maps;
 
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Looper;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -40,6 +42,7 @@ public class MapsFragment extends Fragment implements MapsFragmentContract.View 
 
     private final CollectionsRecyclerAdapter mapsRecyclerAdapter =
             new CollectionsRecyclerAdapter();
+    private final Handler handler = new Handler(Looper.getMainLooper());
 
     public MapsFragment() {
         // Required empty public constructor
@@ -73,6 +76,7 @@ public class MapsFragment extends Fragment implements MapsFragmentContract.View 
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 buttonView.setChecked(isChecked);
+                mapsRecyclerAdapter.showProgress(isChecked);
                 if (isChecked) {
                     final CalculationParameters calculationParameters = startAmountView.getCalculationData();
                     mapsFragmentPresenter.onCalculationLaunch(calculationParameters);
@@ -94,22 +98,36 @@ public class MapsFragment extends Fragment implements MapsFragmentContract.View 
     @Override
     public void setRecyclerAdapterData(List<CalculationResultItem> list) {
         mapsRecyclerAdapter.setItems(list);
-        mapsRecyclerAdapter.notifyDataSetChanged();
+    }
+
+    @Override
+    public void updateItem(final int itemIndex, final String time) {
+        handler.post(new Runnable() {
+            @Override
+            public void run() {
+                mapsRecyclerAdapter.updateItem(itemIndex, time);
+            }
+        });
     }
 
     @Override
     public void uncheckStartButton() {
-        startAmountView.uncheckStartButton();
+        handler.post(new Runnable() {
+            @Override
+            public void run() {
+                startAmountView.uncheckStartButton();
+            }
+        });
     }
 
     @Override
-    public void amountValidationError() {
-        startAmountView.amountValidationError();
+    public void invalidMapSize() {
+        startAmountView.invalidSizeNotification();
     }
 
     @Override
-    public void threadValidationError() {
-        startAmountView.threadValidationError();
+    public void invalidThreadsAmount() {
+        startAmountView.invalidThreadsAmountNotification();
     }
 
 }

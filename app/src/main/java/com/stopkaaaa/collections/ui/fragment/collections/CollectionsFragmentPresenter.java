@@ -1,15 +1,13 @@
 package com.stopkaaaa.collections.ui.fragment.collections;
 
-import androidx.lifecycle.LifecycleOwner;
-import androidx.lifecycle.LiveData;
-import androidx.lifecycle.Observer;
-
 import com.stopkaaaa.collections.dto.CalculationParameters;
 import com.stopkaaaa.collections.dto.CalculationResultItem;
+import com.stopkaaaa.collections.model.collections.CollectionCalculator;
 import com.stopkaaaa.collections.model.collections.CollectionSupplier;
 import com.stopkaaaa.collections.model.ModelContract;
 
 import java.util.ArrayList;
+import java.util.List;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.LinkedBlockingQueue;
 import java.util.concurrent.ThreadPoolExecutor;
@@ -20,56 +18,88 @@ public class CollectionsFragmentPresenter implements CollectionsFragmentContract
 
     private final CollectionsFragmentContract.View collectionsFragmentContractView;
 
-    private LiveData<ArrayList<CalculationResultItem>> liveData;
-
     private CollectionSupplier collectionSupplier;
+
+    private final BlockingQueue<Runnable> calculationQueue;
+    private final ThreadPoolExecutor calculationThreadPool;
 
     public CollectionsFragmentPresenter(CollectionsFragmentContract.View collectionsFragmentContractView, CollectionSupplier collectionSupplier) {
         this.collectionsFragmentContractView = collectionsFragmentContractView;
         this.collectionSupplier = collectionSupplier;
+        this.calculationQueue = new LinkedBlockingQueue<Runnable>();
+        this.calculationThreadPool = new ThreadPoolExecutor(1, 1,
+                50, TimeUnit.MILLISECONDS, calculationQueue);
     }
 
     @Override
     public void setup() {
-        collectionsFragmentContractView.setRecyclerAdapterData(collectionSupplier.getListArrayList());
+        collectionsFragmentContractView.setRecyclerAdapterData(collectionSupplier.getRecyclerData());
     }
 
     @Override
     public int getSpanCount() {
-        return CollectionSupplier.getSpanCount();
+        return collectionSupplier.getSpanCount();
     }
 
     @Override
     public void onCalculationLaunch(CalculationParameters calculationParameters) {
-
-        if (calculationParameters != null && CalculationParameters.isAmountValid(calculationParameters) &&
-        CalculationParameters.isThreadsValid(calculationParameters) && calculationParameters.isChecked()) {
-            liveData = collectionSupplier.getData();
-            liveData.observe((LifecycleOwner) collectionsFragmentContractView, new Observer<ArrayList<CalculationResultItem>>() {
-                @Override
-                public void onChanged(ArrayList<CalculationResultItem> calculationResultItems) {
-                    collectionsFragmentContractView.setRecyclerAdapterData(collectionSupplier.getListArrayList());
-                    if (!collectionSupplier.isCalculationFinished()) {
-                        return;
-                    }
-                    calculationFinished();
+        if (calculationParameters != null && calculationParameters.isChecked()) {
+            if (calculationParameters.isAmountValid()) {
+                if (calculationParameters.isThreadsValid()) {
+                    startCalculation(calculationParameters);
+                } else {
+                    collectionsFragmentContractView.invalidThreadsAmount();
+                    collectionsFragmentContractView.uncheckStartButton();
                 }
-            });
-            collectionSupplier.showProgress();
-            collectionSupplier.setCalculationParameters(calculationParameters);
-            collectionSupplier.startCalculation();
-        } else if (!CalculationParameters.isAmountValid(calculationParameters)) {
-            collectionsFragmentContractView.amountValidationError();
-            collectionsFragmentContractView.uncheckStartButton();
-        } else if (!CalculationParameters.isThreadsValid(calculationParameters)) {
-            collectionsFragmentContractView.threadValidationError();
-            collectionsFragmentContractView.uncheckStartButton();
+            } else {
+                collectionsFragmentContractView.invalidCollectionSize();
+                collectionsFragmentContractView.uncheckStartButton();
+            }
         }
-
     }
 
     @Override
-    public void calculationFinished() {
-        collectionsFragmentContractView.uncheckStartButton();
+    public void calculationFinished(String listType, String operation, String time) {
+        List<CalculationResultItem> list = new ArrayList<>();
+        list.addAll(collectionSupplier.getRecyclerData());
+        for (CalculationResultItem item: list
+             ) {
+            if (item.getListType().equals(listType) && item.getOperation().equals(operation)) {
+                collectionsFragmentContractView.updateItem(list.indexOf(item), time);
+                break;
+            }
+        }
     }
+
+    public void startCalculation(final CalculationParameters calculationParameters) {
+        calculationThreadPool.setCorePoolSize(calculationParameters.getThreads());
+        calculationThreadPool.setMaximumPoolSize(calculationParameters.getThreads());
+
+        new Thread(new Runnable() {
+            ModelContract.ModelPresenter presenter;
+            public Runnable init(ModelContract.ModelPresenter presenter) {
+                this.presenter = presenter;
+                return this;
+            }
+            @Override
+            public void run() {
+                for (final CalculationResultItem calculationResultItem : collectionSupplier.getRecyclerData()
+                ) {
+                    CollectionCalculator calculator = new CollectionCalculator(
+                            calculationParameters.getAmount(), calculationResultItem.getListType(),
+                            calculationResultItem.getOperation(), collectionSupplier.getContext(), presenter);
+                    calculationThreadPool.execute(calculator);
+
+                }
+                while (calculationThreadPool.getActiveCount() != 0 || !calculationThreadPool.getQueue().isEmpty()){
+                    try {
+                        Thread.sleep(500);
+                    } catch (InterruptedException e) {
+                    }
+                }
+                collectionsFragmentContractView.uncheckStartButton();
+            }
+        }.init(this)).start();
+    }
+
 }

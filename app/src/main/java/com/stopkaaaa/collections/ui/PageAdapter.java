@@ -7,11 +7,12 @@ import androidx.lifecycle.Lifecycle;
 import androidx.viewpager2.adapter.FragmentStateAdapter;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class PageAdapter extends FragmentStateAdapter {
 
-    private final ArrayList<Fragment> fragments;
-    private final ArrayList<String> titles;
+    private final List<Fragment> fragments;
+    private final List<String> titles;
 
     public PageAdapter(@NonNull FragmentManager fragmentManager, @NonNull Lifecycle lifecycle) {
         super(fragmentManager, lifecycle);
@@ -35,7 +36,7 @@ public class PageAdapter extends FragmentStateAdapter {
         titles.add(title);
     }
 
-    public ArrayList<String> getTitles() {
+    public List<String> getTitles() {
         return titles;
     }
 }

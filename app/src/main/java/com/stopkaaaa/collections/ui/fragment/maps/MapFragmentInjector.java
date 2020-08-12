@@ -6,6 +6,6 @@ import com.stopkaaaa.collections.model.maps.MapSupplier;
 
 public class MapFragmentInjector {
         public static MapsFragmentPresenter getPresenter(MapsFragmentContract.View mapsFragmentContractView, Context context) {
-            return new MapsFragmentPresenter(mapsFragmentContractView, MapSupplier.getInstance(context));
+            return new MapsFragmentPresenter(mapsFragmentContractView, new MapSupplier(context));
         }
 }

@@ -10,17 +10,20 @@ public interface MapsFragmentContract {
     interface View extends BaseContract.BaseView<Presenter> {
         void setRecyclerAdapterData(List<CalculationResultItem> list);
 
+        void updateItem(int itemIndex, String time);
+
         void uncheckStartButton();
 
-        void amountValidationError();
+        void invalidMapSize();
 
-        void threadValidationError();
+        void invalidThreadsAmount();
     }
 
     interface Presenter extends BaseContract.BasePresenter {
         void onCalculationLaunch(CalculationParameters calculationParameters);
 
         void setup();
+
         int getSpanCount();
     }
 }

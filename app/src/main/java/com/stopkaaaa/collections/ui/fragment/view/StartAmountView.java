@@ -80,12 +80,12 @@ public class StartAmountView extends ConstraintLayout {
         return editText.getText().toString();
     }
 
-    public void amountValidationError() {
+    public void invalidSizeNotification() {
         elementsAmountEditText.setText("");
         elementsAmountEditText.setHint(R.string.enter_valid_number);
     }
 
-    public void threadValidationError() {
+    public void invalidThreadsAmountNotification() {
         threadsAmountEditText.setText("");
         threadsAmountEditText.setHint(R.string.enter_valid_number);
     }

@@ -3,25 +3,28 @@ package com.stopkaaaa.collections.model.maps;
 import android.content.Context;
 
 import com.stopkaaaa.collections.R;
+import com.stopkaaaa.collections.model.ModelContract;
 
 import java.text.DecimalFormat;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Random;
 import java.util.TreeMap;
-import java.util.concurrent.Callable;
 
-public class MapCalculator implements Runnable {
+public class MapCalculator implements Runnable, ModelContract.Model {
     private Map<Integer, Integer> map;
     private String operation;
     private String mapType;
     private String resultString;
     private Context context;
+    private ModelContract.ModelPresenter modelPresenter;
 
-    public MapCalculator(int amount, String mapType, String operation, Context context) {
+    public MapCalculator(int amount, String mapType, String operation, Context context,
+                         ModelContract.ModelPresenter presenter) {
         this.operation = operation;
         this.mapType = mapType;
         this.context = context;
+        this.modelPresenter = presenter;
         if (mapType.equals(context.getString(R.string.hashMap))) {
             map = new HashMap<>();
         } else if (mapType.equals(context.getString(R.string.treeMap))) {
@@ -35,7 +38,7 @@ public class MapCalculator implements Runnable {
     @Override
     public void run() {
         if (calculation()) {
-            MapSupplier.getInstance(context).updateItem(mapType, operation, resultString);
+            modelPresenter.calculationFinished(mapType, operation, resultString);
         }
     }
 
@@ -61,7 +64,9 @@ public class MapCalculator implements Runnable {
             map.remove(rndIndex);
             result = System.nanoTime() - start;
             resultStringBuilder.append(decimalFormat.format(result / 1000000.0));
-        } else return false;
+        } else {
+            return false;
+        }
         resultString = resultStringBuilder.toString();
         return true;
     }

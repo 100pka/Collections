@@ -5,10 +5,9 @@ import com.stopkaaaa.collections.dto.CalculationParameters;
 
 public interface ModelContract {
     interface Model {
-        void startCalculation();
     }
 
     interface ModelPresenter extends BaseContract.BasePresenter {
-        void calculationFinished();
+        void calculationFinished(String listType, String operation, String time);
     }
 }

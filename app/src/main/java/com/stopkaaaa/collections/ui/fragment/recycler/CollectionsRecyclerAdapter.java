@@ -21,9 +21,6 @@ public class CollectionsRecyclerAdapter extends RecyclerView.Adapter<ResultViewH
 
     private final List<CalculationResultItem> calculationResultItems = new ArrayList<>();
 
-    private final Deque<List<CalculationResultItem>> pendingUpdates =
-            new ArrayDeque<>();
-
     public CollectionsRecyclerAdapter() {
     }
 
@@ -47,5 +44,20 @@ public class CollectionsRecyclerAdapter extends RecyclerView.Adapter<ResultViewH
     public void setItems(List<CalculationResultItem> calculationResultItems) {
         this.calculationResultItems.clear();
         this.calculationResultItems.addAll(calculationResultItems);
+        notifyDataSetChanged();
+    }
+
+    public void updateItem(int itemIndex, String time) {
+        calculationResultItems.get(itemIndex).setTime(time);
+        calculationResultItems.get(itemIndex).setState(false);
+        notifyItemChanged(itemIndex);
+    }
+
+    public void showProgress(boolean showProgress) {
+        for (CalculationResultItem item: calculationResultItems
+             ) {
+            item.setState(showProgress);
+        }
+        notifyDataSetChanged();
     }
 }
