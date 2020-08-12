@@ -17,6 +17,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.stopkaaaa.collections.R;
 import com.stopkaaaa.collections.dto.CalculationParameters;
 import com.stopkaaaa.collections.dto.CalculationResultItem;
+import com.stopkaaaa.collections.ui.FragmentInjector;
 import com.stopkaaaa.collections.ui.fragment.recycler.CollectionsRecyclerAdapter;
 import com.stopkaaaa.collections.ui.fragment.view.StartAmountView;
 
@@ -84,7 +85,7 @@ public class CollectionsFragment extends Fragment implements CollectionsFragment
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        collectionsFragmentPresenter = CollectionFragmentInjector.getPresenter(
+        collectionsFragmentPresenter = (CollectionsFragmentContract.Presenter) FragmentInjector.getPresenter(
                 this, getContext());
     }
 

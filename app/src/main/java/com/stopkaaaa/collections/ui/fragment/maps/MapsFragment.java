@@ -17,6 +17,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.stopkaaaa.collections.R;
 import com.stopkaaaa.collections.dto.CalculationParameters;
 import com.stopkaaaa.collections.dto.CalculationResultItem;
+import com.stopkaaaa.collections.ui.FragmentInjector;
 import com.stopkaaaa.collections.ui.fragment.recycler.CollectionsRecyclerAdapter;
 import com.stopkaaaa.collections.ui.fragment.view.StartAmountView;
 
@@ -64,7 +65,7 @@ public class MapsFragment extends Fragment implements MapsFragmentContract.View 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        mapsFragmentPresenter = MapFragmentInjector.getPresenter(
+        mapsFragmentPresenter = (MapsFragmentContract.Presenter) FragmentInjector.getPresenter(
                 this, getContext());
         mapsFragmentPresenter.setup();
     }
