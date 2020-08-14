@@ -85,20 +85,10 @@ public class CollectionsFragmentPresenter implements CollectionsFragmentContract
         calculationThreadPool.setCorePoolSize(calculationParameters.getThreads());
         calculationThreadPool.setMaximumPoolSize(calculationParameters.getThreads());
 
-        calculationThreadPool.execute(new Runnable() {
-            ModelContract.ModelPresenter presenter;
-            public Runnable init(ModelContract.ModelPresenter presenter) {
-                this.presenter = presenter;
-                return this;
-            }
-            @Override
-            public void run() {
-                final List<CollectionCalculator> tasks = Collections.synchronizedList(collectionSupplier
-                        .getTasks(calculationParameters.getAmount(), presenter));
-                for (CollectionCalculator task: new ArrayList<>(tasks)) {
-                    calculationThreadPool.execute(task);
-                }
-            }
-        }.init(this));
+        final List<CollectionCalculator> tasks = Collections.synchronizedList(collectionSupplier
+                .getTasks(calculationParameters.getAmount(), this));
+        for (CollectionCalculator task: new ArrayList<>(tasks)) {
+            calculationThreadPool.execute(task);
+        }
     }
 }
