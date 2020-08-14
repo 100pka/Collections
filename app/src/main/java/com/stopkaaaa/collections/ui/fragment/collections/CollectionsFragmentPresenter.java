@@ -52,8 +52,14 @@ public class CollectionsFragmentPresenter implements CollectionsFragmentContract
                     collectionsFragmentContractView.uncheckStartButton();
                 }
             } else {
-                collectionsFragmentContractView.invalidCollectionSize();
-                collectionsFragmentContractView.uncheckStartButton();
+                if (calculationParameters.isThreadsValid()){
+                    collectionsFragmentContractView.invalidCollectionSize();
+                    collectionsFragmentContractView.uncheckStartButton();
+                } else {
+                    collectionsFragmentContractView.invalidCollectionSize();
+                    collectionsFragmentContractView.invalidThreadsAmount();
+                    collectionsFragmentContractView.uncheckStartButton();
+                }
             }
         }
     }
@@ -100,6 +106,7 @@ public class CollectionsFragmentPresenter implements CollectionsFragmentContract
                 collectionsFragmentContractView.uncheckStartButton();
             }
         }.init(this)).start();
+
     }
 
 }

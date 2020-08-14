@@ -1,6 +1,7 @@
 package com.stopkaaaa.collections.dto;
 
 import android.text.TextUtils;
+import android.util.Log;
 
 public class CalculationParameters {
     private final String amount;

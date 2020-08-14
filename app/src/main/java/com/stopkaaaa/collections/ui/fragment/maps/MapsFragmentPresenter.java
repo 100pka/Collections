@@ -51,8 +51,14 @@ public class MapsFragmentPresenter implements MapsFragmentContract.Presenter, Mo
                     mapsFragmentContractView.uncheckStartButton();
                 }
             } else {
-                mapsFragmentContractView.invalidMapSize();
-                mapsFragmentContractView.uncheckStartButton();
+                if (calculationParameters.isThreadsValid()){
+                    mapsFragmentContractView.invalidMapSize();
+                    mapsFragmentContractView.uncheckStartButton();
+                } else {
+                    mapsFragmentContractView.invalidMapSize();
+                    mapsFragmentContractView.invalidThreadsAmount();
+                    mapsFragmentContractView.uncheckStartButton();
+                }
             }
         }
     }
