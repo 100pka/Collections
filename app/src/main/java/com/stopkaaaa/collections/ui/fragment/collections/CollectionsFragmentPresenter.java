@@ -7,6 +7,7 @@ import com.stopkaaaa.collections.model.collections.CollectionSupplier;
 import com.stopkaaaa.collections.model.ModelContract;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.LinkedBlockingQueue;
@@ -75,13 +76,16 @@ public class CollectionsFragmentPresenter implements CollectionsFragmentContract
                 break;
             }
         }
+        if ((calculationThreadPool.getActiveCount() != 0 || !calculationThreadPool.getQueue().isEmpty())) {
+            collectionsFragmentContractView.uncheckStartButton();
+        }
     }
 
     public void startCalculation(final CalculationParameters calculationParameters) {
         calculationThreadPool.setCorePoolSize(calculationParameters.getThreads());
         calculationThreadPool.setMaximumPoolSize(calculationParameters.getThreads());
 
-        new Thread(new Runnable() {
+        calculationThreadPool.execute(new Runnable() {
             ModelContract.ModelPresenter presenter;
             public Runnable init(ModelContract.ModelPresenter presenter) {
                 this.presenter = presenter;
@@ -89,24 +93,12 @@ public class CollectionsFragmentPresenter implements CollectionsFragmentContract
             }
             @Override
             public void run() {
-                for (final CalculationResultItem calculationResultItem : collectionSupplier.getRecyclerData()
-                ) {
-                    CollectionCalculator calculator = new CollectionCalculator(
-                            calculationParameters.getAmount(), calculationResultItem.getListType(),
-                            calculationResultItem.getOperation(), collectionSupplier.getContext(), presenter);
-                    calculationThreadPool.execute(calculator);
-
+                final List<CollectionCalculator> tasks = Collections.synchronizedList(collectionSupplier
+                        .getTasks(calculationParameters.getAmount(), presenter));
+                for (CollectionCalculator task: new ArrayList<>(tasks)) {
+                    calculationThreadPool.execute(task);
                 }
-                while (calculationThreadPool.getActiveCount() != 0 || !calculationThreadPool.getQueue().isEmpty()){
-                    try {
-                        Thread.sleep(500);
-                    } catch (InterruptedException e) {
-                    }
-                }
-                collectionsFragmentContractView.uncheckStartButton();
             }
-        }.init(this)).start();
-
+        }.init(this));
     }
-
 }

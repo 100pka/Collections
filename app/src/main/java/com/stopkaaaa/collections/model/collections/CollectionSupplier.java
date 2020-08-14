@@ -4,6 +4,7 @@ import android.content.Context;
 
 import com.stopkaaaa.collections.R;
 import com.stopkaaaa.collections.dto.CalculationResultItem;
+import com.stopkaaaa.collections.model.ModelContract;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -12,7 +13,8 @@ public class CollectionSupplier {
 
     public static final int SPAN_COUNT = 3;
 
-    private ArrayList<CalculationResultItem> listArrayList;
+    private List<CalculationResultItem> listArrayList;
+    private List<CollectionCalculator> taskList;
     private Context context;
 
 
@@ -57,11 +59,17 @@ public class CollectionSupplier {
         return listArrayList;
     }
 
-    public int getSpanCount() {
-        return SPAN_COUNT;
+    public List<CollectionCalculator> getTasks(int amount, ModelContract.ModelPresenter presenter) {
+        taskList = new ArrayList<>();
+        for (CalculationResultItem item: listArrayList) {
+            CollectionCalculator task = new CollectionCalculator(amount, item.getListType(),
+                    item.getOperation(), context, presenter);
+            taskList.add(task);
+        }
+        return taskList;
     }
 
-    public Context getContext() {
-        return context;
+    public int getSpanCount() {
+        return SPAN_COUNT;
     }
 }
