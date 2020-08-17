@@ -19,11 +19,11 @@ public class CalculationParameters {
     }
 
     public boolean isThreadsValid () {
-        return TextUtils.isDigitsOnly(this.threads);
+        return !threads.isEmpty() && TextUtils.isDigitsOnly(this.threads);
     }
 
     public boolean isAmountValid () {
-        return TextUtils.isDigitsOnly(this.amount);
+        return !amount.isEmpty() && TextUtils.isDigitsOnly(this.amount);
     }
 
     @Override

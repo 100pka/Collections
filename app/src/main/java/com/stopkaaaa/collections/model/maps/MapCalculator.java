@@ -3,7 +3,7 @@ package com.stopkaaaa.collections.model.maps;
 import android.content.Context;
 
 import com.stopkaaaa.collections.R;
-import com.stopkaaaa.collections.model.ModelContract;
+import com.stopkaaaa.collections.dto.CalculationResultItem;
 
 import java.text.DecimalFormat;
 import java.util.HashMap;
@@ -11,43 +11,36 @@ import java.util.Map;
 import java.util.Random;
 import java.util.TreeMap;
 
-public class MapCalculator implements Runnable, ModelContract.Model {
-    private Map<Integer, Integer> map;
-    private String operation;
-    private String mapType;
-    private String resultString;
+public class MapCalculator{
+    private int mapSize;
     private Context context;
-    private ModelContract.ModelPresenter modelPresenter;
 
-    public MapCalculator(int amount, String mapType, String operation, Context context,
-                         ModelContract.ModelPresenter presenter) {
-        this.operation = operation;
-        this.mapType = mapType;
+    public MapCalculator(Context context) {
         this.context = context;
-        this.modelPresenter = presenter;
+    }
+
+    public void setMapSize(int mapSize) {
+        this.mapSize = mapSize;
+    }
+
+    public synchronized String calculate(CalculationResultItem item) {
+        String mapType = item.getListType();
+        String operation = item.getOperation();
+        Map<Integer, Integer> map = null;
+
         if (mapType.equals(context.getString(R.string.hashMap))) {
             map = new HashMap<>();
-        } else if (mapType.equals(context.getString(R.string.treeMap))) {
+        } else {
             map = new TreeMap<>();
         }
-        for (int i = 0; i < amount; i++) {
+
+        for (int i = 0; i < mapSize; i++) {
             map.put(i, i);
         }
-    }
 
-    @Override
-    public void run() {
-        if (calculation()) {
-            modelPresenter.calculationFinished(mapType, operation, resultString);
-        }
-    }
-
-    private boolean calculation() {
         long start, result;
-        int rndIndex;
         StringBuilder resultStringBuilder = new StringBuilder();
         DecimalFormat decimalFormat = new DecimalFormat("0.00");
-        rndIndex = new Random().nextInt(map.size());
 
         if (operation.equals(context.getString(R.string.addingTo))) {
             start = System.nanoTime();
@@ -55,19 +48,20 @@ public class MapCalculator implements Runnable, ModelContract.Model {
             result = System.nanoTime() - start;
             resultStringBuilder.append(decimalFormat.format(result / 1000000.0));
         } else if (operation.equals(context.getString(R.string.searchInMap))) {
+            int rndIndex = new Random().nextInt(map.size());
             start = System.nanoTime();
             map.get(rndIndex);
             result = System.nanoTime() - start;
             resultStringBuilder.append(decimalFormat.format(result / 1000000.0));
         } else if (operation.equals(context.getString(R.string.removeFrom))) {
+            int rndIndex = new Random().nextInt(map.size());
             start = System.nanoTime();
             map.remove(rndIndex);
             result = System.nanoTime() - start;
             resultStringBuilder.append(decimalFormat.format(result / 1000000.0));
         } else {
-            return false;
+            return "";
         }
-        resultString = resultStringBuilder.toString();
-        return true;
+        return resultStringBuilder.toString();
     }
 }

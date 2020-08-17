@@ -66,7 +66,7 @@ public class MapsFragment extends Fragment implements MapsFragmentContract.View 
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         mapsFragmentPresenter = (MapsFragmentContract.Presenter) FragmentInjector.getPresenter(
-                this, getContext());
+                this, getContext(), R.string.maps);
         mapsFragmentPresenter.setup();
     }
 
@@ -77,7 +77,6 @@ public class MapsFragment extends Fragment implements MapsFragmentContract.View 
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 buttonView.setChecked(isChecked);
-                mapsRecyclerAdapter.showProgress(isChecked);
                 if (isChecked) {
                     final CalculationParameters calculationParameters = startAmountView.getCalculationData();
                     mapsFragmentPresenter.onCalculationLaunch(calculationParameters);
@@ -97,7 +96,7 @@ public class MapsFragment extends Fragment implements MapsFragmentContract.View 
     }
 
     @Override
-    public void setRecyclerAdapterData(List<CalculationResultItem> list) {
+    public void setData(List<CalculationResultItem> list) {
         mapsRecyclerAdapter.setItems(list);
     }
 
@@ -131,4 +130,8 @@ public class MapsFragment extends Fragment implements MapsFragmentContract.View 
         startAmountView.invalidThreadsAmountNotification();
     }
 
+    @Override
+    public void showProgressBar(boolean calculationInProgress) {
+        mapsRecyclerAdapter.showProgress(calculationInProgress);
+    }
 }

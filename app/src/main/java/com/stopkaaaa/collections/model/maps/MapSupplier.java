@@ -12,36 +12,28 @@ public class MapSupplier {
 
     public static final int SPAN_COUNT = 2;
 
-    private ArrayList<CalculationResultItem> listArrayList;
     private Context context;
 
     public MapSupplier(Context context) {
         this.context = context;
-        init();
     }
 
-    private void init() {
-        listArrayList = new ArrayList<>();
+    public List<CalculationResultItem> getTaskList() {
+        List<CalculationResultItem> taskList = new ArrayList<>();
 
-        listArrayList.add(new CalculationResultItem(context.getString(R.string.hashMap), context.getString(R.string.addingTo)));
-        listArrayList.add(new CalculationResultItem(context.getString(R.string.treeMap), context.getString(R.string.addingTo)));
+        taskList.add(new CalculationResultItem(context.getString(R.string.hashMap), context.getString(R.string.addingTo)));
+        taskList.add(new CalculationResultItem(context.getString(R.string.treeMap), context.getString(R.string.addingTo)));
 
-        listArrayList.add(new CalculationResultItem(context.getString(R.string.hashMap), context.getString(R.string.searchInMap)));
-        listArrayList.add(new CalculationResultItem(context.getString(R.string.treeMap), context.getString(R.string.searchInMap)));
+        taskList.add(new CalculationResultItem(context.getString(R.string.hashMap), context.getString(R.string.searchInMap)));
+        taskList.add(new CalculationResultItem(context.getString(R.string.treeMap), context.getString(R.string.searchInMap)));
 
-        listArrayList.add(new CalculationResultItem(context.getString(R.string.hashMap), context.getString(R.string.removeFrom)));
-        listArrayList.add(new CalculationResultItem(context.getString(R.string.treeMap), context.getString(R.string.removeFrom)));
-    }
+        taskList.add(new CalculationResultItem(context.getString(R.string.hashMap), context.getString(R.string.removeFrom)));
+        taskList.add(new CalculationResultItem(context.getString(R.string.treeMap), context.getString(R.string.removeFrom)));
 
-    public List<CalculationResultItem> getRecyclerData() {
-        return listArrayList;
+        return taskList;
     }
 
     public int getSpanCount() {
         return SPAN_COUNT;
-    }
-
-    public Context getContext() {
-        return context;
     }
 }

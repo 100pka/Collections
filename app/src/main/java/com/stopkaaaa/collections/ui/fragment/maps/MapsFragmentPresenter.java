@@ -4,7 +4,6 @@ import com.stopkaaaa.collections.dto.CalculationParameters;
 import com.stopkaaaa.collections.dto.CalculationResultItem;
 import com.stopkaaaa.collections.model.maps.MapCalculator;
 import com.stopkaaaa.collections.model.maps.MapSupplier;
-import com.stopkaaaa.collections.model.ModelContract;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -13,18 +12,21 @@ import java.util.concurrent.LinkedBlockingQueue;
 import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
 
-public class MapsFragmentPresenter implements MapsFragmentContract.Presenter, ModelContract.ModelPresenter {
+public class MapsFragmentPresenter implements MapsFragmentContract.Presenter{
 
     private final MapsFragmentContract.View mapsFragmentContractView;
-
     private MapSupplier mapSupplier;
-
+    private MapCalculator calculator;
     private final BlockingQueue<Runnable> calculationQueue;
     private final ThreadPoolExecutor calculationThreadPool;
 
-    public MapsFragmentPresenter(MapsFragmentContract.View mapsFragmentContractView, MapSupplier mapSupplier) {
+    public MapsFragmentPresenter(
+            MapsFragmentContract.View mapsFragmentContractView,
+            MapSupplier mapSupplier,
+            MapCalculator calculator) {
         this.mapsFragmentContractView = mapsFragmentContractView;
         this.mapSupplier = mapSupplier;
+        this.calculator = calculator;
         this.calculationQueue = new LinkedBlockingQueue<Runnable>();
         this.calculationThreadPool = new ThreadPoolExecutor(1, 1,
                 50, TimeUnit.MILLISECONDS, calculationQueue);
@@ -32,7 +34,7 @@ public class MapsFragmentPresenter implements MapsFragmentContract.Presenter, Mo
 
     @Override
     public void setup() {
-        mapsFragmentContractView.setRecyclerAdapterData(mapSupplier.getRecyclerData());
+        mapsFragmentContractView.setData(mapSupplier.getTaskList());
     }
 
     @Override
@@ -45,6 +47,7 @@ public class MapsFragmentPresenter implements MapsFragmentContract.Presenter, Mo
         if (calculationParameters != null && calculationParameters.isChecked()) {
             if (calculationParameters.isAmountValid()) {
                 if (calculationParameters.isThreadsValid()) {
+                    mapsFragmentContractView.showProgressBar(true);
                     startCalculation(calculationParameters);
                 } else {
                     mapsFragmentContractView.invalidThreadsAmount();
@@ -63,46 +66,26 @@ public class MapsFragmentPresenter implements MapsFragmentContract.Presenter, Mo
         }
     }
 
-    @Override
-    public void calculationFinished(String listType, String operation, String time) {
-        List<CalculationResultItem> list = new ArrayList<>();
-        list.addAll(mapSupplier.getRecyclerData());
-        for (CalculationResultItem item: list
-        ) {
-            if (item.getListType().equals(listType) && item.getOperation().equals(operation)) {
-                mapsFragmentContractView.updateItem(list.indexOf(item), time);
-                break;
-            }
-        }
-    }
-
     public void startCalculation(final CalculationParameters calculationParameters) {
         calculationThreadPool.setCorePoolSize(calculationParameters.getThreads());
         calculationThreadPool.setMaximumPoolSize(calculationParameters.getThreads());
 
-        new Thread(new Runnable() {
-            ModelContract.ModelPresenter presenter;
-            public Runnable init(ModelContract.ModelPresenter presenter) {
-                this.presenter = presenter;
-                return this;
-            }
-            @Override
-            public void run() {
-                for (final CalculationResultItem calculationResultItem : mapSupplier.getRecyclerData()
-                ) {
-                    MapCalculator calculator = new MapCalculator(
-                            calculationParameters.getAmount(), calculationResultItem.getListType(),
-                            calculationResultItem.getOperation(), mapSupplier.getContext(), presenter);
-                    calculationThreadPool.execute(calculator);
-                }
-                while (calculationThreadPool.getActiveCount() != 0 || !calculationThreadPool.getQueue().isEmpty()){
-                    try {
-                        Thread.sleep(500);
-                    } catch (InterruptedException e) {
+        calculator.setMapSize(calculationParameters.getAmount());
+        final List<CalculationResultItem> tasks = mapSupplier.getTaskList();
+        final List<CalculationResultItem> calculationResultItems = new ArrayList<>(tasks);
+
+        for (final CalculationResultItem item: tasks) {
+            calculationThreadPool.execute(new Runnable() {
+                @Override
+                public void run() {
+                    String resultTime = calculator.calculate(item);
+                    mapsFragmentContractView.updateItem(tasks.indexOf(item), resultTime);
+                    calculationResultItems.remove(item);
+                    if (calculationResultItems.isEmpty()) {
+                        mapsFragmentContractView.uncheckStartButton();
                     }
                 }
-                mapsFragmentContractView.uncheckStartButton();
-            }
-        }.init(this)).start();
+            });
+        }
     }
 }

@@ -8,7 +8,7 @@ import java.util.List;
 
 public interface CollectionsFragmentContract {
     interface View extends BaseContract.BaseView<Presenter> {
-        void setRecyclerAdapterData(List<CalculationResultItem> list);
+        void setData(List<CalculationResultItem> list);
 
         void updateItem(int itemIndex, String time);
 
@@ -17,6 +17,8 @@ public interface CollectionsFragmentContract {
         void invalidCollectionSize();
 
         void invalidThreadsAmount();
+
+        void showProgressBar(boolean calculationInProgress);
     }
 
     interface Presenter extends BaseContract.BasePresenter {

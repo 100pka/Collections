@@ -1,5 +1,6 @@
 package com.stopkaaaa.collections.ui.fragment.collections;
 
+import android.content.Context;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
@@ -33,6 +34,7 @@ import butterknife.ButterKnife;
  * create an instance of this fragment.
  */
 public class CollectionsFragment extends Fragment implements CollectionsFragmentContract.View {
+
 
     private CollectionsFragmentContract.Presenter collectionsFragmentPresenter;
 
@@ -71,7 +73,6 @@ public class CollectionsFragment extends Fragment implements CollectionsFragment
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 buttonView.setChecked(isChecked);
-                collectionsRecyclerAdapter.showProgress(isChecked);
                 if (isChecked) {
                     final CalculationParameters calculationParameters = startAmountView.getCalculationData();
                     collectionsFragmentPresenter.onCalculationLaunch(calculationParameters);
@@ -86,7 +87,7 @@ public class CollectionsFragment extends Fragment implements CollectionsFragment
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         collectionsFragmentPresenter = (CollectionsFragmentContract.Presenter) FragmentInjector.getPresenter(
-                this, getContext());
+                this, getContext(), R.string.collections);
     }
 
     @Override
@@ -98,7 +99,7 @@ public class CollectionsFragment extends Fragment implements CollectionsFragment
     }
 
     @Override
-    public void setRecyclerAdapterData(List<CalculationResultItem> list) {
+    public void setData(List<CalculationResultItem> list) {
         collectionsRecyclerAdapter.setItems(list);
     }
 
@@ -130,5 +131,10 @@ public class CollectionsFragment extends Fragment implements CollectionsFragment
     @Override
     public void invalidThreadsAmount() {
         startAmountView.invalidThreadsAmountNotification();
+    }
+
+    @Override
+    public void showProgressBar(boolean calculationInProgress) {
+        collectionsRecyclerAdapter.showProgress(calculationInProgress);
     }
 }
