@@ -1,20 +1,16 @@
 package com.stopkaaaa.collections.ui.fragment.recycler;
 
-import android.os.Handler;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
-import androidx.recyclerview.widget.DiffUtil;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.stopkaaaa.collections.R;
 import com.stopkaaaa.collections.dto.CalculationResultItem;
 
-import java.util.ArrayDeque;
 import java.util.ArrayList;
-import java.util.Deque;
 import java.util.List;
 
 public class CollectionsRecyclerAdapter extends RecyclerView.Adapter<ResultViewHolder> {
@@ -56,6 +52,7 @@ public class CollectionsRecyclerAdapter extends RecyclerView.Adapter<ResultViewH
     public void showProgress(boolean showProgress) {
         for (CalculationResultItem item: calculationResultItems
              ) {
+            item.setTime(null);
             item.setState(showProgress);
         }
         notifyDataSetChanged();

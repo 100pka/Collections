@@ -4,6 +4,7 @@ import android.content.Context;
 
 import com.stopkaaaa.collections.R;
 import com.stopkaaaa.collections.dto.CalculationResultItem;
+import com.stopkaaaa.collections.model.Calculator;
 
 import java.text.DecimalFormat;
 import java.util.HashMap;
@@ -11,7 +12,7 @@ import java.util.Map;
 import java.util.Random;
 import java.util.TreeMap;
 
-public class MapCalculator{
+public class MapCalculator implements Calculator {
     private int mapSize;
     private Context context;
 
@@ -19,10 +20,12 @@ public class MapCalculator{
         this.context = context;
     }
 
-    public void setMapSize(int mapSize) {
+    @Override
+    public void setCollectionSize(int mapSize) {
         this.mapSize = mapSize;
     }
 
+    @Override
     public synchronized String calculate(CalculationResultItem item) {
         String mapType = item.getListType();
         String operation = item.getOperation();

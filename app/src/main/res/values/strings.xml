@@ -4,7 +4,6 @@
     <string name="maps">Maps</string>
 
     <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="start">START</string>
 
     <string name="arrayList">ArrayList</string>
@@ -32,6 +31,5 @@
     <string name="removeFrom">Removing from</string>
     <string name="searchInMap">Search in map</string>
     <string name="enter_valid_number">please enter valid number</string>
-    <string name="ViewHolder">ViewHolder</string>
 
 </resources>

@@ -4,11 +4,12 @@ import android.content.Context;
 
 import com.stopkaaaa.collections.R;
 import com.stopkaaaa.collections.dto.CalculationResultItem;
+import com.stopkaaaa.collections.model.Supplier;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class MapSupplier {
+public class MapSupplier implements Supplier {
 
     public static final int SPAN_COUNT = 2;
 
@@ -18,6 +19,7 @@ public class MapSupplier {
         this.context = context;
     }
 
+    @Override
     public List<CalculationResultItem> getTaskList() {
         List<CalculationResultItem> taskList = new ArrayList<>();
 
@@ -33,6 +35,7 @@ public class MapSupplier {
         return taskList;
     }
 
+    @Override
     public int getSpanCount() {
         return SPAN_COUNT;
     }

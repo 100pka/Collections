@@ -1,6 +1,5 @@
-package com.stopkaaaa.collections.ui.fragment.collections;
+package com.stopkaaaa.collections.ui.fragment.mapcollection;
 
-import android.content.Context;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
@@ -11,11 +10,13 @@ import android.widget.CompoundButton;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.annotation.StringRes;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.stopkaaaa.collections.R;
+import com.stopkaaaa.collections.base.BaseContract;
 import com.stopkaaaa.collections.dto.CalculationParameters;
 import com.stopkaaaa.collections.dto.CalculationResultItem;
 import com.stopkaaaa.collections.ui.FragmentInjector;
@@ -30,13 +31,13 @@ import butterknife.ButterKnife;
 
 /**
  * A simple {@link Fragment} subclass.
- * Use the {@link CollectionsFragment#newInstance} factory method to
+ * Use the {@link MapCollectionFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class CollectionsFragment extends Fragment implements CollectionsFragmentContract.View {
+public class MapCollectionFragment extends Fragment implements BaseContract.BaseView {
 
 
-    private CollectionsFragmentContract.Presenter collectionsFragmentPresenter;
+    private BaseContract.BasePresenter collectionsFragmentPresenter;
 
     @BindView(R.id.startAmountCollections)
     StartAmountView startAmountView;
@@ -44,16 +45,19 @@ public class CollectionsFragment extends Fragment implements CollectionsFragment
     @BindView(R.id.collectionsRecycler)
     RecyclerView collectionsRecycler;
 
+    private @StringRes int page;
+
     private final CollectionsRecyclerAdapter collectionsRecyclerAdapter =
             new CollectionsRecyclerAdapter();
     private final Handler handler = new Handler(Looper.getMainLooper());
 
-    public CollectionsFragment() {
+    public MapCollectionFragment(@StringRes int page) {
+        this.page = page;
         // Required empty public constructor
     }
 
-    public static CollectionsFragment newInstance() {
-        return new CollectionsFragment();
+    public static MapCollectionFragment newInstance(@StringRes int page) {
+            return new MapCollectionFragment(page);
     }
 
 
@@ -73,10 +77,9 @@ public class CollectionsFragment extends Fragment implements CollectionsFragment
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 buttonView.setChecked(isChecked);
-                if (isChecked) {
-                    final CalculationParameters calculationParameters = startAmountView.getCalculationData();
-                    collectionsFragmentPresenter.onCalculationLaunch(calculationParameters);
-                }
+                final CalculationParameters calculationParameters = startAmountView.getCalculationData();
+                collectionsFragmentPresenter.onCalculationLaunch(calculationParameters);
+
             }
         });
         collectionsRecycler.setLayoutManager(new GridLayoutManager(getContext(), collectionsFragmentPresenter.getSpanCount()));
@@ -86,8 +89,8 @@ public class CollectionsFragment extends Fragment implements CollectionsFragment
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        collectionsFragmentPresenter = (CollectionsFragmentContract.Presenter) FragmentInjector.getPresenter(
-                this, getContext(), R.string.collections);
+        collectionsFragmentPresenter = FragmentInjector.getPresenter(
+                this, getContext(), page);
     }
 
     @Override

@@ -9,8 +9,7 @@ import androidx.viewpager2.widget.ViewPager2;
 import com.google.android.material.tabs.TabLayout;
 import com.google.android.material.tabs.TabLayoutMediator;
 import com.stopkaaaa.collections.R;
-import com.stopkaaaa.collections.ui.fragment.collections.CollectionsFragment;
-import com.stopkaaaa.collections.ui.fragment.maps.MapsFragment;
+import com.stopkaaaa.collections.ui.fragment.mapcollection.MapCollectionFragment;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -32,11 +31,11 @@ public class MainActivity extends AppCompatActivity {
 
         ButterKnife.bind(this);
 
-        CollectionsFragment collectionsFragment = CollectionsFragment.newInstance();
-        MapsFragment mapsFragment = MapsFragment.newInstance();
+        MapCollectionFragment mapCollectionFragment = MapCollectionFragment.newInstance(R.string.collections);
+        MapCollectionFragment mapsFragment =  MapCollectionFragment.newInstance(R.string.maps);
 
         pageAdapter = new PageAdapter(getSupportFragmentManager(), getLifecycle());
-        pageAdapter.addFragment(collectionsFragment, getString(R.string.collections));
+        pageAdapter.addFragment(mapCollectionFragment, getString(R.string.collections));
         pageAdapter.addFragment(mapsFragment, getString(R.string.maps));
 
         viewPager.setAdapter(pageAdapter);

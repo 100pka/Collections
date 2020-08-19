@@ -4,6 +4,7 @@ import android.content.Context;
 
 import com.stopkaaaa.collections.R;
 import com.stopkaaaa.collections.dto.CalculationResultItem;
+import com.stopkaaaa.collections.model.Calculator;
 
 import java.text.DecimalFormat;
 import java.util.ArrayList;
@@ -14,7 +15,7 @@ import java.util.Random;
 import java.util.concurrent.CopyOnWriteArrayList;
 
 
-public class CollectionCalculator {
+public class CollectionCalculator implements Calculator {
     private int listSize;
     private Context context;
 
@@ -22,10 +23,12 @@ public class CollectionCalculator {
         this.context = context;
     }
 
-    public void setListSize(int listSize) {
+    @Override
+    public void setCollectionSize(int listSize) {
         this.listSize = listSize;
     }
 
+    @Override
     public synchronized String calculate(CalculationResultItem item) {
         String listType = item.getListType();
         String operation = item.getOperation();
