@@ -19,7 +19,7 @@ import com.stopkaaaa.collections.R;
 import com.stopkaaaa.collections.base.BaseContract;
 import com.stopkaaaa.collections.dto.CalculationParameters;
 import com.stopkaaaa.collections.dto.CalculationResultItem;
-import com.stopkaaaa.collections.ui.FragmentInjector;
+import com.stopkaaaa.collections.ui.fragment.FragmentInjector;
 import com.stopkaaaa.collections.ui.fragment.recycler.CollectionsRecyclerAdapter;
 import com.stopkaaaa.collections.ui.fragment.view.StartAmountView;
 
@@ -37,6 +37,7 @@ import butterknife.ButterKnife;
 public class MapCollectionFragment extends Fragment implements BaseContract.BaseView {
 
 
+    private static final String PAGE = "PAGE";
     private BaseContract.BasePresenter collectionsFragmentPresenter;
 
     @BindView(R.id.startAmountCollections)
@@ -45,21 +46,21 @@ public class MapCollectionFragment extends Fragment implements BaseContract.Base
     @BindView(R.id.collectionsRecycler)
     RecyclerView collectionsRecycler;
 
-    private @StringRes int page;
-
     private final CollectionsRecyclerAdapter collectionsRecyclerAdapter =
             new CollectionsRecyclerAdapter();
     private final Handler handler = new Handler(Looper.getMainLooper());
 
-    public MapCollectionFragment(@StringRes int page) {
-        this.page = page;
+    public MapCollectionFragment() {
         // Required empty public constructor
     }
 
     public static MapCollectionFragment newInstance(@StringRes int page) {
-            return new MapCollectionFragment(page);
+        final Bundle args = new Bundle();
+        args.putInt(PAGE, page);
+        final MapCollectionFragment mapCollectionFragment = new MapCollectionFragment();
+        mapCollectionFragment.setArguments(args);
+        return mapCollectionFragment;
     }
-
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -77,9 +78,8 @@ public class MapCollectionFragment extends Fragment implements BaseContract.Base
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 buttonView.setChecked(isChecked);
-                final CalculationParameters calculationParameters = startAmountView.getCalculationData();
-                collectionsFragmentPresenter.onCalculationLaunch(calculationParameters);
-
+                    final CalculationParameters calculationParameters = startAmountView.getCalculationData();
+                    collectionsFragmentPresenter.onCalculationLaunch(calculationParameters);
             }
         });
         collectionsRecycler.setLayoutManager(new GridLayoutManager(getContext(), collectionsFragmentPresenter.getSpanCount()));
@@ -90,7 +90,7 @@ public class MapCollectionFragment extends Fragment implements BaseContract.Base
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         collectionsFragmentPresenter = FragmentInjector.getPresenter(
-                this, getContext(), page);
+                this, getContext(), this.getArguments().getInt(PAGE));
     }
 
     @Override
@@ -118,12 +118,13 @@ public class MapCollectionFragment extends Fragment implements BaseContract.Base
 
     @Override
     public void uncheckStartButton() {
-        handler.post(new Runnable() {
-            @Override
-            public void run() {
-                startAmountView.uncheckStartButton();
-            }
-        });
+//        handler.post(new Runnable() {
+//            @Override
+//            public void run() {
+//                startAmountView.uncheckStartButton();
+//            }
+//        });
+        startAmountView.uncheckStartButton();
     }
 
     @Override

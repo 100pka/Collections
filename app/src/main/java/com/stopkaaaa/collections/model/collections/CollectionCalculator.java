@@ -16,7 +16,7 @@ import java.util.concurrent.CopyOnWriteArrayList;
 
 
 public class CollectionCalculator implements Calculator {
-    private int listSize;
+
     private Context context;
 
     public CollectionCalculator(Context context) {
@@ -24,12 +24,7 @@ public class CollectionCalculator implements Calculator {
     }
 
     @Override
-    public void setCollectionSize(int listSize) {
-        this.listSize = listSize;
-    }
-
-    @Override
-    public synchronized String calculate(CalculationResultItem item) {
+    public synchronized String calculate(CalculationResultItem item, int listSize) {
         String listType = item.getListType();
         String operation = item.getOperation();
         List<Integer> list = null;

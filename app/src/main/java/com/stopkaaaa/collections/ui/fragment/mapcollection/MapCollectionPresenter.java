@@ -14,18 +14,18 @@ import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
 
 
-public class MapCollectionPresenter<K extends Supplier, V extends Calculator> implements BaseContract.BasePresenter {
+public class MapCollectionPresenter implements BaseContract.BasePresenter {
 
     private final BaseContract.BaseView collectionsFragmentContractView;
-    private K collectionSupplier;
-    private V calculator;
+    private Supplier collectionSupplier;
+    private Calculator calculator;
     private final BlockingQueue<Runnable> calculationQueue;
     private final ThreadPoolExecutor calculationThreadPool;
 
     public MapCollectionPresenter(
             BaseContract.BaseView collectionsFragmentContractView,
-            K collectionSupplier,
-            V calculator) {
+            Supplier collectionSupplier,
+            Calculator calculator) {
         this.collectionsFragmentContractView = collectionsFragmentContractView;
         this.collectionSupplier = collectionSupplier;
         this.calculator = calculator;
@@ -77,21 +77,23 @@ public class MapCollectionPresenter<K extends Supplier, V extends Calculator> im
     public void startCalculation(final CalculationParameters calculationParameters) {
         calculationThreadPool.setCorePoolSize(calculationParameters.getThreads());
         calculationThreadPool.setMaximumPoolSize(calculationParameters.getThreads());
-        calculator.setCollectionSize(calculationParameters.getAmount());
+
         final List<CalculationResultItem> tasks = collectionSupplier.getTaskList();
         final List<CalculationResultItem> calculationResultItems = new ArrayList<>(tasks);
+        final int size = calculationParameters.getAmount();
 
         for (final CalculationResultItem item : tasks) {
             calculationThreadPool.execute(new Runnable() {
                 @Override
                 public void run() {
-                    String resultTime = calculator.calculate(item);
-                    if (!calculationThreadPool.isShutdown()) {
-                        collectionsFragmentContractView.updateItem(tasks.indexOf(item), resultTime);
-                        calculationResultItems.remove(item);
-                        if (calculationResultItems.isEmpty()) {
-                            collectionsFragmentContractView.uncheckStartButton();
-                        }
+                    String resultTime = calculator.calculate(item, size);
+                    if (calculationThreadPool.isShutdown()) {
+                        return;
+                    }
+                    collectionsFragmentContractView.updateItem(tasks.indexOf(item), resultTime);
+                    calculationResultItems.remove(item);
+                    if (calculationResultItems.isEmpty()) {
+                        collectionsFragmentContractView.uncheckStartButton();
                     }
                 }
             });

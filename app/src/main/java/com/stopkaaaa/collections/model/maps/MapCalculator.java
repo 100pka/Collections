@@ -13,7 +13,7 @@ import java.util.Random;
 import java.util.TreeMap;
 
 public class MapCalculator implements Calculator {
-    private int mapSize;
+
     private Context context;
 
     public MapCalculator(Context context) {
@@ -21,12 +21,7 @@ public class MapCalculator implements Calculator {
     }
 
     @Override
-    public void setCollectionSize(int mapSize) {
-        this.mapSize = mapSize;
-    }
-
-    @Override
-    public synchronized String calculate(CalculationResultItem item) {
+    public synchronized String calculate(CalculationResultItem item, int mapSize) {
         String mapType = item.getListType();
         String operation = item.getOperation();
         Map<Integer, Integer> map = null;

@@ -1,4 +1,4 @@
-package com.stopkaaaa.collections.ui;
+package com.stopkaaaa.collections.ui.fragment;
 
 import android.content.Context;
 
@@ -15,14 +15,15 @@ import com.stopkaaaa.collections.ui.fragment.mapcollection.MapCollectionPresente
 
 public class FragmentInjector {
 
-    public static BaseContract.BasePresenter getPresenter(BaseContract.BaseView fragmentContractView, Context context, @StringRes int page) {
+    public static BaseContract.BasePresenter getPresenter(BaseContract.BaseView fragmentContractView,
+                                                          Context context, @StringRes int page) {
         if (page == R.string.collections) {
-            return new MapCollectionPresenter<CollectionSupplier, CollectionCalculator>(
+            return new MapCollectionPresenter(
                     fragmentContractView,
                     new CollectionSupplier(context),
                     new CollectionCalculator(context));
         }  if (page == R.string.maps) {
-            return new MapCollectionPresenter<MapSupplier, MapCalculator>(
+            return new MapCollectionPresenter(
                     fragmentContractView,
                     new MapSupplier(context),
                     new MapCalculator(context));
