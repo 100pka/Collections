@@ -12,6 +12,8 @@ import java.util.Map;
 import java.util.Random;
 import java.util.TreeMap;
 
+import javax.inject.Inject;
+
 public class MapCalculator implements Calculator {
 
     private Context context;

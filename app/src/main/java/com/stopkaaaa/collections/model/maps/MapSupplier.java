@@ -9,12 +9,15 @@ import com.stopkaaaa.collections.model.Supplier;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.inject.Inject;
+
 public class MapSupplier implements Supplier {
 
     public static final int SPAN_COUNT = 2;
 
     private Context context;
 
+    @Inject
     public MapSupplier(Context context) {
         this.context = context;
     }

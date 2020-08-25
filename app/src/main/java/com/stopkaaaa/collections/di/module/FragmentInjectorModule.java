@@ -1,4 +1,4 @@
-package com.stopkaaaa.collections.ui.fragment;
+package com.stopkaaaa.collections.di.module;
 
 import android.content.Context;
 
@@ -12,11 +12,28 @@ import com.stopkaaaa.collections.model.maps.MapCalculator;
 import com.stopkaaaa.collections.model.maps.MapSupplier;
 import com.stopkaaaa.collections.ui.fragment.mapcollection.MapCollectionPresenter;
 
+import dagger.Module;
+import dagger.Provides;
 
-public class FragmentInjector {
+@Module
+public class FragmentInjectorModule {
 
-    public static BaseContract.BasePresenter getPresenter(BaseContract.BaseView fragmentContractView,
-                                                          Context context, @StringRes int page) {
+    private BaseContract.BaseView view;
+    private int page;
+
+    public FragmentInjectorModule(BaseContract.BaseView view, @StringRes int page) {
+        this.view = view;
+        this.page = page;
+    }
+
+    @Provides
+    public BaseContract.BaseView provideView() {
+        return view;
+    }
+
+    @Provides
+    public BaseContract.BasePresenter providePresenter(BaseContract.BaseView fragmentContractView,
+                                                          Context context) {
         if (page == R.string.collections) {
             return new MapCollectionPresenter(
                     fragmentContractView,

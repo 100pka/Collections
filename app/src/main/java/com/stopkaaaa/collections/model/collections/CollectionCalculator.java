@@ -14,6 +14,8 @@ import java.util.List;
 import java.util.Random;
 import java.util.concurrent.CopyOnWriteArrayList;
 
+import javax.inject.Inject;
+
 
 public class CollectionCalculator implements Calculator {
 

@@ -1,5 +1,6 @@
 package com.stopkaaaa.collections.ui.fragment.mapcollection;
 
+import android.content.Context;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
@@ -15,15 +16,19 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.stopkaaaa.collections.InitApplication;
 import com.stopkaaaa.collections.R;
 import com.stopkaaaa.collections.base.BaseContract;
+import com.stopkaaaa.collections.di.component.DaggerActivityComponent;
 import com.stopkaaaa.collections.dto.CalculationParameters;
 import com.stopkaaaa.collections.dto.CalculationResultItem;
-import com.stopkaaaa.collections.ui.fragment.FragmentInjector;
+import com.stopkaaaa.collections.di.module.FragmentInjectorModule;
 import com.stopkaaaa.collections.ui.fragment.recycler.CollectionsRecyclerAdapter;
 import com.stopkaaaa.collections.ui.fragment.view.StartAmountView;
 
 import java.util.List;
+
+import javax.inject.Inject;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -38,7 +43,12 @@ public class MapCollectionFragment extends Fragment implements BaseContract.Base
 
 
     private static final String PAGE = "PAGE";
-    private BaseContract.BasePresenter collectionsFragmentPresenter;
+
+    @Inject
+    BaseContract.BasePresenter collectionsFragmentPresenter;
+
+    @Inject
+    Context context;
 
     @BindView(R.id.startAmountCollections)
     StartAmountView startAmountView;
@@ -89,8 +99,12 @@ public class MapCollectionFragment extends Fragment implements BaseContract.Base
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        collectionsFragmentPresenter = FragmentInjector.getPresenter(
-                this, getContext(), this.getArguments().getInt(PAGE));
+
+        DaggerActivityComponent.builder()
+                .appComponent(InitApplication.get(getContext()).component())
+                .fragmentInjectorModule(new FragmentInjectorModule(this, this.getArguments().getInt(PAGE)))
+                .build()
+                .inject(this);
     }
 
     @Override
@@ -118,12 +132,6 @@ public class MapCollectionFragment extends Fragment implements BaseContract.Base
 
     @Override
     public void uncheckStartButton() {
-//        handler.post(new Runnable() {
-//            @Override
-//            public void run() {
-//                startAmountView.uncheckStartButton();
-//            }
-//        });
         startAmountView.uncheckStartButton();
     }
 

@@ -9,13 +9,15 @@ import com.stopkaaaa.collections.model.Supplier;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.inject.Inject;
+
 public class CollectionSupplier implements Supplier {
 
     public static final int SPAN_COUNT = 3;
 
     private Context context;
 
-
+    @Inject
     public CollectionSupplier(Context context) {
         this.context = context;
     }
