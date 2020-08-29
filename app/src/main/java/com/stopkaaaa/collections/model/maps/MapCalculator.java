@@ -23,7 +23,7 @@ public class MapCalculator implements Calculator {
     }
 
     @Override
-    public synchronized String calculate(CalculationResultItem item, int mapSize) {
+    public CalculationResultItem calculate(CalculationResultItem item, int mapSize) {
         String mapType = item.getListType();
         String operation = item.getOperation();
         Map<Integer, Integer> map = null;
@@ -60,8 +60,9 @@ public class MapCalculator implements Calculator {
             result = System.nanoTime() - start;
             resultStringBuilder.append(decimalFormat.format(result / 1000000.0));
         } else {
-            return "";
+            return item;
         }
-        return resultStringBuilder.toString();
+        item.setTime(resultStringBuilder.toString());
+        return item;
     }
 }

@@ -87,9 +87,10 @@ public class MapCollectionFragment extends Fragment implements BaseContract.Base
         startAmountView.setOnStartCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                buttonView.setChecked(isChecked);
+                if (buttonView.isPressed()) {
                     final CalculationParameters calculationParameters = startAmountView.getCalculationData();
                     collectionsFragmentPresenter.onCalculationLaunch(calculationParameters);
+                }
             }
         });
         collectionsRecycler.setLayoutManager(new GridLayoutManager(getContext(), collectionsFragmentPresenter.getSpanCount()));
@@ -122,17 +123,12 @@ public class MapCollectionFragment extends Fragment implements BaseContract.Base
 
     @Override
     public void updateItem(final int itemIndex, final String time) {
-        handler.post(new Runnable() {
-            @Override
-            public void run() {
-                collectionsRecyclerAdapter.updateItem(itemIndex, time);
-            }
-        });
+        handler.post(() -> collectionsRecyclerAdapter.updateItem(itemIndex, time));
     }
 
     @Override
     public void uncheckStartButton() {
-        startAmountView.uncheckStartButton();
+        handler.post(() -> startAmountView.uncheckStartButton());
     }
 
     @Override

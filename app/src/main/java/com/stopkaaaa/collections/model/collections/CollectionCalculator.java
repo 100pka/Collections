@@ -26,7 +26,7 @@ public class CollectionCalculator implements Calculator {
     }
 
     @Override
-    public synchronized String calculate(CalculationResultItem item, int listSize) {
+    public CalculationResultItem calculate(CalculationResultItem item, int listSize) {
         String listType = item.getListType();
         String operation = item.getOperation();
         List<Integer> list = null;
@@ -81,8 +81,9 @@ public class CollectionCalculator implements Calculator {
             result = System.nanoTime() - start;
             resultStringBuilder.append(decimalFormat.format(result / 1000000.0));
         } else {
-            return "";
+            return item;
         }
-        return resultStringBuilder.toString();
+        item.setTime(resultStringBuilder.toString());
+        return item;
     }
 }
