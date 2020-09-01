@@ -117,18 +117,24 @@ public class MapCollectionFragment extends Fragment implements BaseContract.Base
     }
 
     @Override
+    public void onPause() {
+        super.onPause();
+        collectionsFragmentPresenter.stopCalculation();
+    }
+
+    @Override
     public void setData(List<CalculationResultItem> list) {
         collectionsRecyclerAdapter.setItems(list);
     }
 
     @Override
     public void updateItem(final int itemIndex, final String time) {
-        handler.post(() -> collectionsRecyclerAdapter.updateItem(itemIndex, time));
+        collectionsRecyclerAdapter.updateItem(itemIndex, time);
     }
 
     @Override
     public void uncheckStartButton() {
-        handler.post(() -> startAmountView.uncheckStartButton());
+        startAmountView.uncheckStartButton();
     }
 
     @Override

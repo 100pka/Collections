@@ -13,11 +13,13 @@ import java.util.concurrent.LinkedBlockingQueue;
 import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
 
+import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers;
 import io.reactivex.rxjava3.annotations.NonNull;
 import io.reactivex.rxjava3.core.Observable;
 import io.reactivex.rxjava3.core.Observer;
 import io.reactivex.rxjava3.core.Scheduler;
 import io.reactivex.rxjava3.disposables.Disposable;
+import io.reactivex.rxjava3.functions.Consumer;
 import io.reactivex.rxjava3.schedulers.Schedulers;
 
 public class MapCollectionPresenter implements BaseContract.BasePresenter {
@@ -27,6 +29,9 @@ public class MapCollectionPresenter implements BaseContract.BasePresenter {
     private Calculator calculator;
     private final BlockingQueue<Runnable> calculationQueue;
     private final ThreadPoolExecutor calculationThreadPool;
+    private Scheduler scheduler;
+    private Observable<CalculationResultItem> calculationResultItemObservable;
+    private Disposable disposable;
 
     public MapCollectionPresenter(
             BaseContract.BaseView collectionsFragmentContractView,
@@ -66,56 +71,41 @@ public class MapCollectionPresenter implements BaseContract.BasePresenter {
                 collectionsFragmentContractView.invalidThreadsAmount();
             }
             if (amountValid && threadsValid) {
-                collectionsFragmentContractView.showProgressBar(true);
                 startCalculation(calculationParameters);
             } else {
                 collectionsFragmentContractView.uncheckStartButton();
             }
         } else {
             // stop calculation
-            collectionsFragmentContractView.showProgressBar(false);
+            stopCalculation();
         }
 
+    }
+
+    @Override
+    public void stopCalculation() {
+        disposable.dispose();
+        collectionsFragmentContractView.showProgressBar(false);
     }
 
     public void startCalculation(final CalculationParameters calculationParameters) {
         calculationThreadPool.setCorePoolSize(calculationParameters.getThreads());
         calculationThreadPool.setMaximumPoolSize(calculationParameters.getThreads());
-        final Scheduler scheduler = Schedulers.from(calculationThreadPool);
+        scheduler = Schedulers.from(calculationThreadPool);
 
         final List<CalculationResultItem> tasks = collectionSupplier.getTaskList();
-        final List<CalculationResultItem> calculationResultItems = new ArrayList<>(tasks);
         final int size = calculationParameters.getAmount();
 
-        final Observable<CalculationResultItem> calculationResultItemObservable =
-                Observable.fromIterable(tasks)
+        calculationResultItemObservable = Observable.fromIterable(tasks)
                 .flatMap(task -> Observable.just(task)
-                .map(item -> calculator.calculate(item, size))
-                .subscribeOn(scheduler));
-        final Observer<CalculationResultItem> observer = new Observer<CalculationResultItem>() {
-            @Override
-            public void onSubscribe(@NonNull Disposable d) {
+                        .map(item -> calculator.calculate(item, size))
+                        .subscribeOn(scheduler))
+                .doOnSubscribe(disposable -> collectionsFragmentContractView.showProgressBar(true))
+                .doFinally(collectionsFragmentContractView::uncheckStartButton)
+                .observeOn(AndroidSchedulers.mainThread());
 
-            }
-
-            @Override
-            public void onNext(@NonNull CalculationResultItem calculationResultItem) {
-                collectionsFragmentContractView.updateItem(tasks.indexOf(calculationResultItem), calculationResultItem.getTime());
-                    calculationResultItems.remove(calculationResultItem);
-                if (calculationResultItems.isEmpty()) {
-                    collectionsFragmentContractView.uncheckStartButton();
-                }
-            }
-
-            @Override
-            public void onError(@NonNull Throwable e) {
-
-            }
-
-            @Override
-            public void onComplete() {
-            }
-        };
-        calculationResultItemObservable.subscribe(observer);
+        disposable = calculationResultItemObservable.subscribe(result -> {
+            collectionsFragmentContractView.updateItem(tasks.indexOf(result), result.getTime());
+            });
     }
 }

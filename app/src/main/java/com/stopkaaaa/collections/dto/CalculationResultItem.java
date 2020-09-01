@@ -12,9 +12,8 @@ public class CalculationResultItem {
         this.listType = listType;
         this.operation = operation;
         this.state = false;
-        this.time = null;
-        StringBuffer title = new StringBuffer().append(operation).append(" ").append(listType);
-        this.title = title.toString();
+        this.time = "0";
+        this.title = operation + " " + listType;
     }
 
     public String getTitle() {

@@ -31,7 +31,7 @@ public class ResultViewHolder extends RecyclerView.ViewHolder {
     public void bindItem(CalculationResultItem item) {
         itemNameTextView.setText(item.getTitle());
         progressBar.animate().alpha(item.isState() ? 1 : 0).start();
-        if (item.getTime() != null) {
+        if (!item.getTime().equals(itemTimeTextView.getContext().getString(R.string.empty))) {
             StringBuilder time = new StringBuilder(item.getTime())
                     .append(itemTimeTextView.getContext().getString(R.string.ms));
             itemTimeTextView.setText(time.toString());

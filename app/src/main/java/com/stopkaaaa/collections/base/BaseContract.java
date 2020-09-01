@@ -12,6 +12,8 @@ public class BaseContract {
         void setup();
 
         int getSpanCount();
+
+        void stopCalculation();
     }
 
     public interface BaseView {
