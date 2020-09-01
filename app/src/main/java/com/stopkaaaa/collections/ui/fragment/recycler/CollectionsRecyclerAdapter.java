@@ -50,11 +50,13 @@ public class CollectionsRecyclerAdapter extends RecyclerView.Adapter<ResultViewH
     }
 
     public void showProgress(boolean showProgress) {
-        for (CalculationResultItem item: calculationResultItems
-             ) {
-            item.setTime("0");
+        for (int i = 0; i < calculationResultItems.size(); i++) {
+            CalculationResultItem item = calculationResultItems.get(i);
+            if (!showProgress) {
+                item.setTime("0");
+            }
             item.setState(showProgress);
+            notifyItemChanged(i);
         }
-        notifyDataSetChanged();
     }
 }

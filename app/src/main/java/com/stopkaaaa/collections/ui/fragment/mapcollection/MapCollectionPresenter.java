@@ -23,11 +23,9 @@ public class MapCollectionPresenter implements BaseContract.BasePresenter {
     private final BaseContract.BaseView collectionsFragmentContractView;
     private Supplier collectionSupplier;
     private Calculator calculator;
-    private final BlockingQueue<Runnable> calculationQueue;
     private final ThreadPoolExecutor calculationThreadPool;
-    private Scheduler scheduler;
-    private Observable<CalculationResultItem> calculationResultItemObservable;
-    private Disposable disposable;
+    private Scheduler scheduler = Schedulers.single();
+    private Disposable disposable = Disposable.disposed();
 
     public MapCollectionPresenter(
             BaseContract.BaseView collectionsFragmentContractView,
@@ -36,9 +34,8 @@ public class MapCollectionPresenter implements BaseContract.BasePresenter {
         this.collectionsFragmentContractView = collectionsFragmentContractView;
         this.collectionSupplier = collectionSupplier;
         this.calculator = calculator;
-        this.calculationQueue = new LinkedBlockingQueue<Runnable>();
         this.calculationThreadPool = new ThreadPoolExecutor(1, 1,
-                50, TimeUnit.MILLISECONDS, calculationQueue);
+                50, TimeUnit.MILLISECONDS, new LinkedBlockingQueue<Runnable>());
     }
 
     @Override
@@ -93,16 +90,15 @@ public class MapCollectionPresenter implements BaseContract.BasePresenter {
         final List<CalculationResultItem> tasks = collectionSupplier.getTaskList();
         final int size = calculationParameters.getAmount();
 
-        calculationResultItemObservable = Observable.fromIterable(tasks)
+        disposable = (Disposable) Observable.fromIterable(tasks)
                 .flatMap(task -> Observable.just(task)
                         .map(item -> calculator.calculate(item, size))
                         .subscribeOn(scheduler))
+                .observeOn(AndroidSchedulers.mainThread())
                 .doOnSubscribe(disposable -> collectionsFragmentContractView.showProgressBar(true))
                 .doFinally(collectionsFragmentContractView::uncheckStartButton)
-                .observeOn(AndroidSchedulers.mainThread());
-
-        disposable = calculationResultItemObservable.subscribe(result -> {
-            collectionsFragmentContractView.updateItem(tasks.indexOf(result), result.getTime());
-            });
+                .subscribe(result -> {
+                    collectionsFragmentContractView.updateItem(tasks.indexOf(result), result.getTime());
+                });
     }
 }
