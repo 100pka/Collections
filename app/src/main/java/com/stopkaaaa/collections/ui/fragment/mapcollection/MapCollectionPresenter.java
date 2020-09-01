@@ -81,6 +81,7 @@ public class MapCollectionPresenter implements BaseContract.BasePresenter {
     @Override
     public void stopCalculation() {
         disposable.dispose();
+        scheduler.shutdown();
         collectionsFragmentContractView.showProgressBar(false);
     }
 
