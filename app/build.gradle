@@ -9,6 +9,12 @@ android {
         targetCompatibility 1.8
     }
 
+    testOptions {
+        unitTests {
+            includeAndroidResources = true
+        }
+    }
+
     defaultConfig {
         applicationId "com.stopkaaaa.collections"
         minSdkVersion 23

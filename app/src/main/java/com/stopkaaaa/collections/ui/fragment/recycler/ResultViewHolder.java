@@ -30,14 +30,15 @@ public class ResultViewHolder extends RecyclerView.ViewHolder {
 
     public void bindItem(CalculationResultItem item) {
         itemNameTextView.setText(item.getTitle());
-        if (item.isState()) {
-            progressBar.setVisibility(View.VISIBLE);
+
+        if (progressBar.getAlpha() != (item.isState() ? 1 : 0)) {
+            progressBar.animate().alpha(item.isState() ? 1 : 0).start();
         }
+
         if (!item.getTime().equals(itemTimeTextView.getContext().getString(R.string.empty))) {
-            StringBuilder time = new StringBuilder(item.getTime())
-                    .append(itemTimeTextView.getContext().getString(R.string.ms));
-            itemTimeTextView.setText(time.toString());
-            progressBar.setVisibility(View.INVISIBLE);
+            String time = item.getTime() +
+                    itemTimeTextView.getContext().getString(R.string.ms);
+            itemTimeTextView.setText(time);
         }
     }
 }

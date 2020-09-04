@@ -19,11 +19,13 @@ public class CalculationParameters {
     }
 
     public boolean isThreadsValid () {
-        return !threads.isEmpty() && TextUtils.isDigitsOnly(this.threads);
+        return !threads.isEmpty() && TextUtils.isDigitsOnly(threads)
+                && threads.matches("^[1-9].*");
     }
 
     public boolean isAmountValid () {
-        return !amount.isEmpty() && TextUtils.isDigitsOnly(this.amount);
+        return !amount.isEmpty() && TextUtils.isDigitsOnly(amount)
+                && amount.matches("^[1-9].*");
     }
 
     @Override
