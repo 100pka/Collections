@@ -29,7 +29,7 @@ public class CollectionCalculator implements Calculator {
     public CalculationResultItem calculate(CalculationResultItem item, int listSize) {
         String listType = item.getListType();
         String operation = item.getOperation();
-        List<Integer> list = null;
+        List<Integer> list;
 
         if (listType.equals(context.getString(R.string.linkedList))) {
             list = new LinkedList<>();
