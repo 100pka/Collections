@@ -43,13 +43,13 @@ public class CollectionCalculatorTest {
     public static int[] listSize = {1, 111, 111111, 1111111, 11111111};
 
     @Test
-    public void calculate() {
+    public void testCalculateIsReturningCorrectValues() {
         List<CalculationResultItem> list = new CollectionSupplier(mockApplicationContext).getTaskList();
         CollectionCalculator collectionCalculator = new CollectionCalculator(mockApplicationContext);
         CalculationResultItem result;
-        for (int i = 0; i < listSize.length; i++) {
-            for (CalculationResultItem item: list) {
-                result = collectionCalculator.calculate(item, listSize[i]);
+        for (int value : listSize) {
+            for (CalculationResultItem item : list) {
+                result = collectionCalculator.calculate(item, value);
                 assertNotEquals(result.getTime(), "0");
                 Log.i("test", "calculate: " + result.getTime());
             }

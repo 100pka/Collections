@@ -63,7 +63,7 @@ public class MapCollectionPresenterTest {
     }
 
     @Test
-    public void setup() {
+    public void testSetupIsNotDoingExcessInvocations() {
         spyPresenter.setup();
         verify(view).setData(any());
         verify(supplier).getTaskList();
@@ -71,7 +71,7 @@ public class MapCollectionPresenterTest {
     }
 
     @Test
-    public void getSpanCount() {
+    public void testGetSpanCountReturnsCorrectValueOfColumns() {
         when(supplier.getSpanCount()).thenReturn(3);
         assertEquals(3, spyPresenter.getSpanCount());
         verify(supplier).getSpanCount();
@@ -80,7 +80,7 @@ public class MapCollectionPresenterTest {
 
     // calculationParameters checked and valid
     @Test
-    public void onCalculationLaunch1() {
+    public void testOnCalculationLaunchWhenParametersIsValid() {
         when(parameters.isChecked()).thenReturn(true);
         when(parameters.isAmountValid()).thenReturn(true);
         when(parameters.isThreadsValid()).thenReturn(true);
@@ -94,7 +94,7 @@ public class MapCollectionPresenterTest {
     }
 
     @Test // calculationParameters not Checked
-    public void onCalculationLaunch2() {
+    public void testOnCalculationLaunchWhenParametersIsNotChecked() {
         when(parameters.isChecked()).thenReturn(false);
         spyPresenter.onCalculationLaunch(parameters);
         verify(spyPresenter).stopCalculation();
@@ -103,7 +103,7 @@ public class MapCollectionPresenterTest {
     }
 
     @Test // calculationParameters checked and collectionSize not valid
-    public void onCalculationLaunch3() {
+    public void testOnCalculationLaunchWhenCollectionSizeIsNotValid() {
         when(parameters.isChecked()).thenReturn(true);
         when(parameters.isAmountValid()).thenReturn(false);
         when(parameters.isThreadsValid()).thenReturn(true);
@@ -114,7 +114,7 @@ public class MapCollectionPresenterTest {
     }
 
     @Test // calculationParameters checked and threadsAmount not valid
-    public void onCalculationLaunch4() {
+    public void testOnCalculationLaunchWhenThreadsAmountIsNotValid() {
         when(parameters.isChecked()).thenReturn(true);
         when(parameters.isAmountValid()).thenReturn(true);
         when(parameters.isThreadsValid()).thenReturn(false);
@@ -125,7 +125,7 @@ public class MapCollectionPresenterTest {
     }
 
     @Test // calculationParameters = null
-    public void onCalculationLaunch5() {
+    public void testOnCalculationLaunchWhenParametersIsNull() {
         spyPresenter.onCalculationLaunch(null);
         verify(view).uncheckStartButton();
         verifyNoMore();
@@ -133,7 +133,7 @@ public class MapCollectionPresenterTest {
 
 
     @Test
-    public void stopCalculation() {
+    public void testStopCalculationIsWorkingCorrectly() {
         spyPresenter.stopCalculation();
         verify(view).showProgressBar(false);
         verifyNoMore();

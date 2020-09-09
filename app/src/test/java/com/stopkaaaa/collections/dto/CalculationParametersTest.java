@@ -18,8 +18,8 @@ import static org.mockito.ArgumentMatchers.any;
 @PrepareForTest(TextUtils.class)
 public class CalculationParametersTest {
 
-    public static String[] input_false = {"", "0", "00001", "sdfs", "123sdf"};
-    public static String[] input_true = {"123", "10", "99999", "101000000", "1"};
+    public static final String[] input_false = {"", "0", "00001", "sdfs", "123sdf"};
+    public static final String[] input_true = {"123", "10", "99999", "101000000", "1"};
 
     @Before
     public void setup(){
@@ -41,14 +41,14 @@ public class CalculationParametersTest {
     }
 
     @Test
-    public void isThreadsValid() {
+    public void testValidateIsWorkingCorrectly() {
         CalculationParameters calculationParameters;
-        for (int i = 0; i < input_true.length; i++) {
-            calculationParameters = new CalculationParameters(input_true[i], input_true[i], true);
+        for (String s : input_true) {
+            calculationParameters = new CalculationParameters(s, s, true);
             assertTrue(calculationParameters.isThreadsValid());
         }
-        for (int i = 0; i < input_false.length; i++) {
-            calculationParameters = new CalculationParameters(input_false[i], input_false[i], true);
+        for (String s : input_false) {
+            calculationParameters = new CalculationParameters(s, s, true);
             assertFalse(calculationParameters.isThreadsValid());
         }
 
