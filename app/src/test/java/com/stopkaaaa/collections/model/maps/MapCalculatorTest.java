@@ -38,9 +38,9 @@ public class MapCalculatorTest {
         List<CalculationResultItem> list = new MapSupplier(mockApplicationContext).getTaskList();
         MapCalculator mapCalculator = new MapCalculator(mockApplicationContext);
         CalculationResultItem result;
-        for (int i = 0; i < listSize.length; i++) {
-            for (CalculationResultItem item: list) {
-                result = mapCalculator.calculate(item, listSize[i]);
+        for (int value : listSize) {
+            for (CalculationResultItem item : list) {
+                result = mapCalculator.calculate(item, value);
                 assertNotEquals(result.getTime(), "0");
                 Log.i("test", "calculate: " + result.getTime());
             }

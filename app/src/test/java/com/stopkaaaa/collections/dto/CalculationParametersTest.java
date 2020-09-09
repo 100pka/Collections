@@ -43,12 +43,12 @@ public class CalculationParametersTest {
     @Test
     public void isThreadsValid() {
         CalculationParameters calculationParameters;
-        for (int i = 0; i < input_true.length; i++) {
-            calculationParameters = new CalculationParameters(input_true[i], input_true[i], true);
+        for (String s : input_true) {
+            calculationParameters = new CalculationParameters(s, s, true);
             assertTrue(calculationParameters.isThreadsValid());
         }
-        for (int i = 0; i < input_false.length; i++) {
-            calculationParameters = new CalculationParameters(input_false[i], input_false[i], true);
+        for (String s : input_false) {
+            calculationParameters = new CalculationParameters(s, s, true);
             assertFalse(calculationParameters.isThreadsValid());
         }
 
