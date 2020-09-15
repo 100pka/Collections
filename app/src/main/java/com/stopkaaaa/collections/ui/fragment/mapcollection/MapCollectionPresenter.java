@@ -1,5 +1,7 @@
 package com.stopkaaaa.collections.ui.fragment.mapcollection;
 
+import android.widget.Toast;
+
 import com.stopkaaaa.collections.base.BaseContract;
 import com.stopkaaaa.collections.dto.CalculationParameters;
 import com.stopkaaaa.collections.dto.CalculationResultItem;
@@ -79,6 +81,7 @@ public class MapCollectionPresenter implements BaseContract.BasePresenter {
         disposable.dispose();
         scheduler.shutdown();
         collectionsFragmentContractView.showProgressBar(false);
+        collectionsFragmentContractView.stopCalculationNotification();
     }
 
     public void startCalculation(final CalculationParameters calculationParameters) {

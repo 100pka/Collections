@@ -1,5 +1,6 @@
 package com.stopkaaaa.collections.ui.fragment.mapcollection;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.os.Bundle;
 import android.os.Handler;
@@ -8,10 +9,12 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CompoundButton;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.annotation.StringRes;
+import androidx.annotation.VisibleForTesting;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -19,6 +22,8 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.stopkaaaa.collections.InitApplication;
 import com.stopkaaaa.collections.R;
 import com.stopkaaaa.collections.base.BaseContract;
+import com.stopkaaaa.collections.di.component.ActivityComponent;
+import com.stopkaaaa.collections.di.component.AppComponent;
 import com.stopkaaaa.collections.di.component.DaggerActivityComponent;
 import com.stopkaaaa.collections.dto.CalculationParameters;
 import com.stopkaaaa.collections.dto.CalculationResultItem;
@@ -102,7 +107,7 @@ public class MapCollectionFragment extends Fragment implements BaseContract.Base
         super.onCreate(savedInstanceState);
 
         DaggerActivityComponent.builder()
-                .appComponent(InitApplication.get(getContext()).component())
+                .appComponent(InitApplication.getInstance().component())
                 .fragmentInjectorModule(new FragmentInjectorModule(this, this.getArguments().getInt(PAGE)))
                 .build()
                 .inject(this);
@@ -150,5 +155,11 @@ public class MapCollectionFragment extends Fragment implements BaseContract.Base
     @Override
     public void showProgressBar(boolean calculationInProgress) {
         collectionsRecyclerAdapter.showProgress(calculationInProgress);
+    }
+
+    @Override
+    @SuppressLint("ShowToast")
+    public void stopCalculationNotification(){
+        Toast.makeText(context, R.string.calculation_stopped, Toast.LENGTH_LONG);
     }
 }

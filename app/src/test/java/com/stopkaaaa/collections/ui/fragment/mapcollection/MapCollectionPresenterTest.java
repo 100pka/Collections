@@ -136,6 +136,7 @@ public class MapCollectionPresenterTest {
     public void testStopCalculationIsWorkingCorrectly() {
         spyPresenter.stopCalculation();
         verify(view).showProgressBar(false);
+        verify(view).stopCalculationNotification();
         verifyNoMore();
     }
 }

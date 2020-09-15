@@ -32,5 +32,6 @@
     <string name="searchInMap">Search in map</string>
     <string name="enter_valid_number">please enter valid number</string>
     <string name="empty">"0"</string>
+    <string name="calculation_stopped">Calculation stopped</string>
 
 </resources>

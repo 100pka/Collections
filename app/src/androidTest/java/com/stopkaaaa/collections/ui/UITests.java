@@ -1,21 +1,30 @@
 package com.stopkaaaa.collections.ui;
 
+import android.content.Intent;
 import android.view.View;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
+import androidx.test.espresso.intent.rule.IntentsTestRule;
 import androidx.test.espresso.matcher.BoundedMatcher;
-import androidx.test.espresso.matcher.ViewMatchers;
+import androidx.test.internal.runner.junit4.AndroidJUnit4ClassRunner;
 import androidx.test.rule.ActivityTestRule;
 
+
 import com.stopkaaaa.collections.R;
+import com.stopkaaaa.collections.model.Calculator;
 
 import static androidx.test.espresso.Espresso.onView;
 
 import org.hamcrest.Description;
 import org.hamcrest.Matcher;
+import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.mockito.Mock;
+import org.mockito.MockitoAnnotations;
+
 
 import static androidx.test.espresso.action.ViewActions.click;
 import static androidx.test.espresso.action.ViewActions.closeSoftKeyboard;
@@ -27,12 +36,18 @@ import static androidx.test.espresso.matcher.ViewMatchers.withText;
 
 import static org.hamcrest.Matchers.containsString;
 
+@RunWith(AndroidJUnit4ClassRunner.class)
+public class UITests {
 
-public class MainActivityTest {
+
+    @Before
+    public void setupTests(){
+    }
 
     @Rule
-    public ActivityTestRule<MainActivity> mActivityRule = new ActivityTestRule<>(
-            MainActivity.class);
+    public ActivityTestRule<MainActivityForTesting> mActivityRule = new ActivityTestRule<>(
+            MainActivityForTesting.class, true);
+
 
     public static Matcher<View> atPositionOnView(final int position, final Matcher<View> itemMatcher,
                                                  @NonNull final int targetViewId) {
@@ -62,11 +77,23 @@ public class MainActivityTest {
     }
 
     @Test
-    public void testCalculationSetValidTimeToListItem() {
+    public void testCalculationSetValidTimeToListItem() throws InterruptedException {
         onView(withId(R.id.elementsAmount)).perform(typeText("11111"), closeSoftKeyboard());
         onView(withId(R.id.threadsAmount)).perform(typeText("5"), closeSoftKeyboard());
         onView(withId(R.id.startButton)).perform(click());
+        Thread.sleep(5000);
         onView(withId(R.id.collectionsRecycler))
                 .check(matches(atPositionOnView(0, withText(containsString("ms")), R.id.itemTime)));
+    }
+
+    @Test
+    public void testCalculationStopped() throws InterruptedException {
+        onView(withId(R.id.elementsAmount)).perform(typeText("11111"), closeSoftKeyboard());
+        onView(withId(R.id.threadsAmount)).perform(typeText("5"), closeSoftKeyboard());
+        onView(withId(R.id.startButton)).perform(click());
+        onView(withId(R.id.startButton)).check(matches(withText(R.string.stop)));
+        Thread.sleep(500);
+        onView(withId(R.id.startButton)).perform(click());
+        onView(withId(R.id.startButton)).check(matches(withText(R.string.start)));
     }
 }

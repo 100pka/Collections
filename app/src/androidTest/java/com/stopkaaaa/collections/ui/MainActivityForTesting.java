@@ -9,21 +9,12 @@ import androidx.viewpager2.widget.ViewPager2;
 import com.google.android.material.tabs.TabLayout;
 import com.google.android.material.tabs.TabLayoutMediator;
 import com.stopkaaaa.collections.R;
-import com.stopkaaaa.collections.ui.fragment.mapcollection.MapCollectionFragment;
+import com.stopkaaaa.collections.ui.fragment.mapcollection.MapCollectionFragmentTest;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
-public class MainActivity extends AppCompatActivity {
-
-    @BindView(R.id.tabLayout)
-    TabLayout tableLayout;
-
-    @BindView(R.id.viewPager)
-    ViewPager2 viewPager;
-
-    PageAdapter pageAdapter;
-
+public class MainActivityForTesting extends MainActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -32,8 +23,8 @@ public class MainActivity extends AppCompatActivity {
 
         ButterKnife.bind(this);
 
-        MapCollectionFragment collectionsFragment = MapCollectionFragment.newInstance(R.string.collections);
-        MapCollectionFragment mapsFragment =  MapCollectionFragment.newInstance(R.string.maps);
+        MapCollectionFragmentTest collectionsFragment = MapCollectionFragmentTest.newInstance(R.string.collections);
+        MapCollectionFragmentTest mapsFragment = MapCollectionFragmentTest.newInstance(R.string.maps);
 
         pageAdapter = new PageAdapter(getSupportFragmentManager(), getLifecycle());
         pageAdapter.addFragment(collectionsFragment, getString(R.string.collections));
@@ -49,4 +40,3 @@ public class MainActivity extends AppCompatActivity {
                 }).attach();
     }
 }
-

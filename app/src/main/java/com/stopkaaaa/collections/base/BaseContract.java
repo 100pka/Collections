@@ -28,5 +28,7 @@ public class BaseContract {
         void invalidThreadsAmount();
 
         void showProgressBar(boolean calculationInProgress);
+
+        void stopCalculationNotification();
     }
 }
