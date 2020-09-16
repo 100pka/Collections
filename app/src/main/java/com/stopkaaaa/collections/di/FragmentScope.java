@@ -1,4 +1,4 @@
-package com.stopkaaaa.collections.di.scope;
+package com.stopkaaaa.collections.di;
 
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
@@ -7,5 +7,5 @@ import javax.inject.Scope;
 
 @Scope
 @Retention(RetentionPolicy.RUNTIME)
-public @interface ActivityScope {
+public @interface FragmentScope {
 }

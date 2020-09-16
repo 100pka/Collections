@@ -1,10 +1,7 @@
 package com.stopkaaaa.collections.ui.fragment.mapcollection;
 
 import android.annotation.SuppressLint;
-import android.content.Context;
 import android.os.Bundle;
-import android.os.Handler;
-import android.os.Looper;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,7 +11,6 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.annotation.StringRes;
-import androidx.annotation.VisibleForTesting;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -22,12 +18,11 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.stopkaaaa.collections.InitApplication;
 import com.stopkaaaa.collections.R;
 import com.stopkaaaa.collections.base.BaseContract;
-import com.stopkaaaa.collections.di.component.ActivityComponent;
-import com.stopkaaaa.collections.di.component.AppComponent;
-import com.stopkaaaa.collections.di.component.DaggerActivityComponent;
+
+import com.stopkaaaa.collections.di.component.DaggerFragmentComponent;
 import com.stopkaaaa.collections.dto.CalculationParameters;
 import com.stopkaaaa.collections.dto.CalculationResultItem;
-import com.stopkaaaa.collections.di.module.FragmentInjectorModule;
+import com.stopkaaaa.collections.di.module.FragmentModule;
 import com.stopkaaaa.collections.ui.fragment.recycler.CollectionsRecyclerAdapter;
 import com.stopkaaaa.collections.ui.fragment.view.StartAmountView;
 
@@ -52,9 +47,6 @@ public class MapCollectionFragment extends Fragment implements BaseContract.Base
     @Inject
     BaseContract.BasePresenter collectionsFragmentPresenter;
 
-    @Inject
-    Context context;
-
     @BindView(R.id.startAmountCollections)
     StartAmountView startAmountView;
 
@@ -63,7 +55,6 @@ public class MapCollectionFragment extends Fragment implements BaseContract.Base
 
     private final CollectionsRecyclerAdapter collectionsRecyclerAdapter =
             new CollectionsRecyclerAdapter();
-    private final Handler handler = new Handler(Looper.getMainLooper());
 
     public MapCollectionFragment() {
         // Required empty public constructor
@@ -106,11 +97,11 @@ public class MapCollectionFragment extends Fragment implements BaseContract.Base
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        DaggerActivityComponent.builder()
-                .appComponent(InitApplication.getInstance().component())
-                .fragmentInjectorModule(new FragmentInjectorModule(this, this.getArguments().getInt(PAGE)))
+        DaggerFragmentComponent.builder()
+                .appComponent(InitApplication.getInstance().getAppComponent())
+                .fragmentModule(new FragmentModule(this, this.getArguments().getInt(PAGE)))
                 .build()
-                .inject(this);
+                .injectPresenter(this);
     }
 
     @Override
@@ -160,6 +151,6 @@ public class MapCollectionFragment extends Fragment implements BaseContract.Base
     @Override
     @SuppressLint("ShowToast")
     public void stopCalculationNotification(){
-        Toast.makeText(context, R.string.calculation_stopped, Toast.LENGTH_LONG);
+        Toast.makeText(this.getContext(), R.string.calculation_stopped, Toast.LENGTH_LONG);
     }
 }

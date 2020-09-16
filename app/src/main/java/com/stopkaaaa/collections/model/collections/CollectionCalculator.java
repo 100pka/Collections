@@ -21,6 +21,7 @@ public class CollectionCalculator implements Calculator {
 
     private Context context;
 
+    @Inject
     public CollectionCalculator(Context context) {
         this.context = context;
     }

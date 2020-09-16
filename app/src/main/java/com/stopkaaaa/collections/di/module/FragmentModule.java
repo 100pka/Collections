@@ -4,24 +4,47 @@ import android.content.Context;
 
 import androidx.annotation.StringRes;
 
+import com.stopkaaaa.collections.InitApplication;
 import com.stopkaaaa.collections.R;
 import com.stopkaaaa.collections.base.BaseContract;
+import com.stopkaaaa.collections.model.Calculator;
+import com.stopkaaaa.collections.model.Supplier;
 import com.stopkaaaa.collections.model.collections.CollectionCalculator;
 import com.stopkaaaa.collections.model.collections.CollectionSupplier;
 import com.stopkaaaa.collections.model.maps.MapCalculator;
 import com.stopkaaaa.collections.model.maps.MapSupplier;
 import com.stopkaaaa.collections.ui.fragment.mapcollection.MapCollectionPresenter;
 
+import javax.inject.Inject;
+import javax.inject.Named;
+
 import dagger.Module;
 import dagger.Provides;
 
 @Module
-public class FragmentInjectorModule {
+public class FragmentModule {
 
     private BaseContract.BaseView view;
     private int page;
 
-    public FragmentInjectorModule(BaseContract.BaseView view, @StringRes int page) {
+    @Inject
+    @Named("CollectionCalculator")
+    Calculator collectionCalculator;
+
+    @Inject
+    @Named("MapCalculator")
+    Calculator mapCalculator;
+
+    @Inject
+    @Named("CollectionSupplier")
+    Supplier collectionSupplier;
+
+    @Inject
+    @Named("MapSupplier")
+    Supplier mapSupplier;
+
+    public FragmentModule(BaseContract.BaseView view, @StringRes int page) {
+        InitApplication.getInstance().getAppComponent().injectCalculatorsAndSuppliers(this);
         this.view = view;
         this.page = page;
     }
@@ -32,18 +55,17 @@ public class FragmentInjectorModule {
     }
 
     @Provides
-    public BaseContract.BasePresenter providePresenter(BaseContract.BaseView fragmentContractView,
-                                                          Context context) {
+    public BaseContract.BasePresenter providePresenter() {
         if (page == R.string.collections) {
             return new MapCollectionPresenter(
-                    fragmentContractView,
-                    new CollectionSupplier(context),
-                    new CollectionCalculator(context));
+                    view,
+                    collectionSupplier,
+                    collectionCalculator);
         }  if (page == R.string.maps) {
             return new MapCollectionPresenter(
-                    fragmentContractView,
-                    new MapSupplier(context),
-                    new MapCalculator(context));
+                    view,
+                    mapSupplier,
+                    mapCalculator);
         }
         return null;
     }

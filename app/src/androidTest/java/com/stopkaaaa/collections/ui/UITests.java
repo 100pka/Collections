@@ -1,18 +1,19 @@
 package com.stopkaaaa.collections.ui;
 
-import android.content.Intent;
 import android.view.View;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
-import androidx.test.espresso.intent.rule.IntentsTestRule;
 import androidx.test.espresso.matcher.BoundedMatcher;
 import androidx.test.internal.runner.junit4.AndroidJUnit4ClassRunner;
 import androidx.test.rule.ActivityTestRule;
 
-
+import com.stopkaaaa.collections.InitApplication;
 import com.stopkaaaa.collections.R;
-import com.stopkaaaa.collections.model.Calculator;
+import com.stopkaaaa.collections.di.DaggerActivityTestRule;
+import com.stopkaaaa.collections.di.component.AppComponentTest;
+import com.stopkaaaa.collections.di.component.DaggerAppComponentTest;
+import com.stopkaaaa.collections.di.module.AppModuleTest;
 
 import static androidx.test.espresso.Espresso.onView;
 
@@ -22,9 +23,6 @@ import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.mockito.Mock;
-import org.mockito.MockitoAnnotations;
-
 
 import static androidx.test.espresso.action.ViewActions.click;
 import static androidx.test.espresso.action.ViewActions.closeSoftKeyboard;
@@ -39,14 +37,21 @@ import static org.hamcrest.Matchers.containsString;
 @RunWith(AndroidJUnit4ClassRunner.class)
 public class UITests {
 
+    private AppComponentTest componentTest;
 
     @Before
     public void setupTests(){
     }
 
     @Rule
-    public ActivityTestRule<MainActivityForTesting> mActivityRule = new ActivityTestRule<>(
-            MainActivityForTesting.class, true);
+    public ActivityTestRule<MainActivity> mainActivityRule =
+            new DaggerActivityTestRule<>(MainActivity.class, (application, activity) -> {
+                componentTest = DaggerAppComponentTest.builder()
+                        .appModuleTest(new AppModuleTest(InitApplication.getInstance()))
+                        .build();
+                InitApplication.getInstance().setAppComponent(componentTest);
+            });
+
 
 
     public static Matcher<View> atPositionOnView(final int position, final Matcher<View> itemMatcher,

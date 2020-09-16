@@ -2,9 +2,11 @@ package com.stopkaaaa.collections;
 
 import android.app.Application;
 
+import androidx.annotation.VisibleForTesting;
+
 import com.stopkaaaa.collections.di.component.AppComponent;
 import com.stopkaaaa.collections.di.component.DaggerAppComponent;
-import com.stopkaaaa.collections.di.module.ContextModule;
+import com.stopkaaaa.collections.di.module.AppModule;
 
 public class InitApplication extends Application {
 
@@ -20,11 +22,16 @@ public class InitApplication extends Application {
         super.onCreate();
         instance = this;
         appComponent = DaggerAppComponent.builder()
-                .contextModule(new ContextModule(this))
+                .appModule(new AppModule(this))
                 .build();
     }
 
-    public AppComponent component() {
+    public AppComponent getAppComponent() {
         return appComponent;
+    }
+
+    @VisibleForTesting
+    public void setAppComponent(AppComponent appComponent) {
+        this.appComponent = appComponent;
     }
 }
