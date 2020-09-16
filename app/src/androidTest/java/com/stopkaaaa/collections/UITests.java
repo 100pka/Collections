@@ -1,4 +1,4 @@
-package com.stopkaaaa.collections.ui;
+package com.stopkaaaa.collections;
 
 import android.view.View;
 
@@ -8,12 +8,11 @@ import androidx.test.espresso.matcher.BoundedMatcher;
 import androidx.test.internal.runner.junit4.AndroidJUnit4ClassRunner;
 import androidx.test.rule.ActivityTestRule;
 
-import com.stopkaaaa.collections.InitApplication;
-import com.stopkaaaa.collections.R;
 import com.stopkaaaa.collections.di.DaggerActivityTestRule;
-import com.stopkaaaa.collections.di.component.AppComponentTest;
-import com.stopkaaaa.collections.di.component.DaggerAppComponentTest;
+import com.stopkaaaa.collections.di.component.AppComponent;
+import com.stopkaaaa.collections.di.component.DaggerAppComponent;
 import com.stopkaaaa.collections.di.module.AppModuleTest;
+import com.stopkaaaa.collections.ui.MainActivity;
 
 import static androidx.test.espresso.Espresso.onView;
 
@@ -37,7 +36,7 @@ import static org.hamcrest.Matchers.containsString;
 @RunWith(AndroidJUnit4ClassRunner.class)
 public class UITests {
 
-    private AppComponentTest componentTest;
+    private AppComponent componentTest;
 
     @Before
     public void setupTests(){
@@ -46,10 +45,10 @@ public class UITests {
     @Rule
     public ActivityTestRule<MainActivity> mainActivityRule =
             new DaggerActivityTestRule<>(MainActivity.class, (application, activity) -> {
-                componentTest = DaggerAppComponentTest.builder()
-                        .appModuleTest(new AppModuleTest(InitApplication.getInstance()))
+                componentTest = DaggerAppComponent.builder()
+                        .appModule(new AppModuleTest(CollectionsMapsApp.getInstance()))
                         .build();
-                InitApplication.getInstance().setAppComponent(componentTest);
+                CollectionsMapsApp.getInstance().setAppComponent(componentTest);
             });
 
 

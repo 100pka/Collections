@@ -15,7 +15,7 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.stopkaaaa.collections.InitApplication;
+import com.stopkaaaa.collections.CollectionsMapsApp;
 import com.stopkaaaa.collections.R;
 import com.stopkaaaa.collections.base.BaseContract;
 
@@ -98,7 +98,7 @@ public class MapCollectionFragment extends Fragment implements BaseContract.Base
         super.onCreate(savedInstanceState);
 
         DaggerFragmentComponent.builder()
-                .appComponent(InitApplication.getInstance().getAppComponent())
+                .appComponent(CollectionsMapsApp.getInstance().getAppComponent())
                 .fragmentModule(new FragmentModule(this, this.getArguments().getInt(PAGE)))
                 .build()
                 .injectPresenter(this);

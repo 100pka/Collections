@@ -8,12 +8,12 @@ import com.stopkaaaa.collections.di.component.AppComponent;
 import com.stopkaaaa.collections.di.component.DaggerAppComponent;
 import com.stopkaaaa.collections.di.module.AppModule;
 
-public class InitApplication extends Application {
+public class CollectionsMapsApp extends Application {
 
-    private static InitApplication instance;
+    private static CollectionsMapsApp instance;
     private AppComponent appComponent;
 
-    public static InitApplication getInstance() {
+    public static CollectionsMapsApp getInstance() {
         return instance;
     }
 

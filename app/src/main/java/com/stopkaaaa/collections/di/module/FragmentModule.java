@@ -1,18 +1,12 @@
 package com.stopkaaaa.collections.di.module;
 
-import android.content.Context;
-
 import androidx.annotation.StringRes;
 
-import com.stopkaaaa.collections.InitApplication;
+import com.stopkaaaa.collections.CollectionsMapsApp;
 import com.stopkaaaa.collections.R;
 import com.stopkaaaa.collections.base.BaseContract;
 import com.stopkaaaa.collections.model.Calculator;
 import com.stopkaaaa.collections.model.Supplier;
-import com.stopkaaaa.collections.model.collections.CollectionCalculator;
-import com.stopkaaaa.collections.model.collections.CollectionSupplier;
-import com.stopkaaaa.collections.model.maps.MapCalculator;
-import com.stopkaaaa.collections.model.maps.MapSupplier;
 import com.stopkaaaa.collections.ui.fragment.mapcollection.MapCollectionPresenter;
 
 import javax.inject.Inject;
@@ -44,7 +38,7 @@ public class FragmentModule {
     Supplier mapSupplier;
 
     public FragmentModule(BaseContract.BaseView view, @StringRes int page) {
-        InitApplication.getInstance().getAppComponent().injectCalculatorsAndSuppliers(this);
+        CollectionsMapsApp.getInstance().getAppComponent().injectCalculatorsAndSuppliers(this);
         this.view = view;
         this.page = page;
     }
