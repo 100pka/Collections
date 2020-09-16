@@ -4,11 +4,9 @@ import android.content.Context;
 
 import com.stopkaaaa.collections.model.Calculator;
 import com.stopkaaaa.collections.model.Supplier;
-import com.stopkaaaa.collections.model.collections.CollectionCalculator;
 import com.stopkaaaa.collections.model.collections.CollectionSupplier;
-import com.stopkaaaa.collections.model.maps.MapCalculator;
 import com.stopkaaaa.collections.model.maps.MapSupplier;
-import com.stopkaaaa.collections.ui.CalculatorForTest;
+import com.stopkaaaa.collections.model.CalculatorForTest;
 
 import javax.inject.Named;
 import javax.inject.Singleton;

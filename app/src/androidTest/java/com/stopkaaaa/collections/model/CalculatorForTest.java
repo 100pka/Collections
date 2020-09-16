@@ -1,4 +1,4 @@
-package com.stopkaaaa.collections.ui;
+package com.stopkaaaa.collections.model;
 
 import android.content.Context;
 
